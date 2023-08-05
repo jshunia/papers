@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\theoremstyle{plain}
+\Urlmuskip=0mu plus 1mu\relax
+
+\title{A Novel Formula for Binomial Coefficients}
+\author{Joseph M. Shunia}
+\date{August 2023}
+
+\newtheorem{thm}{Theorem}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In this paper, we introduce a novel formula for the computation of binomial coefficients, utilizing only basic arithmetic operations. This formula represents a significant departure from traditional methods, which typically involve factorials or the gamma function, offering a simpler and more intuitive approach. The derivation of our formula is rooted in a rarely explored property of polynomials, specifically, that any polynomial with non-negative integer coefficients can be completely determined by the values \(P(1)\) and \(P(P(1))\). We demonstrate how this property is used to derive our formula and extend it to polynomials over a field. This novel approach not only offers a simple method to compute binomial coefficients, but also opens the door to new insights and formulas pertaining to binomial coefficients and related topics.
+\end{abstract}
+
+\section{Introduction}
+Binomial coefficients, denoted as \(\binom{n}{k}\), are a cornerstone of mathematical theory. They quantify the number of distinct ways to select \(k\) elements from a set of \(n\) elements, irrespective of the order of selection. These coefficients permeate various branches of mathematics, from the coefficients in the expansion of a binomial equation to the calculation of probabilities in statistical theory. Traditional methods to compute binomial coefficients include the use of Pascal's triangle, factorials, or the Gamma function \cite{brualdi1992introductory}. Despite the prevalence of these methods, there is always room for fresh perspectives that can lead to novel insights and applications. In this paper, we introduce such a perspective, offering a new formula to compute binomial coefficients.
+\\
+\\
+We present a new formula to compute binomial coefficients, given by:
+
+\begin{equation}
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k+n}}\right\rfloor, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
+\end{equation}
+\\
+This formula stems from an intriguing property of polynomials that has been rarely explored in mathematical literature. By connecting the computation of binomial coefficients with this polynomial property, we establish a formula that depends only on basic arithmetic operations. Our contribution is not just in offering an alternative computation method but in unveiling a connection that may lead to further explorations and insights in both polynomial theory and the study of binomial coefficients.
+
+\section{Preliminaries and Definitions}
+In this section, we define our polynomial function $P(x)$. We also give a brief overview of the relationship between polynomial expansion, binomial coefficients, and powers of $2$.
+
+\subsection{Definition of Polynomial Function}
+We define $P(x)$ as the polynomial function:
+\begin{equation}
+P(x) = 1 + x
+\end{equation}
+To denote $P(x)$ raised to the power of $n$, we write:
+\begin{align*}
+P(x)^{n} &= (1 + x)^{n} \\
+&= a_n x^n + a_{n-1} x^{n-1} + \ldots + a_k x^k + \ldots + a_1 x + a_0
+\end{align*}
+\\
+We define $P(x)^{n}_{k}$ to represent the coefficient of the $k$-th degree term in the polynomial expansion of $P(x)^{n}$, that is the value of $a_k$ in $a_k x^k$. Using this definition, we can write the polynomial expansion of $P(x)^{n}$ as the sum:
+\begin{equation}
+P(x)^{n} = \sum_{k=0}^{n} P(x)^{n}_{k} \cdot x^{k}
+\end{equation}
+
+\subsection{Polynomial Expansion and Binomial Coefficients}
+
+If $n$ is a non-negative integer, then by the Binomial Theorem \cite{stewart2007calculus} we have:
+\begin{equation}
+P(x)^{n} = (1 + x)^{n} = \sum_{k=0}^{n} \binom{n}{k} x^{k}
+\end{equation}
+\\
+Since we have defined $P(x)^{n}_{k}$ to represent the coefficient of the $k$-th degree term in the polynomial expansion of $P(x)^{n}$, it follows that:
+\begin{equation}
+P(x)^{n} = \sum_{k=0}^{n} P(x)^{n}_{k} \cdot x^{k} = \sum_{k=0}^{n} \binom{n}{k} x^{k}
+\end{equation}
+\\
+As the coefficients of the terms in $P(x)$ are precisely the binomial coefficients for the $n$-th row of Pascal's Triangle \cite{rosen2011discrete}, it is apparent:
+\begin{equation}
+P(x)^{n}_{k} = \binom{n}{k}
+\end{equation}
+
+\section{Derivation of the Formula}
+
+\subsection{A Key Property of Polynomials}
+We explore a key property of polynomials that plays a pivotal role in our subsequent proofs. The property in question is that a polynomial's coefficients and terms can be completely determined by judiciously selecting two inputs.
+
+\begin{thm}
+\label{thm:1}
+If $P(x)$ is a polynomial with non-negative integer coefficients, it can be completely determined by the values $P(1)$ and $P(P(1))$.
+\end{thm}
+
+\begin{proof}
+Let $q = P(1)$, which gives the sum of the coefficients. Consider $P(P(1)) = P(q)$ expressed in base $q$; the digits correspond exactly to the coefficients of $P$. The only possible ambiguity arises if $P(q) = q\cdot n$ for some $n$, but since the coefficients sum to $q$, we deduce that $P = q \cdot x^{n-1}$ in this case \cite{arupinski}.
+\end{proof}
+
+\paragraph{\textbf{Remark.}}
+This property appears to be underexplored in the literature; we were unable to find any papers explicitly describing it. However, it has been the subject of some online discussion and at least one blog post \cite{jcook}. The proof given above was first proposed by user ARupinski in a MathOverflow post \cite{arupinski} and has been slightly modified for the purposes of this paper.
+\\
+\\
+The choice of $1$ as an input for $P(x)$ is not particularly special. We observe that the theorem and its proof can be generalized to work with polynomials over a field:
+
+\begin{thm}
+\label{thm:2}
+Let $F$ be a field. If $P(x)$ is a polynomial with coefficients in $F$, and $Q(x)$ is any non-zero polynomial with coefficients in $F$, then $P(x)$ can be completely determined by the values $P(Q(1))$ and $P(P(Q(1)))$.
+\end{thm}
+\begin{proof}
+Let $q = P(Q(1))$, which gives the sum of the coefficients of $P$ evaluated at $Q(1)$. Consider $P(P(Q(1))) = P(q)$ expressed in base $q$; the digits correspond exactly to the coefficients of $P$. The only possible ambiguity arises if $P(q) = q\cdot n$ for some $n$, but since the coefficients evaluated at $Q(1)$ sum to $q$, we deduce that $P = q \cdot x^{n-1}$ in this case.
+\end{proof}
+
+\subsection{Application of the Polynomial Property}
+The value of $P(1)^{n}$ is simply the summation of the coefficients of $P(x)^{n}$. It is easy to see that:
+\begin{equation}
+P(1)^{n} = \sum_{k=0}^{n} \binom{n}{k} 1^{k} = (1 + 1)^{n} = 2^{n}
+\end{equation}
+\begin{align}
+P(P(1)^{n})^{n} &= \sum_{k=0}^{n} \binom{n}{k} (P(1)^{n})^{k} = (1 + P(1)^{n})^{n} \\
+&= \sum_{k=0}^{n} \binom{n}{k} (2^{n})^{k} = (1 + 2^{n})^{n}
+\end{align}
+\\
+We can now use Theorem 1 to recover the coefficients of $P(x)^{n}$. We will achieve this by first encoding $P(P(1)^{n})^{n}$ in base $P(1)^{n}$, and then recovering the coefficients of $P(x)^n$ from the encoded value.
+
+\subsection{Reconstruction of Polynomial Coefficients}
+
+\begin{thm}
+\label{thm:3}
+The formula to recover the $k$-th coefficient of $P(x)^{n}$ is given by:
+\begin{equation}
+P(x)^{n}_{k} = \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
+\end{equation}
+\end{thm}
+
+\begin{proof}
+Given an integer $n$ and a base $b > 1$. Let $L = \lfloor \log_b{n} \rfloor$. Then the encoded representation of $n$ in base $b$ is the unique representation of $n$, such that \cite{niven2008introduction}:
+\begin{equation}
+n = \sum_{k=0}^{L} b^{k} \left\lfloor\frac{n \bmod b^{k+1}}{b^{k}}\right\rfloor 
+\end{equation}
+By inserting $P(1)$ into the equation, we can see:
+\begin{align}
+    P(x)^{n}_{k} &= \left\lfloor\frac{P(P(1)^{n})^{n} \bmod (P(1)^{n})^{k+1}}{(P(1)^{n})^{k}}\right\rfloor \\
+    &= \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
+\end{align}
+Hence, the theorem is proven.
+\end{proof}
+
+\subsection{Main Theorem and Its Proof}
+We will use the definitions and theorems proven earlier to prove that our formula for the binomial coefficient $\binom{n}{k}$ is valid.
+
+\begin{thm}
+\label{thm:4}
+\begin{equation}
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k+n}}\right\rfloor, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
+\end{equation}
+\end{thm}
+
+\begin{proof}
+We begin with the identity we established in Theorem 3:
+\begin{align}
+ P(x)^{n}_{k} = \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
+\end{align}
+By substituting $P(1) = 2$, we have: 
+\begin{align}
+ P(x)^{n}_{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
+\end{align}
+Now, we define $X = (1 + 2^{n})^{n}$, $Y = 2^{n k + n}$, $Z = 2^{n k}$. By replacement:
+\begin{align}
+P(x)^{n}_{k} &= \left\lfloor\frac{X \bmod Y}{Z}\right\rfloor
+\end{align}
+To simplify the expression, we can utilize the following well-known identity for the mod operation:
+\begin{align}
+p \bmod{q} = p - q \left\lfloor \frac{p}{q} \right\rfloor
+\end{align}
+By application of the identity, the expression simplifies as follows:
+\begin{align}
+P(x)^{n}_{k} = \left\lfloor\frac{X \bmod Y}{Z}\right\rfloor = \left\lfloor\frac{X - Y \left\lfloor \frac{X}{Y} \right\rfloor}{Z}\right\rfloor = \left\lfloor\frac{X}{Z} - \frac{Y}{Z} \left\lfloor \frac{X}{Y} \right\rfloor\right\rfloor
+\end{align}
+Next, we will replace $X$, $Y$, and $Z$ with their respective values and simplify further:
+\begin{align}
+P(x)^{n}_{k} &= \left\lfloor\frac{X}{Z} - \frac{Y}{Z} \left\lfloor \frac{X}{Y} \right\rfloor\right\rfloor \\ 
+&= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}} - \frac{2^{n k + n}}{2^{n k}} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor\right\rfloor \\
+&= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}} - 2^{n} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor\right\rfloor \\
+&= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor
+\end{align}
+Finally, since $P(x)^{n}_{k} = \binom{n}{k}$, it follows:
+\begin{align}
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k+n}}\right\rfloor
+\end{align}
+We have arrived at our formula, hence the theorem is proven.
+\end{proof}
+
+\section{Summary and Future Directions}
+We have introduced and proven a novel formula for computing binomial coefficients, leveraging a seldom-explored property of polynomials. This formula facilitates the calculation of \(\binom{n}{k}\) through a sequence of straightforward arithmetic operations, specifically, powers of 2 and the floor function.
+\\
+\\
+Our work unveils a new connection between polynomial functions and binomial coefficients, a link that is not only mathematically elegant but also ripe with potential for further exploration. The formula itself serves not merely as an alternative means to compute binomial coefficients, but as a gateway to a plethora of new mathematical identities and relations.
+\\
+\\
+Future research could explore the computational efficiency of the formula and its behavior for large values of \(n\) and \(k\), with a view to potential optimizations. Further investigation into the intriguing property of polynomials and its generalization could potentially reveal applications in computing values of certain sequences. An examination of the relationship between the floor and mod operations and binomial coefficients also presents a promising avenue for exploration.
+\\
+\\
+This work underscores the idea that profound insights can often emerge from concepts that, once discovered, seem simple and obvious, yet have remained overlooked. We hope that our findings inspire others to revisit well-explored problems, with the potential of uncovering similarly simple yet powerful insights. Such discoveries serve as a reminder of the vast potential for innovation that lies within the realm of seemingly well-explored mathematical domains.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
