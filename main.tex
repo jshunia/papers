@@ -20,23 +20,22 @@
 \maketitle
 
 \begin{abstract}
-In this paper, we introduce a novel formula for the computation of binomial coefficients, utilizing only basic arithmetic operations. This formula represents a significant departure from traditional methods, which typically involve factorials or the gamma function, offering a simpler and more intuitive approach. The derivation of our formula is rooted in a rarely explored property of polynomials, specifically, that any polynomial with non-negative integer coefficients can be completely determined by the values \(P(1)\) and \(P(P(1))\). We demonstrate how this property is used to derive our formula and extend it to polynomials over a field. This novel approach not only offers a simple method to compute binomial coefficients, but also opens the door to new insights and formulas pertaining to binomial coefficients and related topics.
+In this paper, we introduce a novel formula for binomial coefficients: \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n\). This formula utilizes only basic arithmetic operations and represents a significant departure from traditional methods, which typically involve factorials or the Gamma function. It also establishes an intriguing connection between modular arithmetic and binomial coefficients. The derivation of our formula is rooted in a rarely explored property of polynomials, specifically, that any polynomial with non-negative integer coefficients can be completely determined by the values \(P(1)\) and \(P(P(1))\). We demonstrate how this property is used to derive our formula and extend it to polynomials over a field. This novel approach not only offers a simple method to compute binomial coefficients, but also opens the door to new insights and formulas pertaining to binomial coefficients and related topics, such as multinomial coefficients and factorials.
 \end{abstract}
 
 \section{Introduction}
-Binomial coefficients, denoted as \(\binom{n}{k}\), are a cornerstone of mathematical theory. They quantify the number of distinct ways to select \(k\) elements from a set of \(n\) elements, irrespective of the order of selection. These coefficients permeate various branches of mathematics, from the coefficients in the expansion of a binomial equation to the calculation of probabilities in statistical theory. Traditional methods to compute binomial coefficients include the use of Pascal's triangle, factorials, or the Gamma function \cite{brualdi1992introductory}. Despite the prevalence of these methods, there is always room for fresh perspectives that can lead to novel insights and applications. In this paper, we introduce such a perspective, offering a new formula to compute binomial coefficients.
+Binomial coefficients, denoted as \(\binom{n}{k}\), are a cornerstone of mathematical theory. They quantify the number of distinct ways to select \(k\) elements from a set of \(n\) elements, irrespective of the order of selection. These coefficients permeate various branches of mathematics, from the coefficients in the expansion of a binomial equation to the calculation of probabilities in statistical theory. Traditional methods to compute binomial coefficients include the use of Pascal's triangle, factorials, or the Gamma function \cite{brualdi1992introductory}. Despite the prevalence of these methods, there is always room for fresh perspectives that can lead to novel insights and applications. In this paper, we introduce such a perspective.
 \\
 \\
 We present a new formula to compute binomial coefficients, given by:
 
 \begin{equation}
-\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k+n}}\right\rfloor, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
 \end{equation}
 \\
-This formula stems from an intriguing property of polynomials that has been rarely explored in mathematical literature. By connecting the computation of binomial coefficients with this polynomial property, we establish a formula that depends only on basic arithmetic operations. Our contribution is not just in offering an alternative computation method but in unveiling a connection that may lead to further explorations and insights in both polynomial theory and the study of binomial coefficients.
+This formula stems from a fascinating property of polynomials that has been rarely explored in mathematical literature. By connecting the computation of binomial coefficients with this polynomial property, we establish a formula that depends only on basic arithmetic operations. Our contribution is not just in offering an alternative computation method but in unveiling a connection that may lead to further explorations and insights in both combinatorics and number theory.
 
 \section{Preliminaries and Definitions}
-In this section, we define our polynomial function $P(x)$. We also give a brief overview of the relationship between polynomial expansion, binomial coefficients, and powers of $2$.
 
 \subsection{Definition of Polynomial Function}
 We define $P(x)$ as the polynomial function:
@@ -89,7 +88,7 @@ Let $q = P(1)$, which gives the sum of the coefficients. Consider $P(P(1)) = P(q
 This property appears to be underexplored in the literature; we were unable to find any papers explicitly describing it. However, it has been the subject of some online discussion and at least one blog post \cite{jcook}. The proof given above was first proposed by user ARupinski in a MathOverflow post \cite{arupinski} and has been slightly modified for the purposes of this paper.
 \\
 \\
-The choice of $1$ as an input for $P(x)$ is not particularly special. We observe that the theorem and its proof can be generalized to work with polynomials over a field:
+The choice of $1$ as an input for $P(x)$ is not particularly special; if we replace $1$ with any non-zero integer, the proof will hold. This revelation enables us to observe that the theorem and its proof can be generalized to work with polynomials over a field:
 
 \begin{thm}
 \label{thm:2}
@@ -109,7 +108,7 @@ P(P(1)^{n})^{n} &= \sum_{k=0}^{n} \binom{n}{k} (P(1)^{n})^{k} = (1 + P(1)^{n})^{
 &= \sum_{k=0}^{n} \binom{n}{k} (2^{n})^{k} = (1 + 2^{n})^{n}
 \end{align}
 \\
-We can now use Theorem 1 to recover the coefficients of $P(x)^{n}$. We will achieve this by first encoding $P(P(1)^{n})^{n}$ in base $P(1)^{n}$, and then recovering the coefficients of $P(x)^n$ from the encoded value.
+We can now use Theorem \ref{thm:1} to recover the coefficients of $P(x)^{n}$. We will achieve this by first encoding $P(P(1)^{n})^{n}$ in base $P(1)^{n}$, and then recovering the coefficients of $P(x)^n$ from the encoded value.
 
 \subsection{Reconstruction of Polynomial Coefficients}
 
@@ -122,7 +121,7 @@ P(x)^{n}_{k} = \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{
 \end{thm}
 
 \begin{proof}
-Given an integer $n$ and a base $b > 1$. Let $L = \lfloor \log_b{n} \rfloor$. Then the encoded representation of $n$ in base $b$ is the unique representation of $n$, such that \cite{niven2008introduction}:
+Given an integer $n$ and a base $b > 1$. Let $L = \lfloor \log_b{n} \rfloor$. Then the encoded representation of $n$ in base $b$ is the unique representation of $n$, such that \cite{cormen2009introduction}:
 \begin{equation}
 n = \sum_{k=0}^{L} b^{k} \left\lfloor\frac{n \bmod b^{k+1}}{b^{k}}\right\rfloor 
 \end{equation}
@@ -135,61 +134,78 @@ Hence, the theorem is proven.
 \end{proof}
 
 \subsection{Main Theorem and Its Proof}
-We will use the definitions and theorems proven earlier to prove that our formula for the binomial coefficient $\binom{n}{k}$ is valid.
 
 \begin{thm}
 \label{thm:4}
 \begin{equation}
-\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k+n}}\right\rfloor, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
 \end{equation}
 \end{thm}
-
 \begin{proof}
-We begin with the identity we established in Theorem 3:
+\textbf{Step 1: Proof that the equation is valid:} \\
+We begin with the identity we established in Theorem \ref{thm:3}:
 \begin{align}
  P(x)^{n}_{k} = \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
 \end{align}
-By substituting $P(1) = 2$, we have: 
+By substituting $P(x)^{n}_{k} = \binom{n}{k}$ and $P(1) = 2$, we have: 
 \begin{align}
- P(x)^{n}_{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
 \end{align}
-Now, we define $X = (1 + 2^{n})^{n}$, $Y = 2^{n k + n}$, $Z = 2^{n k}$. By replacement:
+Next, we define $X = (1 + 2^{n})^{n}$, $Y = 2^{n k + n}$, $Z = 2^{n k}$. By replacement:
 \begin{align}
-P(x)^{n}_{k} &= \left\lfloor\frac{X \bmod Y}{Z}\right\rfloor
+\binom{n}{k} &= \left\lfloor\frac{X \bmod Y}{Z}\right\rfloor
 \end{align}
-To simplify the expression, we can utilize the following well-known identity for the mod operation:
+To simplify the expression, we can utilize the following well-known identity for the mod operation \cite{niven2008introduction}:
 \begin{align}
-p \bmod{q} = p - q \left\lfloor \frac{p}{q} \right\rfloor
+\label{modidentity}
+a \bmod{b} = a - b \left\lfloor \frac{a}{b} \right\rfloor
 \end{align}
 By application of the identity, the expression simplifies as follows:
 \begin{align}
-P(x)^{n}_{k} = \left\lfloor\frac{X \bmod Y}{Z}\right\rfloor = \left\lfloor\frac{X - Y \left\lfloor \frac{X}{Y} \right\rfloor}{Z}\right\rfloor = \left\lfloor\frac{X}{Z} - \frac{Y}{Z} \left\lfloor \frac{X}{Y} \right\rfloor\right\rfloor
+\binom{n}{k} &= \left\lfloor\frac{X \bmod Y}{Z}\right\rfloor\\ &= \left\lfloor\frac{X - Y \left\lfloor \frac{X}{Y} \right\rfloor}{Z}\right\rfloor\\ &= \left\lfloor\frac{X}{Z} - \frac{Y}{Z} \left\lfloor \frac{X}{Y} \right\rfloor\right\rfloor
 \end{align}
-Next, we will replace $X$, $Y$, and $Z$ with their respective values and simplify further:
+Next, we replace $X$, $Y$, and $Z$ with their respective values and simplify further:
 \begin{align}
-P(x)^{n}_{k} &= \left\lfloor\frac{X}{Z} - \frac{Y}{Z} \left\lfloor \frac{X}{Y} \right\rfloor\right\rfloor \\ 
+\binom{n}{k} &= \left\lfloor\frac{X}{Z} - \frac{Y}{Z} \left\lfloor \frac{X}{Y} \right\rfloor\right\rfloor \\ 
 &= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}} - \frac{2^{n k + n}}{2^{n k}} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor\right\rfloor \\
 &= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}} - 2^{n} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor\right\rfloor \\
 &= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor
 \end{align}
-Finally, since $P(x)^{n}_{k} = \binom{n}{k}$, it follows:
+Finally, we again make use of the mod operation identity (\ref{modidentity}) to simplify:
 \begin{align}
-\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k+n}}\right\rfloor
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}
 \end{align}
-We have arrived at our formula, hence the theorem is proven.
+We have arrived at our formula.
+\\
+\\
+\textbf{Step 2: Proof that the equation holds only for $n > 0$ and $0 \leq k \leq n$:}
+\\
+To prove why the equation $\binom{n}{k} = \left\lfloor\frac{(1 + 2^n)^n}{2^{nk}}\right\rfloor \bmod{2^n}$ holds only for $n > 0$ and $0 \leq k \leq n$, we consider the following cases:
+
+\begin{enumerate}
+\item $n \leq 0$: In this case, the modulus becomes $2^{-n}$ and the original expression does not make sense.
+
+\item $k < 0$: In this case, we have $2^{-nk} = \frac{1}{2^{nk}}$ and the original expression becomes $2^{nk} (1 + 2^n)^n \bmod{2^n}$, which is always equal to $0$ since $2^{n} \mid 2^{nk}$.
+
+\item $k > n$: In this case, $2^{nk} > (1 + 2^n)^n > 2^{nn}$, hence $\left\lfloor\frac{(1 + 2^n)^n}{2^{nk}}\right\rfloor = 0$. We note that $\binom{n}{k} = \binom{k}{n}$ here, which cannot equal $0$.
+\end{enumerate}
+\noindent
+\textbf{Conclusion:}
+\\
+We have shown that our formula is valid and that it holds only for $n > 0$ and $0 \leq k \leq n$. Hence, the theorem is proven.
 \end{proof}
 
-\section{Summary and Future Directions}
-We have introduced and proven a novel formula for computing binomial coefficients, leveraging a seldom-explored property of polynomials. This formula facilitates the calculation of \(\binom{n}{k}\) through a sequence of straightforward arithmetic operations, specifically, powers of 2 and the floor function.
+\section{Summary}
+We have introduced and proven a novel formula for computing binomial coefficients, leveraging a seldom-explored property of polynomials. This formula facilitates the calculation of \(\binom{n}{k}\) through a sequence of straightforward arithmetic operations.
 \\
 \\
-Our work unveils a new connection between polynomial functions and binomial coefficients, a link that is not only mathematically elegant but also ripe with potential for further exploration. The formula itself serves not merely as an alternative means to compute binomial coefficients, but as a gateway to a plethora of new mathematical identities and relations.
-\\
-\\
-Future research could explore the computational efficiency of the formula and its behavior for large values of \(n\) and \(k\), with a view to potential optimizations. Further investigation into the intriguing property of polynomials and its generalization could potentially reveal applications in computing values of certain sequences. An examination of the relationship between the floor and mod operations and binomial coefficients also presents a promising avenue for exploration.
+Our work strengthens the connection between binomial coefficients and polynomial functions, while also establishing a new link to modular arithmetic; a link that is not only mathematically elegant, but also ripe with potential for further exploration. The formula itself serves not merely as an alternative means to compute binomial coefficients, but as a gateway to new mathematical identities and relations.
 \\
 \\
 This work underscores the idea that profound insights can often emerge from concepts that, once discovered, seem simple and obvious, yet have remained overlooked. We hope that our findings inspire others to revisit well-explored problems, with the potential of uncovering similarly simple yet powerful insights. Such discoveries serve as a reminder of the vast potential for innovation that lies within the realm of seemingly well-explored mathematical domains.
+
+\section{Future Directions}
+Future research could explore the computational efficiency of the formula and its behavior for large values of \(n\) and \(k\), with a view to potential optimizations. This may be of particular importance, as applying our formula to the computation of factorials may unearth new and more efficient methods that can be applied to important problems in computer science and number theory, such as primality testing and integer factorization. Further investigation into the polynomial property and its generalization could potentially reveal applications in computing values of other sequences, like multinomial coefficients. An examination of the relationship between modular arithmetic and binomial coefficients also presents a promising avenue for exploration.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
