@@ -220,7 +220,7 @@ We introduce a simplified notation to represent coefficients in the expansion of
 \textbf{Step 1: Proof that the equation is valid:} \\
 We define the polynomial function:
 \begin{equation}
-P(x,D) = (1 + x + \ldots + x^D)^n
+P(x,D)^n = (1 + x + \ldots + x^D)^n
 \end{equation}
 In this case, it is clear that:
 \begin{equation}
@@ -236,17 +236,17 @@ Observe that the inner sum is equivalent to the summation of the powers $(D+1)^n
 \end{equation}
 By substitution, we have:
 \begin{equation}
-P(P(1,D))^n = \left(\sum_{k=0}^{D} (D+1)^{nk}\right)^n = \left(\frac{(D+1)^{nD+n} - 1}{(D+1)^{n} - 1}\right)^n
+P(P(1,D)^n)^n = \left(\sum_{k=0}^{D} (D+1)^{nk}\right)^n = \left(\frac{(D+1)^{nD+n} - 1}{(D+1)^{n} - 1}\right)^n
 \end{equation}
 In of our proof of Theorem \ref{thm:4}, we established that:
 \begin{equation}
-\binom{n}{k} = \left\lfloor\frac{P(P(1))^{n}}{P(1)^{n k}}\right\rfloor \bmod{P(1)^{n}}
+\binom{n}{k} = \left\lfloor\frac{P(P(1)^n)^{n}}{P(1)^{n k}}\right\rfloor \bmod{P(1)^{n}}
 \end{equation}
 By equivalence, we have:
 \begin{equation}
-\underline{D}\binom{n}{k} = \left\lfloor\frac{P(P(1,D))^{n}}{P(1,D)^{n k}}\right\rfloor \bmod{P(1,D)^{n}}
+\underline{D}\binom{n}{k} = \left\lfloor\frac{P(P(1,D)^n)^{n}}{P(1,D)^{n k}}\right\rfloor \bmod{P(1,D)^{n}}
 \end{equation}
-Finally, we replace the values of $P(1,D)^n$ and $P(P(1,D),D)^n$ to arrive at our original equation:
+Finally, we replace the values of $P(1,D)^n$ and $P(P(1,D)^n,D)^n$ to arrive at our original equation:
 \begin{equation}
 \underline{D}\binom{n}{k} = \left\lfloor \left(\frac{(D+1)^{nD+n} - 1}{(D+1)^{n} - 1}\right)^n \cdot (D + 1)^{-n k}\right\rfloor \bmod (D + 1)^n
 \end{equation}
