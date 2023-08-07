@@ -20,7 +20,7 @@
 \maketitle
 
 \begin{abstract}
-Computing binomial coefficients is a fundamental problem in combinatorics and number theory, with applications across mathematics. The typical approach relies on factorials, Gamma functions, or Pascal's triangle. In this paper, we introduce a novel formula for binomial coefficients: \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n\). We generalize the formula to multinomials, and discuss how it follows from a key property of polynomial interpolation rarely highlighted in textbooks. The simplicity of our arithmetic approach provides opportunities to develop more efficient algorithms and analyze computational complexity. Further, our formula establishes a new connection between binomial coefficients and modular arithmetic that yields theoretical insights into their underlying mathematical foundations.
+Computing binomial coefficients is a fundamental problem in combinatorics and number theory, with applications across mathematics. The typical approach relies on factorials, Gamma functions, or Pascal's triangle. In this paper, we introduce a novel formula for binomial coefficients: \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n\). We generalize the formula to multinomials, and discuss how it follows from a key property of polynomial interpolation rarely highlighted in textbooks. The simplicity of our arithmetic approach provides opportunities to develop more efficient algorithms and analyze computational complexity. Further, our formula establishes a new connection between binomial coefficients and modular arithmetic that may yield theoretical insights into their underlying mathematical foundations.
 \end{abstract}
 
 \section{Introduction}
@@ -296,6 +296,6 @@ Discoveries such as ours underscore the idea that profound insights can often em
 Future research could explore the computational efficiency of the formulas and their behavior for large values of \(n\), \(k\), and \(D\) with a view to potential optimizations. This may be of particular importance, as applying our formulas to the computation of factorials may unearth new and more efficient methods that can be applied to important problems in computer science and number theory, such as primality testing and integer factorization. Further investigation into the polynomial property and its generalization could potentially reveal applications in computing values of other sequences. An examination of the relationship between modular arithmetic and binomial coefficients also presents a promising avenue for exploration.
 
 \bibliographystyle{unsrt}
-\bibliography{references}
+\bibliography{main}
 
 \end{document}
