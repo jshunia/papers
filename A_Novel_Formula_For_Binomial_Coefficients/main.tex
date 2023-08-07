@@ -20,7 +20,7 @@
 \maketitle
 
 \begin{abstract}
-In this paper, we introduce a novel formula for binomial coefficients: \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n\). This formula utilizes only basic arithmetic operations and represents a significant departure from traditional methods, which typically involve factorials or the Gamma function. It also establishes an intriguing connection between modular arithmetic and binomial coefficients. Further, we generalize our formula for binomial coefficients to find a general closed form expression for the coefficients of terms in the multinomial expansion of arbitrary degree univariate polynomials, a first of its kind. These discoveries are rooted in a rarely explored property of polynomials, specifically, that any polynomial with non-negative integer coefficients can be completely determined by the values \(P(1)\) and \(P(P(1))\). Our novel approach not only offers a simple method to compute binomial and related coefficients, but also opens the door to new insights and formulas.
+In this paper, we introduce a novel formula for binomial coefficients: \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n\). This formula utilizes only basic arithmetic operations and represents a significant departure from traditional methods, which typically involve factorials or the Gamma function. It also establishes an intriguing connection between modular arithmetic and binomial coefficients. Further, we generalize our formula for binomial coefficients to find a general closed form expression for the coefficients of terms in the multinomial expansion of arbitrary degree univariate polynomials. These discoveries are rooted in a rarely explored property of polynomials, specifically, that any polynomial with non-negative integer coefficients can be completely determined by the values \(P(1)\) and \(P(P(1))\). Our novel approach not only offers a simple method to compute binomial and related coefficients, but also opens the door to new insights and formulas.
 \end{abstract}
 
 \section{Introduction}
@@ -196,7 +196,7 @@ We have shown that our formula is valid and that it holds only for $n > 0$ and $
 \end{proof}
 
 \section{Generalization to Coefficients in Multinomial Expansion}
-\subsection{Notation for Polynomial Coefficients}
+\subsection{Notation for Coefficients}
 We introduce a simplified notation to represent coefficients in the expansion of univariate polynomials. To denote the coefficient of the term with degree \( k \) in the polynomial expansion of \( (1 + x + \ldots + x^D)^n \), we write:
 
 \[ \underline{D}\binom{n}{k} \]
@@ -276,7 +276,7 @@ Second, we generalized this formula to find closed form expressions for the coef
 \underline{D}\binom{n}{k} = \left\lfloor \left(\frac{(D+1)^{nD+n} - 1}{(D+1)^{n} - 1}\right)^n \cdot (D + 1)^{-n k}\right\rfloor \bmod (D + 1)^n, \\ \text{for } n > 0 \text{ and } 0 \leq k \leq nD
 \end{align*}
 \\
-Where \(\underline{D}\binom{n}{k}\) denotes the coefficient of the term with degree \(k\) in the expansion of \((1+x+\ldots+x^D)^n\). This generalizes our binomial formula to multinomials and represents the first known general closed form expression for such coefficients.
+Where \(\underline{D}\binom{n}{k}\) denotes the coefficient of the term with degree \(k\) in the expansion of \((1+x+\ldots+x^D)^n\).
 \\
 \\
 Our novel approach stems from connecting binomial and multinomial coefficients to a key, but rarely explored, property of polynomials: that they can be unambiguously determined by two judiciously chosen inputs. This insight allowed us to derive simple arithmetic formulas for computing these coefficients. In doing so, our work strengthens the connection between binomial coefficients and polynomial functions, while also establishing an elegant new link to modular arithmetic. This link is not only mathematically appealing, but also ripe with potential for further exploration. Our formula serves not merely as an alternative means to compute binomial coefficients, but more profoundly, as a gateway to discover new mathematical identities and relations between these fundamental concepts.
