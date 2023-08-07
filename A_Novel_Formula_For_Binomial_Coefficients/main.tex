@@ -70,10 +70,14 @@ As the coefficients of the terms in $P(x)$ are precisely the binomial coefficien
 P(x)^{n}_{k} = \binom{n}{k}
 \end{equation}
 
+\subsection{Polynomial Interpolation}
+Polynomial interpolation is the problem of constructing a polynomial $P(x)$ that passes through a given set of data points ${(x0, y0), (x1, y1), \ldots, (xn, yn)}$. That is, finding a polynomial $P(x)$ such that $P(xi) = yi$ for $i = 0, 1, \ldots, n$ \cite{burden2011numerical, kincaid2012numerical}.
+
+There are various methods to interpolate polynomials, including Lagrange interpolation, Newton polynomial interpolation, and methods using divided differences \cite{burden2011numerical, kincaid2012numerical}. A fundamental result is that there exists a unique polynomial of degree \( n \) or less that interpolates \( n+1 \) data points \cite{burden2011numerical}. The key fact we require is that a polynomial is uniquely determined if we know its value at enough points. Specifically, if we know the value of \( P(x) \) at \( n+1 \) distinct inputs, then we can recover its terms, and therefore the coefficients \cite{cheney2013course}. We will utilize a less known variant of this idea - that a polynomial can be unambiguously determined by evaluating just two carefully selected inputs. This forms the basis for our subsequent derivations of formulas for binomial and multinomial coefficients.
+
 \section{Derivation of the Formula}
 
 \subsection{A Key Property of Polynomials}
-We explore a key property of polynomials that plays a pivotal role in our subsequent proofs. The property in question is that a polynomial's coefficients and terms can be completely determined by judiciously selecting two inputs.
 
 \begin{thm}
 \label{thm:1}
@@ -279,7 +283,7 @@ Second, we generalized this formula to find closed form expressions for the coef
 Where \(\underline{D}\binom{n}{k}\) denotes the coefficient of the term with degree \(k\) in the expansion of \((1+x+\ldots+x^D)^n\).
 \\
 \\
-Our novel approach stems from connecting binomial and multinomial coefficients to a key, but rarely explored, property of polynomials: that they can be unambiguously determined by two judiciously chosen inputs. This insight allowed us to derive simple arithmetic formulas for computing these coefficients. In doing so, our work strengthens the connection between binomial coefficients and polynomial functions, while also establishing an elegant new link to modular arithmetic. This link is not only mathematically appealing, but also ripe with potential for further exploration. Our formula serves not merely as an alternative means to compute binomial coefficients, but more profoundly, as a gateway to discover new mathematical identities and relations between these fundamental concepts.
+Our novel approach stems from connecting binomial coefficients to a key, but rarely explored, property of polynomials: that they can be unambiguously determined by two judiciously chosen inputs. This insight allowed us to derive simple arithmetic formulas for computing these coefficients. In doing so, our work strengthens the connection between binomial coefficients and polynomial functions, while also establishing an elegant new link to modular arithmetic. This link is not only mathematically appealing, but also ripe with potential for further exploration. Our formula serves not merely as an alternative means to compute binomial coefficients, but more profoundly, as a gateway to discover new mathematical identities and relations between these fundamental concepts.
 \\
 \\
 Discoveries such as ours underscore the idea that profound insights can often emerge from concepts that, once discovered, seem simple and obvious, yet have remained overlooked. We hope that this reminds others of the vast potential for innovation that still lies latent even within well-studied fields of mathematics. By revisiting old problems with fresh perspectives, there is always the possibility of unearthing powerful new insights.
