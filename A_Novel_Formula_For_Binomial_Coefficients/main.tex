@@ -236,7 +236,7 @@ P(1,D)^n = (D + 1)^n
 \end{equation}
 Therefore, we have:
 \begin{equation}
-P(P(1,D)^n)^n = (1 + (D+1)^n + \ldots + (D+1)^{n D})^n
+P(P(1,D)^n,D)^n = (1 + (D+1)^n + \ldots + (D+1)^{n D})^n
 \end{equation}
 Observe that the inner sum is equivalent to the summation of the powers of $(D+1)^n$ from $0$ to $D$. We note the following identity \cite{A023037}:
 \begin{equation}
@@ -244,7 +244,7 @@ Observe that the inner sum is equivalent to the summation of the powers of $(D+1
 \end{equation}
 By substitution, we have:
 \begin{equation}
-P(P(1,D)^n)^n = \left(\sum_{k=0}^{D} (D+1)^{nk}\right)^n = \left(\frac{(D+1)^{nD+n} - 1}{(D+1)^{n} - 1}\right)^n
+P(P(1,D)^n,D)^n = \left(\sum_{k=0}^{D} (D+1)^{nk}\right)^n = \left(\frac{(D+1)^{nD+n} - 1}{(D+1)^{n} - 1}\right)^n
 \end{equation}
 In of our proof of Theorem \ref{thm:4}, we established that:
 \begin{equation}
@@ -252,7 +252,7 @@ In of our proof of Theorem \ref{thm:4}, we established that:
 \end{equation}
 By equivalence, we have:
 \begin{equation}
-\underline{D}\binom{n}{k} = \left\lfloor\frac{P(P(1,D)^n)^{n}}{P(1,D)^{n k}}\right\rfloor \bmod{P(1,D)^{n}}
+\underline{D}\binom{n}{k} = \left\lfloor\frac{P(P(1,D)^n,D)^{n}}{P(1,D)^{n k}}\right\rfloor \bmod{P(1,D)^{n}}
 \end{equation}
 Finally, we replace the values of $P(1,D)^n$ and $P(P(1,D)^n,D)^n$ to arrive at our original equation:
 \begin{equation}
