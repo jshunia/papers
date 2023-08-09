@@ -216,7 +216,7 @@ Dividing by the denominator $2^{n k}$ and taking the sum modulo $2^n$ gives:
 \begin{align}
 \frac{(1 + 2^{n})^{n}}{2^{n k}} \bmod{2^n} = \sum_{j=0}^{n} \binom{n}{j} \cdot (2^n)^{j-k} \bmod{2^n}
 \end{align}
-The terms with $j < k$ will sum to a value that is less than $1$ and therefore, will vanish upon application of the floor operation. The terms with $j > k$ will be divisible by $2^n$, and therefore, vanish upon application of the mod operation. The only remaining term is $j = k$, which is equal to $\binom{n}{k}$ since $(2^n)^{j-k} = (2^n)^0 = 1$.
+The terms with $j < k$ will sum to a value that is less than $1$ and therefore, will vanish upon application of the floor operation. The terms with $j > k$ will be divisible by $2^n$ and therefore, vanish upon application of the mod operation. The only remaining term is $j = k$, which is equal to $\binom{n}{k}$ since $(2^n)^{j-k} = (2^n)^0 = 1$.
 
 \section{Generalization to Coefficients in the Multinomial Expansion of Univariate Polynomials}
 \subsection{Notation for Coefficients}
