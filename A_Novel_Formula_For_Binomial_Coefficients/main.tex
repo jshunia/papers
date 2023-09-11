@@ -34,7 +34,7 @@ We present a new formula to compute binomial coefficients, given by:
 \binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
 \end{equation}
 \\
-This formula stems from a fascinating property of polynomials that has been rarely explored in mathematical literature. By connecting the computation of binomial coefficients with this polynomial property, we establish a formula that depends only on basic arithmetic operations. Our contribution is not just in offering an alternative computation method, but in unveiling a connection that may lead to further explorations and insights pertaining to binomial coefficients.
+This formula stems from a fascinating property of polynomials that has been rarely explored in mathematical literature. By connecting the computation of binomial coefficients with this polynomial property, we establish a formula that depends only on basic arithmetic operations.
 
 \section{Preliminaries and Definitions}
 
@@ -240,14 +240,14 @@ Where the summation criteria are:
 \begin{thm}
 \label{thm:5}
 \begin{align*}
-[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n \cdot D^{-n k}\right\rfloor \bmod D^n, \\ \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n \cdot (D-1)
+[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n, \\ \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n \cdot (D-1)
 \end{align*}
 \end{thm}
 \begin{proof}
 \textbf{Step 1: Proof that the equation is valid:} \\
 We define the polynomial function:
 \begin{align}
-P(x,D)^n = \left(\frac{x^{D}-1}{x-1}\right)^n = (1 + \ldots + x^{D-1})^n
+P(x,D)^n = \left(\frac{x^{D}-1}{x-1}\right)^n = (1 + x + \ldots + x^{D-1})^n
 \end{align}
 In this case, it is clear that:
 \begin{equation}
@@ -273,12 +273,19 @@ By equivalence, we have:
 \begin{equation}
 [x^k] P(x,D)^{n} = \left\lfloor\frac{P(P(1,D)^n,D)^{n}}{P(1,D)^{n k}}\right\rfloor \bmod{P(1,D)^{n}}
 \end{equation}
-Finally, we replace the values of $P(1,D)^n$ and $P(P(1,D)^n,D)^n$ to arrive at our original equation:
-\begin{equation}
-[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n \cdot D^{-n k}\right\rfloor \bmod D^n
-\end{equation}
+Finally, we replace the values of $P(1,D)^n$ and $P(P(1,D)^n,D)^n$ and simplify to arrive at our original equation:
+\begin{align}
+[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n \cdot D^{-n k}\right\rfloor \bmod D^n \\
+&= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1} \cdot D^{-k}\right)^n\right\rfloor \bmod D^n \\
+&= \left\lfloor \left(\frac{D^{Dn} - 1}{D^k (D^{n} - 1)}\right)^n\right\rfloor \bmod D^n \\
+&= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n
+\end{align}
 \textbf{Step 2: Proof that the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D - 1)$:} \\
-To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D-1)$, we consider the following cases:
+To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D-1)$, we consider the following cases in relation to:
+\begin{align}
+[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n \\
+&= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n \cdot D^{-n k}\right\rfloor \bmod D^n
+\end{align}
 \begin{enumerate}
 \item $n \leq 0$: In this case, the modulus becomes $D^{-n}$ and the original equation does not make sense.
 \item $k < 0$: In this case, we have $D^{-(-nk)} = D^{nk}$ and thus the original expression is always equal to $0$, since $D^{n} \mid D^{nk}$.
@@ -300,7 +307,7 @@ This formula depends only on basic arithmetic operations and establishes an inte
 \\
 Second, we generalized this formula to find closed form expressions for the coefficients of terms in the multinomial expansion of arbitrary degree univariate polynomials. Specifically, we showed:
 \begin{align*}
-[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n \cdot D^{-n k}\right\rfloor \bmod D^n, \\ \text{for } n > 0 \text{ and } 0 \leq k \leq n \cdot (D-1)
+[x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n, \\ \text{for } n > 0 \text{ and } 0 \leq k \leq n \cdot (D-1)
 \end{align*}
 Our novel approach stems from connecting binomial coefficients to a key, but rarely explored, property of polynomials: that they can be unambiguously determined by two judiciously chosen inputs. This insight allowed us to derive simple arithmetic formulas for computing these coefficients. In doing so, our work strengthens the connection between binomial coefficients and polynomial functions, while also establishing an elegant new link to modular arithmetic. This link is not only mathematically appealing, but also ripe with potential for further exploration. Our formula serves not merely as an alternative means to compute binomial coefficients, but as a potential pathway to new mathematical identities and relations between these fundamental concepts.
 \\
