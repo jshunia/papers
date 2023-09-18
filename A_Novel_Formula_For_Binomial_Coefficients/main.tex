@@ -216,6 +216,38 @@ Dividing by the denominator $2^{n k}$ and taking the sum modulo $2^n$ gives:
 \end{align}
 The terms with $j < k$ will sum to a value that is less than $1$ and therefore, will vanish upon application of the floor operation. The terms with $j > k$ will be divisible by $2^n$ and therefore, vanish upon application of the mod operation. The only remaining term is $j = k$, which is equal to $\binom{n}{k}$ since $(2^n)^{j-k} = (2^n)^0 = 1$.
 
+\subsection{Derivation Using Kronecker Substitution}
+
+The formula presented for computing binomial coefficients can also be derived using Kronecker substitution \cite{grimaldi2004discrete}. This technique substitutes a variable $x$ in a polynomial $P(x)$ with a discrete value to yield a finite representation. By performing this substitution in an appropriate base, the digits directly correspond to the coefficients of the original polynomial.
+\\
+\\
+Specifically, for a polynomial $P(x)$ with integer coefficients, performing a Kronecker substitution with $x = b$ yields $P(b)$ \cite{grimaldi2004discrete}. Expanding this in base $b$ gives a direct correspondence between the digits and coefficients of the original polynomial. That is:
+
+\begin{align}
+P(x) &= a_0 + a_1 x + a_2 x^2 + \ldots + a_n x^n \\
+P(b) &= (a_0 b^0 + a_1 b^1 + \ldots + a_n b^n)_b
+\end{align}
+
+Where $(a)_b$ denotes the representation of integer $a$ in base $b$.
+\\
+\\
+We can use this approach to derive the binomial coefficient formula as follows:
+
+\begin{enumerate}
+\item Begin with the polynomial $P(x) = 1 + x$
+\item Perform a Kronecker substitution with $x = 2^{n-2}$, yielding:
+\begin{align}
+P(2^{n-2}) &= 1 + 2^{n-2} = 1 + 2^n = A
+\end{align}
+\item Raise $A$ to the $n$th power:
+\begin{align}
+A^n &= (1 + 2^n)^n
+\end{align}
+\item Reverse the Kronecker substitution on $A^n$ in base $2^n$ to obtain the coefficients. By the digit-coefficient correspondence, these are precisely the binomial coefficients.
+\end{enumerate}
+
+Therefore, by carefully selecting the base for the Kronecker substitution, we arrive at the formula presented in Theorem \ref{thm:3}. This provides an alternate derivation relying on digit-coefficient connections in polynomial expansions.
+
 \section{Generalization to Coefficients in the Multinomial Expansion of Univariate Unit Polynomials}
 Building upon the methodologies employed in our binomial coefficient derivation, we have discovered a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials. That is, the coefficients in the expansion for polynomials of the form:
 
