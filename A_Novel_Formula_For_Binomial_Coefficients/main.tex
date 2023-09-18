@@ -1,20 +1,24 @@
 \documentclass{article}
-\usepackage{amsmath}
-\usepackage{amsthm}
+\usepackage{amsmath, amssymb, amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{csquotes}
 \usepackage[hyphens]{url}
 \usepackage{hyperref}
-\theoremstyle{plain}
+\usepackage{cleveref}
 \Urlmuskip=0mu plus 1mu\relax
 \setlength{\parindent}{0pt}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+\theoremstyle{plain}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}{Lemma}
 
 \title{A Novel Formula for Binomial Coefficients}
 \author{Joseph M. Shunia}
 \date{September 2023}
-
-\newtheorem{thm}{Theorem}
 
 \begin{document}
 
@@ -72,9 +76,7 @@ There are various methods to interpolate polynomials, including Lagrange interpo
 \\
 We will utilize a less known variant of this idea: that a polynomial can be unambiguously determined by evaluating just two carefully selected inputs \cite{arupinski,jcook}. This forms the basis for our subsequent derivations of formula for binomial coefficients and its generalization to multinomials.
 
-\section{Derivation of the Formula}
-
-\subsection{A Key Property of Polynomials}
+\section{A Key Property of Polynomials}
 
 \begin{thm}
 \label{thm:1}
@@ -82,22 +84,24 @@ If $P(x)$ is a polynomial with non-negative integer coefficients, it can be comp
 \end{thm}
 
 \begin{proof}
-Let $q = P(1)$, which gives the sum of the coefficients. Consider $P(P(1)) = P(q)$ expressed in base $q$; the digits correspond exactly to the coefficients of $P$. The only possible ambiguity arises if $P(q) = q\cdot n$ for some $n$, but since the coefficients sum to $q$, we deduce that $P = q \cdot x^{n-1}$ in this case \cite{arupinski}.
+Let $q = P(1)$, which gives the sum of the coefficients. Consider $P(P(1)) = P(q)$ expressed in base $q$; the digits correspond exactly to the coefficients of $P$. The only possible ambiguity arises if $P(q) = q\cdot N$ for some $N$, but since the coefficients sum to $q$, we deduce that $P = q \cdot x^{N-1}$ in this case \cite{arupinski}.
 \end{proof}
 
 \paragraph{\textbf{Remark.}}
-This property appears to be underexplored in the literature; we were unable to find any papers explicitly describing it. However, it has been the subject of some online discussion and at least one blog post \cite{jcook}. The proof given above was first proposed by user ARupinski in a MathOverflow post \cite{arupinski} and has been slightly modified for the purposes of this paper.
+This property appears to be under explored in the literature; we were unable to find any papers explicitly describing it. However, it has been the subject of some online discussion and at least one blog post \cite{jcook}. The proof given above was first proposed by user ARupinski in a MathOverflow post \cite{arupinski} and has been slightly modified for the purposes of this paper.
 \\
 \\
-The choice of $1$ as an input for $P(x)$ is not particularly special; if we replace $1$ with any non-zero integer, the proof will hold. This revelation enables us to observe that the theorem and its proof can be generalized to work with polynomials:
+The choice of $x=1$ as an input for $P(x)$ is not particularly special; if we let $x$ be any non-zero integer, the proof will hold. This revelation enables us to observe that the theorem and its proof can be generalized as follows:
 
 \begin{thm}
 \label{thm:2}
-If $P(x)$ is a polynomial with non-negative integer coefficients, and $Q(x)$ is any non-zero polynomial with integer coefficients, then $P(x)$ can be completely determined by the values $P(Q(1))$ and $P(P(Q(1)))$.
+If $P(x)$ is a polynomial with non-negative integer coefficients, and $n \geq 1$ is an integer, then $P(x)$ can be completely determined by the values $P(n)$ and $P(P(n))$.
 \end{thm}
 \begin{proof}
-Let $q = P(Q(1))$, which gives the sum of the coefficients of $P$ evaluated at $Q(1)$. Consider $P(P(Q(1))) = P(q)$ expressed in base $q$; the digits correspond exactly to the coefficients of $P$. The only possible ambiguity arises if $P(q) = q\cdot n$ for some $n$, but since the coefficients evaluated at $Q(1)$ sum to $q$, we deduce that $P = q \cdot x^{n-1}$ in this case.
+Let $q = P(n)$, which gives the sum of the coefficients of $P$ evaluated at $n$. Consider $P(P(n)) = P(q)$ expressed in base $q$; the digits correspond exactly to the coefficients of $P$. The only possible ambiguity arises if $P(q) = q\cdot N$ for some $N$, but since the coefficients evaluated at $Q(n)$ sum to $q$, we deduce that $P = q \cdot x^{N-1}$ in this case.
 \end{proof}
+
+\section{Derivation of the Formula}
 
 \subsection{Application of the Polynomial Property}
 The value of $P(1)^{n}$ is simply the summation of the coefficients of $P(x)^{n}$. It is easy to see that:
@@ -109,17 +113,17 @@ P(P(1)^{n})^{n} &= \sum_{k=0}^{n} \binom{n}{k} (P(1)^{n})^{k} = (1 + P(1)^{n})^{
 &= \sum_{k=0}^{n} \binom{n}{k} (2^{n})^{k} = (1 + 2^{n})^{n}
 \end{align}
 \\
-We can now use Theorem \ref{thm:1} to recover the coefficients of $P(x)^{n}$. We will achieve this by first encoding $P(P(1)^{n})^{n}$ in base $P(1)^{n}$, and then recovering the coefficients of $P(x)^n$ from the encoded value.
+We can now use the results from Theorem \ref{thm:1} to recover the coefficients of $P(x)^{n}$. We will achieve this by first encoding $P(P(1)^{n})^{n}$ in base $P(1)^{n}$, and then recovering the coefficients of $P(x)^n$ from the encoded value.
 
 \subsection{Reconstruction of Polynomial Coefficients}
 
-\begin{thm}
-\label{thm:3}
+\begin{lemma}
+\label{lemma:1}
 The formula to recover the $k$-th coefficient of $P(x)^{n}$ is given by:
 \begin{equation}
 [x^k] P(x)^{n} = \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
 \end{equation}
-\end{thm}
+\end{lemma}
 
 \begin{proof}
 Given an integer $n$ and a base $b > 1$. Let $L = \lfloor \log_b{n} \rfloor$. Then the encoded representation of $n$ in base $b$ is the unique representation of $n$, such that \cite{cormen2009introduction}:
@@ -131,25 +135,26 @@ By inserting $P(1)$ into the equation, we can see:
     [x^k] P(x)^{n} &= \left\lfloor\frac{P(P(1)^{n})^{n} \bmod (P(1)^{n})^{k+1}}{(P(1)^{n})^{k}}\right\rfloor \\
     &= \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
 \end{align}
-Hence, the theorem is proven.
+Hence, the lemma is proven.
 \end{proof}
 
 \subsection{Main Theorem and Its Proof}
 
 \begin{thm}
-\label{thm:4}
+\label{thm:3}
 \begin{equation}
 \binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}, \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
 \end{equation}
 \end{thm}
 \begin{proof}
 \textbf{Step 1: Proof that the equation is valid:} \\
-We begin with the identity we established in Theorem \ref{thm:3}:
+We begin with the identity we established in Lemma \ref{lemma:1}:
 \begin{align}
  [x^k] P(x)^{n} = \left\lfloor\frac{(1 + P(1)^{n})^{n} \bmod P(1)^{n k + n}}{P(1)^{n k}}\right\rfloor
 \end{align}
 By substituting $[x^k] P(x)^{n} = \binom{n}{k}$ and $P(1) = 2$, we have: 
 \begin{align}
+\label{equation:timecomplexity}
 \binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
 \end{align}
 Next, we define $X = (1 + 2^{n})^{n}$, $Y = 2^{n k + n}$, $Z = 2^{n k}$. By replacement:
@@ -203,11 +208,11 @@ Upon initial inspection, it may not be obvious why our formula works:
 \end{align*}
 However, by expanding the numerator $(1 + 2^{n})^{n}$, we can see:
 \begin{align}
-(1 + 2^{n})^{n} = \sum_{j=0}^{n} \binom{n}{j} \cdot (2^n)^{j}
+(1 + 2^{n})^{n} = \sum_{j=0}^{n} \binom{n}{j} (2^n)^{j}
 \end{align}
 Dividing by the denominator $2^{n k}$ and taking the sum modulo $2^n$ gives:
 \begin{align}
-\frac{(1 + 2^{n})^{n}}{2^{n k}} \bmod{2^n} = \sum_{j=0}^{n} \binom{n}{j} \cdot (2^n)^{j-k} \bmod{2^n}
+\frac{(1 + 2^{n})^{n}}{2^{n k}} \bmod{2^n} = \sum_{j=0}^{n} \binom{n}{j} (2^n)^{j-k} \bmod{2^n}
 \end{align}
 The terms with $j < k$ will sum to a value that is less than $1$ and therefore, will vanish upon application of the floor operation. The terms with $j > k$ will be divisible by $2^n$ and therefore, vanish upon application of the mod operation. The only remaining term is $j = k$, which is equal to $\binom{n}{k}$ since $(2^n)^{j-k} = (2^n)^0 = 1$.
 
@@ -238,7 +243,7 @@ Where the summation criteria are:
 \subsection{Generalized Formula and Its Proof}
 
 \begin{thm}
-\label{thm:5}
+\label{thm:4}
 \begin{align*}
 [x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n, \\ \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n \cdot (D-1)
 \end{align*}
@@ -247,15 +252,15 @@ Where the summation criteria are:
 \textbf{Step 1: Proof that the equation is valid:} \\
 We define the polynomial function:
 \begin{align}
-P(x,D)^n = \left(\frac{x^{D}-1}{x-1}\right)^n = (1 + x + \ldots + x^{D-1})^n
+P_D(x)^n = \left(\frac{x^{D}-1}{x-1}\right)^n = (1 + x + \ldots + x^{D-1})^n
 \end{align}
 In this case, it is clear that:
 \begin{equation}
-P(1,D)^n = D^n
+P_D(1)^n = D^n
 \end{equation}
 Therefore, we have:
 \begin{equation}
-P(P(1,D)^n,D)^n = (1 + D^n + \ldots + D^{n (D - 1)})^n
+P_D(P_D(1)^n)^n = (1 + D^n + \ldots + D^{n (D - 1)})^n
 \end{equation}
 Observe that the inner sum is equivalent to the summation of the powers of $D^n$ from $0$ to $(D - 1)$. We note the following identity \cite{A023037}:
 \begin{equation}
@@ -263,7 +268,7 @@ Observe that the inner sum is equivalent to the summation of the powers of $D^n$
 \end{equation}
 By substitution, we have:
 \begin{equation}
-P(P(1,D)^n,D)^n = \left(\sum_{k=0}^{D-1} D^{nk}\right)^n = \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n
+P_D(P_D(1)^n)^n = \left(\sum_{k=0}^{D-1} D^{nk}\right)^n = \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n
 \end{equation}
 In of our proof of Theorem \ref{thm:4}, we established that:
 \begin{equation}
@@ -271,9 +276,9 @@ In of our proof of Theorem \ref{thm:4}, we established that:
 \end{equation}
 By equivalence, we have:
 \begin{equation}
-[x^k] P(x,D)^{n} = \left\lfloor\frac{P(P(1,D)^n,D)^{n}}{P(1,D)^{n k}}\right\rfloor \bmod{P(1,D)^{n}}
+[x^k] P_D(x)^{n} = \left\lfloor\frac{P_D(P_D(1)^n)^{n}}{P_D(1)^{n k}}\right\rfloor \bmod{P_D(1)^{n}}
 \end{equation}
-Finally, we replace the values of $P(1,D)^n$ and $P(P(1,D)^n,D)^n$ and simplify to arrive at our original equation:
+Finally, we replace the values of $P_D(1)^n$ and $P_D(P_D(1)^n)^n$ and simplify to arrive at our original equation:
 \begin{align}
 [x^k] \left(\frac{x^{D}-1}{x-1}\right)^n &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1}\right)^n \cdot D^{-n k}\right\rfloor \bmod D^n \\
 &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n} - 1} \cdot D^{-k}\right)^n\right\rfloor \bmod D^n \\
@@ -297,6 +302,68 @@ To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D-1
 We have shown that our formula is valid and that it holds only for $n > 0$ and $0 \leq k \leq n \cdot (D - 1)$. Hence, the theorem is proven.
 \end{proof}
 
+\section{Computational Complexity Analysis of Binomial Coefficient Formula}
+We now analyze the computational complexity associated with naively computing $\binom{n}{k}$ using our formula. The analysis is based on a direct, unoptimized approach. While this offers a foundational understanding, potential optimizations might not be addressed.
+
+\subsection{Time Complexity Analysis}
+Analyzing the time complexity for computing $\binom{n}{k}$ using our formula, we use the representation (\ref{equation:timecomplexity}):
+
+\begin{equation*}
+\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
+\end{equation*}
+
+The procedure can be delineated as follows:
+
+\begin{enumerate}
+\item \textbf{Modular Exponentiation}: The main component affecting the time complexity is the modular exponentiation step. Using exponentiation by squaring, the time complexity for computing \(a^b \mod c\) is \(O(\log{b} \log{c})\) \cite{koblitz1994course}. Given \(c\) is exponential in \(n\):
+\[
+T_1(n) = O((nk + n) \log{n})
+\]
+
+\item \textbf{Bit Shift Operation}: The floored division by \(2^{nk}\) translates to a bit shift, which has a linear time complexity in terms of bit count:
+\[
+T_2(n) = O(nk)
+\]
+
+\item \textbf{Combining Computations}: Taking both primary operations into account, the overall time complexity is:
+\[
+T(n) = O((nk + n) \log{n}) + O(nk) = O((nk + n) \log{n})
+\]
+However, as \(n\) grows, the \(nk\) term becomes dominant:
+\[
+T(n) = O(nk \log{n})
+\]
+\end{enumerate}
+
+\subsection{Space Complexity Analysis}
+Analyzing the space complexity for computing $\binom{n}{k}$ requires us to consider the primary memory-consuming steps:
+
+\begin{enumerate}
+\item \textbf{Intermediate Results}: Exponentiation by squaring requires storage for intermediate results. For modulo $2^{nk + n}$ computations, the maximum number of bits needed is $nk + n$. Thus, space complexity is:
+\[
+S_1(n) = O(nk + n)
+\]
+
+\item \textbf{Bit Shift Operation}: The bit shift operation does not require proportional additional storage, leading to:
+\[
+S_2(n) = O(1)
+\]
+
+\item \textbf{Miscellaneous Variables}: Auxiliary variables, including $n$, $k$, and loop counters, occupy:
+\[
+S_3(n) = O(1)
+\]
+\end{enumerate}
+
+Combining these, the overall space complexity becomes:
+\[
+S(n) = O(nk + n)
+\]
+When \(n\) grows significantly, this simplifies to:
+\[
+S(n) = O(nk)
+\]
+
 \section{Summary}
 In this paper, we have made two key contributions. First, we derived and proved a novel formula for computing binomial coefficients:
 \begin{align*}
@@ -305,11 +372,11 @@ In this paper, we have made two key contributions. First, we derived and proved 
 \\
 This formula depends only on basic arithmetic operations and establishes an interesting connection between binomial coefficients and modular arithmetic. 
 \\
-Second, we generalized this formula to find closed form expressions for the coefficients of terms in the multinomial expansion of arbitrary degree univariate polynomials. Specifically, we showed:
+Second, we generalized this formula to find closed form expressions for the coefficients of terms in the multinomial expansion of arbitrary degree univariate unit polynomials. Specifically, we showed:
 \begin{align*}
 [x^k] \left(\frac{x^{D}-1}{x-1}\right)^n = \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n, \\ \text{for } n > 0 \text{ and } 0 \leq k \leq n \cdot (D-1)
 \end{align*}
-Our novel approach stems from connecting binomial coefficients to a key, but rarely explored, property of polynomials: that they can be unambiguously determined by two judiciously chosen inputs. This insight allowed us to derive simple arithmetic formulas for computing these coefficients. In doing so, our work strengthens the connection between binomial coefficients and polynomial functions, while also establishing an elegant new link to modular arithmetic. This link is not only mathematically appealing, but also ripe with potential for further exploration. Our formula serves not merely as an alternative means to compute binomial coefficients, but as a potential pathway to new mathematical identities and relations between these fundamental concepts.
+Our novel formulae stem from connecting binomial coefficients to a key, but rarely explored, property of polynomials: that they can be unambiguously determined by two judiciously chosen inputs.
 \\
 \\
 Discoveries such as ours underscore the idea that profound insights can often emerge from concepts that, once discovered, seem simple and obvious, yet have remained overlooked. We hope that this reminds others of the vast potential for innovation that still lies latent even within well-studied fields of mathematics. By revisiting old problems with fresh perspectives, there is always the possibility of unearthing powerful new insights.
