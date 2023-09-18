@@ -364,6 +364,45 @@ When \(n\) grows significantly, this simplifies to:
 S(n) = O(nk)
 \]
 
+\subsection{Comparison to State of the Art}
+The most efficient algorithm for computing $\binom{n}{k}$ makes use of the factorial formula:
+\begin{align}
+    \binom{n}{k} = \frac{n!}{k!(n-k)!}
+\end{align}
+
+Notice that when multiplying $k!$ and $(n-k)!$, the product contains all integers from 1 to $n$ in the sequence. Thus, many terms in the numerator $n!$ and the denominator $k!(n-k)!$ will cancel out, leaving only $k$ terms in the numerator. This results in the simplified formula:
+\begin{align}
+    \binom{n}{k} = \prod_{j=1}^{k} \frac{n-j+1}{j} 
+\end{align}
+
+In pseudocode:
+
+\begin{verbatim}
+Function Binomial(n, k)
+    Set c to 1
+    For j from 1 to k
+        Set c to c * (n - j + 1)
+        Set c to c / j
+    End Loop
+    Return c
+End Function
+\end{verbatim}
+
+The program above requires $k$ multiplications and divisions to compute $\binom{n}{k}$. Harvey and van Der Heoven have given an algorithm for integer multiplication which has a time complexity of $O(k \log{k})$ \cite{harveyvanderhoeven2021}. This gives the program an overall time complexity of:
+\[
+T(n) = O(k (k \log{k})) = O(k^2 \log{k})
+\]
+
+The program computes $\binom{n}{k}$ directly, so the space complexity is trivially:
+\[
+S(n) = O(k)
+\]
+
+The time complexity of our formula compares favorably when $k$ is large. Considering the symmetry $\binom{n}{k} = \binom{n}{n-k}$, when $k = \left\lfloor \frac{n}{2} \right\rfloor$ and is therefore as large as possible, the time complexity of both methods is $O(n^2 \log{n})$. However, our formula requires $O(n^2)$ space to compute, whereas the factorial method requires only $O(n)$ space.
+\\
+\\
+In practice, our algorithm may be more efficient to compute due to the reduction in overheads associated with incrementing counters and looping. Since our algorithm uses exponentiation by squaring, it requires only $O(\log{n})$ multiplications compared to $O(k)$ multiplications for the factorial method. While our method has a higher memory footprint, modern systems often have large amounts of RAM available. Further analysis of the tradeoffs associated with both approaches is warranted.
+
 \section{Summary}
 In this paper, we have made two key contributions. First, we derived and proved a novel formula for computing binomial coefficients:
 \begin{align*}
@@ -382,7 +421,7 @@ Our novel formulae stem from connecting binomial coefficients to a key, but rare
 Discoveries such as ours underscore the idea that profound insights can often emerge from concepts that, once discovered, seem simple and obvious, yet have remained overlooked. We hope that this reminds others of the vast potential for innovation that still lies latent even within well-studied fields of mathematics. By revisiting old problems with fresh perspectives, there is always the possibility of unearthing powerful new insights.
 
 \section{Future Directions}
-Future research could explore the computational efficiency of the formulas and their behavior for large values of \(n\), \(k\), and \(D\) with a view to potential optimizations. Further investigation into the polynomial property and its generalization could potentially reveal applications in computing values of other sequences. An examination of the relationship between modular arithmetic and binomial coefficients also presents a promising avenue for exploration.
+Future research could further explore the computational efficiency of the formulas and their behavior for large values of \(n\), \(k\), and \(D\) with a view to potential optimizations. A deeper investigation into the polynomial property and its generalization could potentially reveal applications in computing values of other sequences. An examination of the relationship between modular arithmetic and binomial coefficients also presents a promising avenue for exploration.
 
 \bibliographystyle{unsrt}
 \bibliography{main}
