@@ -31,10 +31,11 @@
 \begin{document}
 
 \maketitle
-
+\linespread{1.3}
 \begin{abstract}
 We provide a detailed derivation of a formula aimed at computing binomial coefficients, utilizing an underexplored property of polynomial encoding. The derived formula, \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}\), is valid for \( n > 0 \) and \( 0 \leq k \leq n \). We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of \( \binom{n}{k} \) modulo \( n \) using our formula.
 \end{abstract}
+\linespread{1.0}
 
 \section{Introduction}
 Binomial coefficients, denoted by \(\binom{n}{k}\), are fundamental in various mathematical domains. Conventional techniques for their computation involve factorials, Gamma functions, and Pascal's triangle. However, alternative approaches can sometimes offer new computational efficiencies and analytical insights. In this paper, we uncover a formula for binomial coefficients, given by:
@@ -208,7 +209,7 @@ We can use this approach to derive the binomial coefficient formula as follows:
     \end{align}
     \item Reverse the Kronecker substitution on $A^n$ in base $2^n$ to obtain the coefficients. By the digit-coefficient correspondence, these are precisely the binomial coefficients.
 \end{enumerate}
-Therefore, by carefully selecting the base for the Kronecker substitution, we arrive at the formula presented in Theorem \ref{thm:2}. While Kronecker substitution is a well-known technique in computation, the author was unable to find any existing literature in which it is used to derive an explicit formula for binomial coefficients.
+Therefore, by carefully selecting the base for the Kronecker substitution, we arrive at the formula presented in Theorem \ref{thm:2}.
 
 \subsection{Observations}
 We notice that our key property of polynomials from Theorem \ref{thm:1} is related to Kronecker substitution in the following way: for a given polynomial $P(x)$, $P(1)$ gives the minimum base that can be used with Kronecker substitution to ensure that all coefficients can be recovered completely.
