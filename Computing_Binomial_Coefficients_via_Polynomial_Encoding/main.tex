@@ -33,7 +33,7 @@
 \maketitle
 \linespread{1.3}
 \begin{abstract}
-We provide a detailed derivation of a formula aimed at computing binomial coefficients, utilizing an underexplored property of polynomial encoding. The derived formula, \(\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}\), is valid for \( n > 0 \) and \( 0 \leq k \leq n \). We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of \( \binom{n}{k} \) modulo \( n \) using our formula.
+We provide a detailed derivation of a formula aimed at computing binomial coefficients, utilizing an underexplored property of polynomial encoding. The derived formula, $\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}$, is valid for $n > 0$ and $0 \leq k \leq n$. We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of $\binom{n}{k}$ modulo $n$ using our formula.
 \end{abstract}
 \linespread{1.0}
 
@@ -221,8 +221,8 @@ Q(x)^n = (1 + 13x + 3x^2 + 7x^3 + 11x^5)^n
 
 Applying Theorem \ref{thm:1}, we get:
 \begin{align}
-Q(1)^n &= 35^n \\
-Q(Q(1))^n &= (1 + 13(35^n) + 3(35^n)^2 + 7(35^n)^3 + 11(35^n)^5)^n
+    Q(1)^n &= 35^n \\
+    Q(Q(1))^n &= (1 + 13(35^n) + 3(35^n)^2 + 7(35^n)^3 + 11(35^n)^5)^n
 \end{align}
 
 From the above, we can derive an explicit formula for the coefficients. Using Kronecker substitution, many additional steps would be required to find a suitable base. Clearly in this case as in most others, our approach offers a distinct advantage over naive application of Kronecker substitution. We demonstrate this further in \S \ref{sec:multinomialformula} by deriving an explicit formula for coefficients in the multinomial expansion of univariate unit polynomials.
@@ -317,7 +317,7 @@ We now analyze the computational complexity associated with naively computing $\
 Analyzing the time complexity for computing $\binom{n}{k}$ using our formula, we use the representation (\ref{equation:timecomplexity}):
 
 \begin{equation*}
-\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
+    \binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n} \bmod 2^{n k + n}}{2^{n k}}\right\rfloor
 \end{equation*}
 
 The procedure can be delineated as follows:
@@ -420,7 +420,7 @@ An equivalent definition of the floor function is as follows \cite{niven2008intr
 
 By substitution, we arrive at:
 \begin{align*}
-    \binom{n}{k} &\equiv \frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\\&- 2^{n} \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \pmod{n}
+    \binom{n}{k} &\equiv \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right)\\&- 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right) \pmod{n}
 \end{align*}
 
 We can distribute the mod operation for $n$ and use modular exponentiation to efficiently compute the values for the majority of the terms modulo $n$. The only terms for which we cannot efficiently compute this way are:
