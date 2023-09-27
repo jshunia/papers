@@ -442,8 +442,8 @@ The only terms in \( A \) and \( B \) modulo \( n \) which we cannot efficiently
 \end{align}
 Therefore, if we can find a way to compute the above terms efficiently, then we can calculate \( \binom{n}{k} \) modulo \( n \) efficiently as well. This is a rather interesting problem of evaluating a nested modular exponentiation involving a large integer power and \( n \) as moduli. We leave the generalized version of this as an open problem.
 
-\fbox{%
-  \begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+\fbox{
+\begin{minipage}{\dimexpr\linewidth-2\fboxrule-4\fboxsep}
 \textbf{Problem Statement:}
 
 Determine an algorithm with time complexity \( O(\log^{c}{n}) \) for computing:
@@ -454,10 +454,8 @@ Where \( n, a, b, x, y \in \mathbb{Z} \). The terms \( a^x \) and \( b^y \) must
 \begin{align*}
     \Omega(2^n) \leq a^x,b^y \leq O(2^{2^n})
 \end{align*}
-Solving this problem will enable the computation of binomial coefficients modulo \( n \) in \( O(\log^{c}{n}) \) time using a variant of our formula.
-  \end{minipage}%
-}
-
+Solving this problem will enable the computation of binomial coefficients \\modulo \( n \) in \( O(\log^{c}{n}) \) time using a variant of our formula.
+\end{minipage}}
 \section{Summary}
 In this paper, we have made several contributions. First, we derived and proved a formula for computing binomial coefficients via polynomial encoding techniques:
 \begin{align*}
