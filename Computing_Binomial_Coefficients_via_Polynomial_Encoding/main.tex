@@ -10,21 +10,18 @@
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
 \usepackage{lmodern}
+\usepackage{mdframed}
 \Urlmuskip=0mu plus 1mu\relax
-%\linespread{1.3}
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
-\renewcommand{\familydefault}{lmr}
-\renewcommand{\sfdefault}{lmr}
-\renewcommand{\ttdefault}{lmr}
 \theoremstyle{plain}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \newtheorem{thm}{Theorem}
 \newtheorem{lemma}{Lemma}
 
-\title{Computing Binomial Coefficients via Polynomial Encoding}
+\title{Computing Binomial Coefficients\\via Polynomial Encoding}
 \author{Joseph M. Shunia}
 \date{September 2023}
 
@@ -33,7 +30,7 @@
 \maketitle
 \linespread{1.3}
 \begin{abstract}
-We provide a detailed derivation of a formula aimed at computing binomial coefficients, utilizing an underexplored property of polynomial encoding. The derived formula, $\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}$, is valid for $n > 0$ and $0 \leq k \leq n$. We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of $\binom{n}{k}$ modulo $n$ using our formula.
+We provide a detailed derivation of a formula for computing binomial coefficients by harnessing an underexplored property of polynomial encoding. The derived formula, $\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}$, is valid for $n > 0$ and $0 \leq k \leq n$. We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of $\binom{n}{k}$ modulo $n$ using our formula.
 \end{abstract}
 \linespread{1.0}
 
@@ -109,7 +106,7 @@ We can use the result from Theorem \ref{thm:1} to recover the coefficients of $P
     Hence, the lemma is proven.
 \end{proof}
 
-\subsection{Binomial Coefficient Formula Proof}
+\subsection[Binomial Coefficient Formula Proof]{Binomial Coefficient Formula Proof}
 \begin{thm}
 \label{thm:2}
 \begin{equation}
@@ -216,7 +213,7 @@ We notice that our key property of polynomials from Theorem \ref{thm:1} is relat
 
 Naive application of Kronecker substitution typically uses powers of \(2\). This is why a derivation of our binomial coefficient formula using Kronecker substitution seems straightforward in hindsight. However, this is a special case, and even still, the exponent in the power of \(2\) to be used is not always obvious. Working with other bases is not as intuitive. For instance, consider the case:
 \begin{align}
-Q(x)^n = (1 + 13x + 3x^2 + 7x^3 + 11x^5)^n
+    Q(x)^n = (1 + 13x + 3x^2 + 7x^3 + 11x^5)^n
 \end{align}
 
 Applying Theorem \ref{thm:1}, we get:
@@ -227,7 +224,7 @@ Applying Theorem \ref{thm:1}, we get:
 
 From the above, we can derive an explicit formula for the coefficients. Using Kronecker substitution, many additional steps would be required to find a suitable base. Clearly in this case as in most others, our approach offers a distinct advantage over naive application of Kronecker substitution. We demonstrate this further in \S \ref{sec:multinomialformula} by deriving an explicit formula for coefficients in the multinomial expansion of univariate unit polynomials.
 
-\section{Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials}
+\section{Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials}[Formula for Coefficients in the Multinomial\\Expansion of Univariate Unit Polynomials]
 \label{sec:multinomialformula}
 Building upon the methodologies employed in our binomial coefficient derivation, we derive a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials:
 \begin{equation}
@@ -294,7 +291,7 @@ Finally, we replace the values of $P_D(1)^n$ and $P_D(P_D(1)^n)^n$ and simplify 
     &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^k (D^{n} - 1)}\right)^n\right\rfloor \bmod D^n \\
     &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n
 \end{align}
-\textbf{Step 2: Proof that the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D - 1)$:} \\
+\textbf{Step 2: Proof that the equation holds only for $n > 0$\\and $0 \leq k \leq n \cdot (D - 1)$:} \\
 To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D-1)$, we consider the following cases in relation to:
 \begin{align}
     [x^k] \left(\frac{x^{D}-1}{x-1}\right)^n &= \left\lfloor \left(\frac{D^{Dn} - 1}{D^{n+k} - D^k}\right)^n\right\rfloor \bmod D^n \\
@@ -310,7 +307,7 @@ To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n \cdot (D-1
 We have shown that our formula is valid and that it holds only for $n > 0$ and $0 \leq k \leq n \cdot (D - 1)$. Hence, the theorem is proven.
 \end{proof}
 
-\section{Computational Complexity Analysis of Binomial Coefficient Formula}
+\section[Computational Complexity Analysis of Binomial Coefficient Formula]{Computational Complexity Analysis of\\ \(\binom{n}{k}\) Formula}
 We now analyze the computational complexity associated with naively computing $\binom{n}{k}$ using our formula. The analysis is based on a direct, unoptimized approach. While this offers a foundational understanding, potential optimizations might not be addressed.
 
 \subsection{Time Complexity Analysis}
@@ -407,7 +404,8 @@ In practice, our formula may be more efficient to compute in certain cases due t
 \subsection{Optimizing Our Binomial Coefficient Formula}
 The connection to Kronecker substitution we found in \S \ref{sec:kronecker} reveals potential for computational optimization. Harvey (2009) \cite{harvey2009kronecker} gives several methods to more efficiently perform multiplications using a modified "multipoint" Kronecker substitution. The techniques provided by Harvey can be applied to our formula in a straightforward manner, however the benefits of doing so have yet to be analyzed. This presents a potential avenue for further research.
 
-\section{The Problem of Efficiently Computing Binomial Coefficients Modulo n}
+\section[The Problem of Efficiently Calculating n choose k Modulo n]{The Problem of Efficiently Calculating\\ \( \binom{n}{k} \) Modulo \( n \)}
+
 Let's examine a variant our binomial coefficient formula (\ref{eq:binomialviafloors}):
 \begin{align*}
     \binom{n}{k} &= \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor - 2^{n} \left\lfloor \frac{(1 + 2^{n})^{n}}{2^{n k + n}} \right\rfloor
@@ -423,22 +421,41 @@ By substitution, we arrive at:
     \binom{n}{k} &\equiv \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right)\\&- 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right) \pmod{n}
 \end{align*}
 
-We can distribute the mod operation for $n$ and use modular exponentiation to efficiently compute the values for the majority of the terms modulo $n$. The only terms for which we cannot efficiently compute this way are:
+We can distribute the mod operation for $n$ and use modular exponentiation to efficiently compute the values for the majority of the terms modulo $n$. To demonstrate, let:
+\begin{align}
+A &= \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right) \bmod{n} \\
+B &= 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right) \bmod{n}
+\end{align}
+Hence, we have:
+\begin{align}
+\binom{n}{k} &\equiv (A - B) \pmod{n}
+\end{align}
+By distribution of the mod \( n \) operation:
+\begin{align}
+A &= \left(\frac{(1 + 2^{n})^{n} \bmod{n}}{2^{nk} \bmod{n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}}) \bmod{n}}{2^{nk} \bmod{n}}\right) \bmod{n} \\
+B &= \left(2^{n} \left( \frac{(1 + 2^{n})^{n} \bmod{n}}{2^{nk+n} \bmod{n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}}) \bmod{n}}{2^{nk+n} \bmod{n}} \right)\right) \bmod{n}
+\end{align}
+The only terms in \( A \) and \( B \) modulo \( n \) which we cannot efficiently compute using modular exponentiation are:
 \begin{align}
     \left((1 + 2^{n})^{n} \bmod{2^{nk}}\right) \bmod{n}
 \end{align}
 \begin{align}
     \left((1 + 2^{n})^{n} \bmod{2^{nk+n}}\right) \bmod{n}
 \end{align}
-
-If we could compute the above terms efficiently, then we could calculate \( \binom{n}{k} \) modulo \( n \) efficiently as well. This is a rather interesting problem of evaluating a double mod operation involving large integer integer powers and \( n \). We leave the generalized version of this as an open problem.
-
+Therefore, if we can find a way to compute the above terms efficiently, then we can calculate \( \binom{n}{k} \) modulo \( n \) efficiently as well. This is a rather interesting problem of evaluating nested modular exponentiations involving a large integer power and \( n \) as moduli. We leave the generalized version of this as an open problem.
+\begin{mdframed}
 \textbf{Problem Statement:}
-Determine an efficient algorithm or mathematical approach for calculating:
+
+Determine an algorithm with time complexity \( O(\log^{c}{n}) \) for calculating:
 \begin{align*}
-    \left(a^{j} \bmod{b^k}\right) \bmod{n},\quad \text{where } n > 1\text{, } a > 1\text{, } b > 1\text{, } \text{ and } a^j > b^k > n
+    \left(a^{x} \bmod{b^y}\right) \bmod{n}
 \end{align*}
-Doing so would enable efficient computation of binomial coefficients modulo \( n \) using a version of our formula.
+Where \( n, a, b, x, y \in \mathbb{Z} \). The terms \( a^x \) and \( b^y \) must satisfy:
+\begin{align*}
+    \Omega(2^n) \leq a^x,b^y \leq O(2^{2^n})
+\end{align*}
+Solving this problem will enable the calculation of binomial coefficients modulo \( n \) in \( O(\log^{c}{n}) \) time using a variant of our formula.
+\end{mdframed}
 
 \section{Summary}
 In this paper, we have made several contributions. First, we derived and proved a formula for computing binomial coefficients via polynomial encoding techniques:
