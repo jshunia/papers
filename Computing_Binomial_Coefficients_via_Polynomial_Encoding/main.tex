@@ -452,9 +452,10 @@ Determine an algorithm with time complexity \( O(\log^{c}{n}) \) for computing:
 \end{align*}
 Where \( n, a, b, x, y \in \mathbb{Z} \). The terms \( a^x \) and \( b^y \) must satisfy:
 \begin{align*}
-    \Omega(2^n) \leq a^x,b^y \leq O(2^{2^n})
+    a^x,b^y = o(2^{2^n})
 \end{align*}
 Solving this problem will enable the computation of binomial coefficients \\modulo \( n \) in \( O(\log^{c}{n}) \) time using a variant of our formula.
+
 \end{minipage}}
 \section{Summary}
 In this paper, we have made several contributions. First, we derived and proved a formula for computing binomial coefficients via polynomial encoding techniques:
