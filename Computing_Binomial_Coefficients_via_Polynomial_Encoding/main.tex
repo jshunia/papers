@@ -416,24 +416,13 @@ An equivalent definition of the floor function is as follows \cite{niven2008intr
 
 By substitution, we arrive at:
 \begin{align*}
-    \binom{n}{k} &\equiv \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right)\\&- 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right) \pmod{n}
+    \binom{n}{k} &= \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right)\\&- 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right)
 \end{align*}
-
-We can distribute the mod operation for $n$ and use modular exponentiation to efficiently compute the values for the majority of the terms modulo $n$. To demonstrate, let:
-\begin{align}
-A &= \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right) \bmod{n} \\
-B &= 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right) \bmod{n}
-\end{align}
-Hence, we have:
-\begin{align}
-\binom{n}{k} &\equiv (A - B) \pmod{n}
-\end{align}
-By distribution of the mod \( n \) operation:
-\begin{align}
-A &= \left(\frac{(1 + 2^{n})^{n} \bmod{n}}{2^{nk} \bmod{n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}}) \bmod{n}}{2^{nk} \bmod{n}}\right) \bmod{n} \\
-B &= \left(2^{n} \left( \frac{(1 + 2^{n})^{n} \bmod{n}}{2^{nk+n} \bmod{n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}}) \bmod{n}}{2^{nk+n} \bmod{n}} \right)\right) \bmod{n}
-\end{align}
-The only terms in \( A \) and \( B \) modulo \( n \) which we cannot efficiently compute using modular exponentiation are:
+Which simplifies to:
+\begin{align*}
+    \binom{n}{k} &= \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}}) - ((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}
+\end{align*}
+From here, we can distribute the mod operation for $n$ and use modular exponentiation to efficiently compute $2^{-nk} \bmod{n}$. The terms which we cannot efficiently compute using modular exponentiation are:
 \begin{align}
     \left((1 + 2^{n})^{n} \bmod{2^{nk}}\right) \bmod{n}
 \end{align}
