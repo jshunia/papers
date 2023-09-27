@@ -9,7 +9,6 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
-\usepackage{lmodern}
 \usepackage{tcolorbox}
 \Urlmuskip=0mu plus 1mu\relax
 \setlength{\parskip}{0.5em}
@@ -443,7 +442,9 @@ The only terms in \( A \) and \( B \) modulo \( n \) which we cannot efficiently
     \left((1 + 2^{n})^{n} \bmod{2^{nk+n}}\right) \bmod{n}
 \end{align}
 Therefore, if we can find a way to compute the above terms efficiently, then we can calculate \( \binom{n}{k} \) modulo \( n \) efficiently as well. This is a rather interesting problem of evaluating nested modular exponentiations involving a large integer power and \( n \) as moduli. We leave the generalized version of this as an open problem.
-\begin{tcolorbox}[colback=white, boxrule=0.5pt, colframe=black, sharp corners]
+
+\fbox{%
+  \begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
 \textbf{Problem Statement:}
 
 Determine an algorithm with time complexity \( O(\log^{c}{n}) \) for calculating:
@@ -455,7 +456,8 @@ Where \( n, a, b, x, y \in \mathbb{Z} \). The terms \( a^x \) and \( b^y \) must
     \Omega(2^n) \leq a^x,b^y \leq O(2^{2^n})
 \end{align*}
 Solving this problem will enable the calculation of binomial coefficients modulo \( n \) in \( O(\log^{c}{n}) \) time using a variant of our formula.
-\end{tcolorbox}
+  \end{minipage}%
+}
 
 \section{Summary}
 In this paper, we have made several contributions. First, we derived and proved a formula for computing binomial coefficients via polynomial encoding techniques:
