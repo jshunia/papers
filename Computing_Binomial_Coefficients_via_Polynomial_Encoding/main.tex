@@ -1,9 +1,6 @@
 %\documentclass[12pt, reqno]{amsart}
 \documentclass{article}
-\textheight 22.5truecm \textwidth 14.5truecm
-\setlength{\oddsidemargin}{0.35in}\setlength{\evensidemargin}{0.35in}
-
-\setlength{\topmargin}{-.5cm}
+\usepackage{fullpage}
 
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage[utf8]{inputenc}
@@ -233,7 +230,7 @@ Applying Theorem \ref{thm:1}, we get:
 
 From the above, we can derive an explicit formula for the coefficients. Using Kronecker substitution, many additional steps would be required to find a suitable base. Clearly in this case as in most others, our approach offers a distinct advantage over naive application of Kronecker substitution. We demonstrate this further in \S \ref{sec:multinomialformula} by deriving an explicit formula for coefficients in the multinomial expansion of univariate unit polynomials.
 
-\section[Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials]{Formula for Coefficients in the Multinomial Expansion\\of Univariate Unit Polynomials}
+\section[Deriving a Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials]{Deriving a Formula for Coefficients in the Multinomial\\Expansion of Univariate Unit Polynomials}
 \label{sec:multinomialformula}
 Building upon the methodologies employed in our binomial coefficient derivation, we derive a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials:
 \begin{equation}
@@ -256,7 +253,7 @@ Where the summation criteria are:
     0 \cdot k_0 + 1 \cdot k_1 + \ldots + (D-1) \cdot k_{D-1} &= k
 \end{align}
 
-\subsection{Multinomial Formula Proof}
+\subsection{Multinomial Formula and Its Proof}
 \begin{thm}
 \label{thm:3}
 \begin{align*}
@@ -427,7 +424,7 @@ An equivalent definition of the floor function is as follows \cite{niven2008intr
 
 By substitution, we arrive at:
 \begin{align*}
-    \binom{n}{k} &= \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right)\\&- 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right)
+    \binom{n}{k} &= \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right) - 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right)
 \end{align*}
 Which simplifies to:
 \begin{align*}
@@ -453,7 +450,7 @@ Where \( n, a, b, x, y \in \mathbb{Z} \). The terms \( a^x \) and \( b^y \) must
 \begin{align}
     a^x,b^y = o(2^{2^n})
 \end{align}
-Solving this problem will enable the computation of binomial coefficients modulo \( n \)\\in \( O(\log^{c}{n}) \) time using a variant of our formula.
+Solving this problem will enable the computation of binomial coefficients modulo \( n \) in \( O(\log^{c}{n}) \) time\\using a variant of our formula.
 \end{minipage}}
 
 \section{Summary}
@@ -461,7 +458,7 @@ In this paper, we have made several contributions. First, we derived and proved 
 \begin{align*}
     \binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}\text{,} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
 \end{align*}
-This formula depends only on basic arithmetic operations and illuminates connections between binomial coefficients, polynomial encoding, and modular arithmetic. We gave a baseline analysis of the computational complexity for the formula and compared it to typical approaches. We also left an open problem which, if resolved, would enable efficient computation of \(\binom{n}{k}\) modulo \(n\) using the formula.
+This formula depends only on basic arithmetic operations and illuminates connections between binomial coefficients, polynomial encoding, and modular arithmetic. We gave a baseline analysis of the computational complexity for the formula and compared it to typical approaches. We also left an open problem which, if resolved, would enable efficient computation of \(\binom{n}{k} \pmod{n}\) using the formula.
 
 Furthermore, we demonstrated the broad applicability of our approach by finding a closed form expression for the coefficients of terms in the multinomial expansion of arbitrary degree univariate unit polynomials:
 \begin{align*}
