@@ -19,7 +19,7 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{lemma}{Lemma}
 
-\title{Computing Binomial Coefficients via\\Polynomial Encoding Techniques}
+\title{A Simple Formula for Binomial Coefficients Revealed Through Polynomial Encoding}
 \author{Joseph M. Shunia}
 \date{September 2023}
 
@@ -28,7 +28,7 @@
 \maketitle
 \linespread{1.3}
 \begin{abstract}
-We provide a detailed derivation of a formula for computing binomial coefficients by harnessing an underexplored property of polynomial encoding. The derived formula, $\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}$, is valid for $n > 0$ and $0 \leq k \leq n$. We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of $\binom{n}{k}$ modulo $n$ using our formula.
+We provide a detailed derivation of a new formula for binomial coefficients by harnessing an underexplored property of polynomial encoding. The formula, $\binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}$, is valid for $n > 0$ and $0 \leq k \leq n$. We relate this formula to existing mathematical methods via Kronecker substitution. To showcase the versatility of our approach, we also apply it to multinomials. A baseline computational complexity analysis identifies opportunities for optimization. We conclude by positing an open problem concerning the efficient computation of $\binom{n}{k}$ modulo $n$ using our formula.
 \end{abstract}
 \linespread{1.0}
 
@@ -450,7 +450,7 @@ Solving this problem will enable the computation of binomial coefficients modulo
 \end{minipage}}
 
 \section{Summary}
-In this paper, we have made several contributions. First, we derived and proved a formula for computing binomial coefficients via polynomial encoding techniques:
+In this paper, we have made several contributions. First, we proved a new formula for computing binomial coefficients via polynomial encoding techniques:
 \begin{align*}
     \binom{n}{k} = \left\lfloor\frac{(1 + 2^{n})^{n}}{2^{n k}}\right\rfloor \bmod{2^{n}}\text{,} \quad \text{for } n > 0 \text{ and } 0 \leq k \leq n
 \end{align*}
