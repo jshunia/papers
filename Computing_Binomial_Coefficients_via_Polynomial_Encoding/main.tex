@@ -3,14 +3,14 @@
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage[numbers]{natbib}
 \usepackage{csquotes}
-\usepackage[hyphens]{url}
+\usepackage{url}
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
-%\Urlmuskip=0mu plus 1mu\relax
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 \theoremstyle{plain}
@@ -462,7 +462,10 @@ Furthermore, we demonstrated the broad applicability of our approach by finding 
 \end{align*}
 The formulas above stem from connecting binomial coefficients to a key, but rarely explored, property of polynomial encoding. We linked this polynomial property to an established technique, Kronecker substitution, and showed how this linkage presents opportunities for additional research into computational optimizations.
 
-\bibliographystyle{unsrt}
+\begingroup
+\raggedright
+\bibliographystyle{unsrtnat}
 \bibliography{main}
+\endgroup
 
 \end{document}
