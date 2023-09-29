@@ -1,7 +1,5 @@
-%\documentclass[12pt, reqno]{amsart}
 \documentclass{article}
 \usepackage{fullpage}
-
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -12,7 +10,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
-\Urlmuskip=0mu plus 1mu\relax
+%\Urlmuskip=0mu plus 1mu\relax
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 \theoremstyle{plain}
@@ -230,8 +228,7 @@ Applying Theorem \ref{thm:1}, we get:
 
 From the above, we can derive an explicit formula for the coefficients. Using Kronecker substitution, many additional steps would be required to find a suitable base. Clearly in this case as in most others, our approach offers a distinct advantage over naive application of Kronecker substitution. We demonstrate this further in \S \ref{sec:multinomialformula} by deriving an explicit formula for coefficients in the multinomial expansion of univariate unit polynomials.
 
-\section[Deriving a Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials]{Deriving a Formula for Coefficients in the Multinomial\\Expansion of Univariate Unit Polynomials}
-\label{sec:multinomialformula}
+\section[Deriving a Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials]{Deriving a Formula for Coefficients in the Multinomial\\ Expansion of Univariate Unit Polynomials} \label{sec:multinomialformula}
 Building upon the methodologies employed in our binomial coefficient derivation, we derive a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials:
 \begin{equation}
     \left(\frac{x^{D}-1}{x-1}\right)^n = (1 + x + \ldots + x^{D-1})^n 
@@ -403,9 +400,9 @@ The algorithm computes $\binom{n}{k}$ directly, so the space complexity is trivi
     S(n) = O(k)
 \end{align}
 
-The time complexity of our formula compares favorably when $k$ is large. Considering the symmetry $\binom{n}{k} = \binom{n}{n-k}$, when $k = \left\lfloor \frac{n}{2} \right\rfloor$ and is therefore as large as possible, the time complexity of both methods is $O(n^2 \log{n})$. However, our formula requires $O(n^2)$ space to compute, whereas the factorial method requires only $O(n)$ space.
+The time complexity of our formula compares favorably when $k$ is large. Considering the symmetry $\binom{n}{k} = \binom{n}{n-k}$, when $k = \left\lfloor \frac{n}{2} \right\rfloor$ and is therefore as large as possible, the time complexity of both formulas simplifies to $O(n^2 \log{n})$. However, our formula requires $O(n^2)$ space to compute, whereas the factorial formula requires only $O(n)$ space.
 
-In practice, our formula may be more efficient to compute in certain cases due to the reduction in overheads associated with incrementing counters and looping. Since our formula uses exponentiation by squaring, it requires only $O(\log{n})$ multiplications compared to $O(k)$ multiplications for the factorial method. While our formula has a higher memory footprint, modern systems often have large amounts of RAM available. A practical analysis of performance and trade offs associated with both approaches is warranted.
+In practice, our formula may be more efficient to compute in certain cases due to the reduction in overheads associated with incrementing counters and looping. Since our formula uses exponentiation by squaring, it requires only $O(\log{n})$ multiplications compared to $O(k)$ multiplications for the factorial formula. While our formula has a higher memory footprint, modern systems often have large amounts of RAM available. A practical analysis of performance and trade offs associated with both approaches is warranted.
 
 \subsection{Optimizing Our Binomial Coefficient Formula}
 The connection to Kronecker substitution we found in \S \ref{sec:kronecker} reveals potential for computational optimization. Harvey (2009) \cite{harvey2009kronecker} gives several methods to more efficiently perform multiplications using a modified "multipoint" Kronecker substitution. The techniques provided by Harvey can be applied to our formula in a straightforward manner, however the benefits of doing so have yet to be analyzed. This presents a potential avenue for further research.
@@ -441,7 +438,6 @@ Therefore, if we can find a way to compute the above terms efficiently, then we 
 
 \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
 \textbf{Problem Statement:}
-
 Determine an algorithm with time complexity \( O(\log^{c}{n}) \) for computing:
 \begin{align}
     \left(a^{x} \bmod{b^y}\right) \bmod{n}
