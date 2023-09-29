@@ -423,13 +423,13 @@ An equivalent definition of the floor function is as follows \cite{niven2008intr
 \end{align}
 
 By substitution, we arrive at:
-\begin{align*}
+\begin{align}
     \binom{n}{k} &= \left(\frac{(1 + 2^{n})^{n}}{2^{nk}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}\right) - 2^{n} \left( \frac{(1 + 2^{n})^{n}}{2^{nk+n}} - \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}})}{2^{nk+n}} \right)
-\end{align*}
+\end{align}
 Which simplifies to:
-\begin{align*}
+\begin{align}
     \binom{n}{k} &= \frac{((1 + 2^{n})^{n} \bmod{2^{nk+n}}) - ((1 + 2^{n})^{n} \bmod{2^{nk}})}{2^{nk}}
-\end{align*}
+\end{align}
 From here, if $n$ is odd, then we can distribute the mod operation for $n$ and use modular exponentiation to efficiently compute $2^{-nk} \bmod{n}$. The terms which we cannot efficiently compute using modular exponentiation are:
 \begin{align}
     \left((1 + 2^{n})^{n} \bmod{2^{nk}}\right) \bmod{n}
