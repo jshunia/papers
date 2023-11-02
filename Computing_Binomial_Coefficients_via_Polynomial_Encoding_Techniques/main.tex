@@ -1,3 +1,4 @@
+\pdfoutput=1
 \documentclass{article}
 \usepackage{fullpage}
 \usepackage{amsmath, amssymb, amsthm}
@@ -21,7 +22,7 @@
 
 \title{A Simple Formula for Binomial Coefficients Revealed Through Polynomial Encoding}
 \author{Joseph M. Shunia}
-\date{September 2023}
+\date{October 2023}
 
 \begin{document}
 
@@ -210,23 +211,28 @@ We can use this approach to derive the binomial coefficient formula as follows:
     \end{align}
     \item Reverse the Kronecker substitution on $A^n$ in base $2^n$ to obtain the coefficients. By the digit-coefficient correspondence, these are precisely the binomial coefficients.
 \end{enumerate}
-Therefore, by carefully selecting the base for the Kronecker substitution, we arrive at the formula presented in Theorem \ref{thm:2}. It is important to note that our usage of Kronecker substitution in this manner, while valid, is highly unusual compared to typical applications focused on polynomial multiplication.
+Therefore, by carefully selecting the base for the Kronecker substitution, we arrive at the formula presented in Theorem \ref{thm:2}. It is important to note that our usage of Kronecker substitution in this manner, while valid, is highly unusual compared to typical applications focused on polynomial multiplication. Although this application of Kronecker substitution produces the same binomial coefficients, its limitations become apparent when we examine the general properties of polynomial coefficients.
 
-\subsection{Observations}
+\subsubsection{Observation}
 We notice that our key property of polynomials from Theorem \ref{thm:1} is related to Kronecker substitution in the following way: for a given polynomial $P(x)$, $P(1)$ gives the minimum base that can be used with Kronecker substitution to ensure that all coefficients can be recovered completely.
 
-Naive application of Kronecker substitution typically uses powers of \(2\). This is why a derivation of our binomial coefficient formula using Kronecker substitution seems straightforward in hindsight. However, this is a special case, and even still, the exponent in the power of \(2\) to be used is not always obvious. Working with other bases is not as intuitive. For instance, consider the case:
+\subsection{The Non-Triviality of Base Selection in Kronecker Substitution}
+A naive reading of our derivation might suggest that the results are trivially achieved through Kronecker substitution. Such an interpretation would miss the nuanced challenges associated with choosing an appropriate base for the substitution, especially in the general case. While Kronecker substitution does yield a result that encodes polynomial coefficients as digits in a particular base, it does not provide an explicit method to determine what that base should be to recover a formula for those coefficients. The base selection is typically input specific, and influenced by computational efficiency considerations, such as fast bitwise operations in base 2.
+
+To illustrate this point, consider the polynomial:
 \begin{align}
-    Q(x)^n = (1 + 13x + 3x^2 + 7x^3 + 11x^5)^n
+    Q(x)^5 = (1 + 13x + 3x^2 + 7x^3 + 11x^5)^5
 \end{align}
 
 Applying Theorem \ref{thm:1}, we get:
 \begin{align}
-    Q(1)^n &= 35^n \\
-    Q(Q(1))^n &= (1 + 13(35^n) + 3(35^n)^2 + 7(35^n)^3 + 11(35^n)^5)^n
+    Q(1)^5 &= 35^5 \\
+    Q(Q(1))^5 &= (1 + 13(35^5) + 3(35^5)^2 + 7(35^5)^3 + 11(35^5)^5)^5
 \end{align}
 
-From the above, we can derive an explicit formula for the coefficients. Using Kronecker substitution, many additional steps would be required to find a suitable base. Clearly in this case as in most others, our approach offers a distinct advantage over naive application of Kronecker substitution. We demonstrate this further in \S \ref{sec:multinomialformula} by deriving an explicit formula for coefficients in the multinomial expansion of univariate unit polynomials.
+In this example, the base needed for coefficient recovery via Kronecker substitution would require additional calculations to identify. Moreover, the step to reverse Kronecker substitution often involves complicated manipulations. While these might yield the coefficients, they are far removed from the original formula and are more computationally intensive. This demonstrates that choosing a suitable base, particularly in the general case, is far from trivial.
+
+Our approach offers a key advantage in this regard: Theorem \ref{thm:1} furnishes us with an elegant way to determine the minimum base that ensures complete recovery of the polynomial's coefficients for all inputs, thus enabling us to derive an explicit formula. This addresses a non-trivial challenge in the use of Kronecker substitution for polynomial coefficient recovery, especially when the polynomial has a more complex structure or higher degree. We demonstrate this further in \S \ref{sec:multinomialformula} by deriving an explicit formula for coefficients in the multinomial expansion of univariate unit polynomials.
 
 \section[Deriving a Formula for Coefficients in the Multinomial Expansion of Univariate Unit Polynomials]{Deriving a Formula for Coefficients in the Multinomial\\ Expansion of Univariate Unit Polynomials} \label{sec:multinomialformula}
 Building upon the methodologies employed in our binomial coefficient derivation, we derive a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials:
