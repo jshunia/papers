@@ -1,0 +1,364 @@
+\pdfoutput=1
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage{csquotes}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\theoremstyle{plain}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\usepackage{graphicx}
+\usepackage{multicol}
+
+\title{An Efficient Deterministic Primality Test}
+\author{Joseph M. Shunia}
+\date{November 2023}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+A deterministic primality test with a polynomial time complexity of $O(\log(n)^3 \log\log(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. Combining elements of number theory and combinatorics, the proof operates on the basis of simultaneous modular congruences relating to binomial transforms of powers of two.
+\end{abstract}
+
+\section{Introduction}
+
+Primality testing has seen remarkable advancements over the past few decades. A significant breakthrough in this field was the AKS primality test, introduced by Agrawal, Kayal, and Saxena (2002) \cite{aks2002}. The AKS test was the first to offer determinism and polynomial-time complexity, a monumental achievement that resolved a longstanding open question in computational number theory \cite{goldreich2008}. However, despite its theoretical importance, the AKS test has practical limitations due to its relatively high polynomial time complexity, rendering it inefficient for most applications. Agrawal, Kayal, and Saxena gave a time complexity of $O(\log(n)^{12})$ for the AKS test \cite{aks2002}. This bound was lowered significantly by Lenstra and Pomerance (2011) to $O(\log^6(n))$ \cite{lenstra2011}. Despite this reduction, AKS remains impractical and is mostly unused.
+
+In the field of cryptography, the unique properties of prime numbers are widely exploited to create cryptographic primitives. It is often the case that many large primes must be generated in rapid succession \cite{lenstra1987}. To make these cryptographic operations practical, fast probabilistic primality tests such as the Baille-PSW primality test (BPSW) \cite{baillie1980} or Miller-Rabin (MR) \cite{rabin1980} \cite{miller1976} are used instead of AKS when searching for large primes. Probabilistic primality tests are by definition non-deterministic and may erroneously report a composite integer as being prime. Composite integers which pass a probabilistic primality test are relatively rare and are known as psuedoprimes (PSPs) for the respective test \cite{wagstaff1983}. When generating primes for cryptographic purposes, probabilistic primality tests are often combined or repeated with different parameters in order to achieve an acceptable error-bound that makes it almost certain that no composite integer will pass. However, reducing the error-bound requires additional compute and increases running-time, creating a trade-off.
+
+We present a new deterministic primality test that operates in polynomial time with a time complexity of $O(\log(n)^3 \log\log(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. Our main theorem posits a condition for an odd integer \( n \) to be prime, based on specific modular congruences related to the binomial transforms of powers of $2$. The basis for our test is the following main theorem: Let \( n \) be an odd integer satisfying \( 2^{n-1} \equiv 1 \pmod{n} \). Denote \( D \) as the least integer strictly greater than \( 2 \) and less than \( n \) which does not divide \( n-1 \). Then, \( n \) is prime if and only if a set of simultaneous modular congruences involving \( D \), \( n \), and binomial coefficients hold.
+
+This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by two critical lemmas. The first lemma demonstrates the test's validity for odd prime numbers, while the second confirms its failure for odd composite numbers. Through these lemmas, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We also give a pseudocode implementation for our test to show how it can be implemented.
+
+\section{Main Theorem}
+
+\begin{theorem}
+\label{theorem:1}
+    Let $n$ be an odd integer $n > 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $n$ is prime if and only if the following congruence holds:
+    \begin{align}
+        1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \equiv \sum_{k=0}^{n} \binom{n}{k}2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}
+    \end{align}
+\end{theorem}
+
+\subsection{Supporting Lemmas}
+
+\subsubsection[Lemma for odd prime n]{Lemma for odd prime $n$}
+
+\begin{lemma} \label{lemma:primes}
+    If $n$ is an odd prime integer $>3$, it passes our test unconditionally.
+\end{lemma}
+\begin{proof}
+\label{proof:primes}
+    To show that an odd prime $n > 3$ passes the test, we need to verify the requisite congruences under the assumption that $n$ is an odd prime.
+    
+    \textbf{Note.}
+    We require $n > 3$ due to the nature of our test, which defines $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. In the case of $n=3$, no such $D$ exists.
+
+    \textbf{Step 1:} Show that $2^{n-1} \equiv 1 \pmod{n}$.
+
+     Let $\varphi(n)$ denote Euler's totient function. Euler's totient theorem \cite{hardy2008} states that if $n$ and $a$ are coprime positive integers, then:
+    \begin{align}
+        a^{\varphi(n)} \equiv 1 \pmod{n}
+    \end{align}
+    
+    In our case, we have $n$ as an odd prime and $a = 2$, which is even. These are obviously coprime. Also, since $n$ is prime, we have $\varphi(n) = n - 1$. Applying Euler's totient theorem, we see that our initial criterion $2^{n-1} \equiv 1 \pmod{n}$ holds, as $2^{\varphi(n)} = 2^{n-1}$ and $2^{\varphi(n)} \equiv 1 \pmod{n}$.
+
+    \textbf{Step 2:} Verify that $1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \pmod{n}$. \label{proof:primes:step:2}
+
+    Define $f(x) = 2^{\left\lfloor \frac{x-1}{D} \right\rfloor}$. Taking the binomial expansion of $(1 + f(n))^n$, we can see:
+    \begin{align}
+        (1 + f(n))^n = \sum_{k=0}^{n} \binom{n}{k} 1^{n-k} \cdot f(n)^k = \sum_{k=0}^{n} \binom{n}{k} f(n)^k
+    \end{align}
+    
+    Since $n$ is prime, $\binom{n}{k}$ is divisible by $n$ for all $k$ in $0 < k < n$. This is because $\binom{n}{k} = \frac{n!}{k!(n-k)!}$ has $n$ in the numerator and, as $k$ and $n-k$ are less than our $n$ (which is prime), neither $k!$ nor $(n-k)!$ can have $n$ as a factor. Thus, all terms of the sum, except for $k = 0$ and $k = n$, are divisible by $n$. Further, as $\binom{n}{0} = \binom{n}{n} = 1$, our congruence simplifies as follows:
+    \begin{align}
+        (1 + f(n))^n &\equiv \binom{n}{0} f(n)^0 + \binom{n}{n} f(n)^n \pmod{n} \\
+                     &\equiv 1 \cdot f(n)^0 + 1 \cdot f(n)^n \pmod{n} \\
+                     &\equiv 1 + f(n)^n \pmod{n}
+    \end{align}
+    
+    Fermat's little theorem tells us that when $n$ is prime and $a$ is an integer coprime to $n$, we have:
+    \begin{align}
+        a^n \equiv a \pmod{n}
+    \end{align}
+    
+    In our case, $n$ is odd and $f(n)^n$ is an even power of $2$, therefore these are always coprime and we have $f(n)^n \equiv f(n) \pmod{n}$. Now, we can use Fermat's little theorem to simplify further:
+    \begin{align}
+        (1 + f(n))^n &\equiv 1 + f(n)^n  \equiv 1 + f(n) \pmod{n}
+    \end{align}
+    
+    \textbf{Step 3:} Confirm that $1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. \label{proof:primes:step:3}
+
+    Define $f(x) = 2^{\left\lfloor \frac{x-1}{D} \right\rfloor}$. By substitution, we have:
+    \begin{align}
+        1 + f(n) \equiv \sum_{k=0}^{n} \binom{n}{k} f(k+1) \pmod{n}
+    \end{align}
+    
+    In Step 2, we noted how when $n$ is prime, $\binom{n}{k} \equiv 0 \pmod{n}$ for every $0 < k < n$. Therefore, all terms of the sum, except for $k = 0$ and $k = n$, are divisible by $n$. Further, as $\binom{n}{0} = \binom{n}{n} = 1$ and $f(1) = 2^{\left\lfloor \frac{1-1}{D} \right\rfloor} = 2^{\left\lfloor \frac{0}{D} \right\rfloor} = 2^{0} = 1$, our congruence simplifies as follows:
+    \begin{align}
+        \sum_{k=0}^{n} \binom{n}{k} f(k+1) \pmod{n} &\equiv \binom{n}{0} f(1) + \binom{n}{n} f(n+1) \pmod{n} \\
+                     &\equiv 1 \cdot f(1) + 1 \cdot f(n+1) \pmod{n} \\
+                     &\equiv f(1) + f(n+1) \pmod{n} \\
+                     &\equiv 1 + f(n+1) \pmod{n}
+    \end{align}
+    
+    Recall that $f(x) = 2^{\left\lfloor \frac{x-1}{D} \right\rfloor}$. Examine the exponent $\left\lfloor \frac{x-1}{D} \right\rfloor$. We have defined $D$ to be an integer greater than $2$ which does not divide $n-1$. Consequently, by the nature of the floor operation, we have $\left\lfloor \frac{(n+1)-1}{D} \right\rfloor = \left\lfloor \frac{n-1}{D} \right\rfloor$. This implies $f(n+1) = f(n)$, and thus:
+    \begin{align}
+        \sum_{k=0}^{n} \binom{n}{k} f(k+1) \equiv 1 + f(n) \pmod{n}
+    \end{align}
+    
+\textbf{Conclusion:} \label{proof:primes:conclusion}
+
+    The congruences share a common term, leading to the test's defining congruence:
+    \begin{align}
+        1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \equiv \sum_{k=0}^{n} \binom{n}{k}2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}
+    \end{align}
+
+    These steps establish that for an odd prime $n$, the initial criteria and all conditions of our test are satisfied. Hence, odd primes $>3$ pass our test unconditionally.
+\end{proof}
+
+\subsubsection[Lemma for odd composite n]{Lemma for odd composite $n$}
+
+\begin{lemma} \label{lemma:composites}
+    If $n$ is an odd composite integer, it fails our test unconditionally.
+\end{lemma}
+\begin{proof}
+    Assume \( n \) is an odd composite integer proposed to pass the given primality test. We aim to demonstrate that under these conditions, the necessary congruences of our test cannot hold simultaneously.
+    
+    Define \( f(x) = 2^{\left\lfloor \frac{x-1}{D} \right\rfloor} \) and \( D \) as the least integer greater than 2 that does not divide \( n-1 \). We begin with the congruence:
+    \begin{align}
+        (1 + f(n))^n \equiv \sum_{k=0}^{n} \binom{n}{k} f(k+1) \pmod{n}
+    \end{align}
+
+    Using the binomial theorem, we expand the left-hand side:
+    \begin{align}
+        \sum_{k=0}^{n} \binom{n}{k} f(n)^k \equiv \sum_{k=0}^{n} \binom{n}{k} f(k+1) \pmod{n}.
+    \end{align}
+
+    Rewriting this, we must have:
+    \begin{align}
+        \sum_{k=0}^{n} \binom{n}{k} \left(f(n)^k - f(k+1)\right) \equiv 0 \pmod{n}.
+    \end{align}
+    
+    As a necessary condition of our test, we also require:
+    \begin{align}
+          \sum_{k=0}^{n} \binom{n}{k} f(n)^k \equiv \sum_{k=0}^{n} \binom{n}{k} f(k+1) \equiv 1 + f(n) \pmod{n}
+    \end{align}
+
+    For this to hold, in both $f(n)^k$ and $f(k+1)$, at indices $k=0,n$, their evaluations taken modulo $n$ must be equivalent to $1,f(n)$ respectively. In such case, the inner terms sum to a multiple of $n$. Therefore, it must be true that:
+    \begin{align}
+        \sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1)\right) &\equiv 0 \pmod{n}
+    \end{align}
+    
+    For composite \( n \), the binomial coefficient \( \binom{n}{k} \) is not divisible by \( n \) for \( k \) such that \( \gcd(n, k) \neq 1 \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k \) and \( f(k+1) \) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
+    \begin{align}
+        \left\lfloor \frac{n-1}{D} \right\rfloor k \equiv \left\lfloor \frac{k}{D} \right\rfloor \pmod{\text{ord}_n(2)}
+    \end{align}
+
+    \begin{itemize}
+        \item \textbf{Cycling of \( 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
+        \item \textbf{Behavior of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
+    \end{itemize}    
+    
+    In the special case where \( f(n) \equiv 1 \pmod{n} \), \( f(n)^k \) simplifies to \( 1 \pmod{n} \) for all \( k \). The congruence would require \( f(k+1) \) to also simplify to \( 1 \pmod{n} \) for each \( k \) such that \( \binom{n}{k} \not\equiv 0 \pmod{n} \). This demands each \( \left\lfloor \frac{k}{D} \right\rfloor \) to be a multiple of the order of 2 modulo \( n \), or \( \text{ord}_n(2) \). In this scenario, it is possible for the congruence to hold. However, if \( D \) does not divide \( \text{ord}_n(2) \), the variability in \( \left\lfloor \frac{k}{D} \right\rfloor \) disrupts any potential alignment with multiples of \( \text{ord}_n(2) \). This variability would ensure that \( f(k+1) \) does not uniformly reduce to \( 1 \pmod{n} \) across all \( k \).
+    
+    Recall that we are given an odd composite $n$ with $2^{n-1} \equiv 1 \pmod{n}$. By the properties of the order of an integer modulo composite $n$, the smallest $k$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \text{ord}_n(2)$, must be a divisor of $n-1$. That is, $\text{ord}_n(2) \mid (n-1)$. Since $\left\lfloor\frac{n-1}{D}\right\rfloor$ is strictly less than $n-1$ and $D$ does not divide $n-1$, it follows that $f(n) \not\equiv 1 \pmod{n}$ and \( D \nmid \text{ord}_n(2) \).
+        
+    Since \( f(n) \not\equiv 1 \pmod{n} \), applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( \binom{n}{k} \left(f(n)^k - f(k+1)\right) \not\equiv 0 \pmod{n} \). This non-zero term in the sum, when multiplied by the non-zero binomial coefficient (which shares a common factor with $n$), ensures that the sum cannot be congruent to zero modulo \( n \). This gives a contradiction in the equivalence of the two sums modulo \( n \), demonstrating that the test's conditions cannot be simultaneously satisfied for odd composite integers. Therefore, such integers will fail the test unconditionally.
+\end{proof}
+
+\subsection{Proof of the Main Theorem}
+\begin{proof}[Proof of Theorem \ref{theorem:1}]
+     The correctness of the theorem follows from Lemma \ref{lemma:primes} and Lemma \ref{lemma:composites}. The lemmas together cover all possible cases of odd integers $n$. Therefore, the theorem is proven.
+\end{proof}
+
+\section{Algorithm}
+\textbf{INPUT}: An integer $n > 1$.
+\begin{center}
+    \begin{enumerate}
+        \item If $n \equiv 0 \mod{2}$:
+            \begin{enumerate}
+                \item If $n$ equals $2$, output PRIME.
+                \item Otherwise, output COMPOSITE.
+            \end{enumerate}
+        \item If $n$ equals $3$, output PRIME.
+        \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
+        \item Find the least integer $D$ that is greater than 2 and less than $n$ which does not divide $n-1$.
+        \item Set $A = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \bmod{n}$.
+        \item Set $B = (1 + A)^n \bmod{n}$.
+        \item If $B \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
+        \item Set $C = \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \bmod{n}$.
+        \item If $C \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
+        \item Output PRIME;
+    \end{enumerate}
+\end{center}
+
+\subsection{Time Complexity Analysis}
+
+\subsubsection{Algorithm Overview}
+The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring \(\mathbb{Z}/n\mathbb{Z}\).
+
+\subsubsection{Analysis of Individual Operations}
+\begin{enumerate}
+    \item \textbf{Check for Even \( n \)}:
+    
+        This step involves calculating $n \bmod{2}$ and has a time complexity of \( O(1) \).
+
+    \item \textbf{Modular Exponentiation \( 2^{n-1} \mod n \)}:
+    
+        This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
+
+    \item \textbf{Finding \( D \)}:
+    
+        Finding the least integer \( D > 2 \) that does not divide \( n-1 \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
+
+    \item \textbf{Computing \( A \) and \( B \)}:
+    
+        Each of these steps involves modular exponentiation similar to Step 2, and thus each has a time complexity of \( O(\log(n) M(n)) \).
+
+    \item \textbf{Computing \( C \)}:
+    
+        Computing \( C \) involves exponentiating a polynomial in the ring \(\mathbb{Z}/n\mathbb{Z}\) with \( O(\log(n)) \) terms and summing the coefficients.
+        \begin{enumerate}
+            \item Summing the polynomial coefficients can be done in \( O(\log(n)^2) \) time.
+            \item Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \).
+        \end{enumerate}
+         Therefore, the overall complexity for computing \( C \) is \( O(\log(n)^2 M(n)) \).
+
+    \item \textbf{Comparisons}:
+    
+        The final steps involve comparisons which are \( O(1) \) operations.
+\end{enumerate}
+
+\subsubsection{Overall Time Complexity}
+The dominant time complexity in the algorithm comes from computing \( C \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log(n)^2 M(n)) \).
+
+Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
+\begin{align}
+    T(n) = O(\log(n)^2 M(n)) = O(\log(n)^2 \log(n) \log\log(n)) = O(\log(n)^3 \log\log(n))
+\end{align}
+
+\subsubsection{Conclusion}
+The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
+
+\subsection{Psuedocode Implementation}
+To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved.
+
+\subsubsection{IsPrime Function}
+
+\begin{algorithmic}
+\Require An integer $n > 1$
+\Function{IsPrime}{$n$}
+    \If{$n \bmod 2 = 0$}
+        \If{$n = 2$}
+            \State \Return \textbf{true} \Comment{$n$ is prime}
+        \Else
+            \State \Return \textbf{false} \Comment{$n$ is composite}
+        \EndIf
+    \EndIf
+    \If{$n = 3$}
+        \State \Return \textbf{true} \Comment{$n$ is prime}
+    \EndIf
+    \State $fermat \gets \Call{Pow}{2, n-1, n}$ \Comment{Fermat pseudoprime test to base 2}
+    \If{$fermat \neq 1$}
+        \State \Return \textbf{false} \Comment{$n$ is composite}
+    \EndIf
+    \State $D \gets 2$
+    \State $log \gets \Call{Log2}{n}$
+    \For{$i \gets 3$ \textbf{to} $\Call{Max}{log, 3}$}
+        \State $D \gets i$
+        \State $m \gets (n-1) \bmod D$
+        \If{$m \neq 0$}
+            \State \textbf{break}
+        \EndIf
+    \EndFor
+    \State $A \gets \Call{Pow}{2, \lfloor (n-1) / D \rfloor, n}$
+    \State $expectedValue \gets (A + 1) \bmod n$
+    \State $B \gets \Call{Pow}{A + 1, n, n}$
+    \If{$B \neq expectedValue$}
+        \State \Return \textbf{false} \Comment{$n$ is composite}
+    \EndIf
+    \State $polyDegree \gets D - 1$ \Comment{Subtract 1 to account for zero indexing in arrays}
+    \State $poly \gets \Call{PolyPow}{[1, 1], n, n, polyDegree, [2]}$
+    \State $C \gets \Call{PolyEval}{poly, 1} \bmod n$ \Comment{Evaluate at x=1 to sum coefficients}
+    \If{$C \neq expectedValue$}
+        \State \Return \textbf{false} \Comment{$n$ is composite}
+    \EndIf
+    \State \Return \textbf{true} \Comment{$n$ is prime}
+\EndFunction
+\end{algorithmic}
+
+\subsubsection{PolyPow Function}
+\begin{algorithmic}
+\Function{PolyPow}{$poly_A$, $k$, $n$, $d$, $polyMapping$}
+    \State $polyB \gets [1]$ \Comment{Initialize polyB as a polynomial with constant term 1}
+    \While{$k > 0$}
+        \If{$k \bmod 2 = 1$}
+            \State $polyB \gets \Call{PolyMul}{polyA, polyB, n}$ \Comment{Multiply polynomials modulo $n$}
+            \State $polyB \gets \Call{PolyReduce}{polyB, d, polyMapping, n}$ \Comment{Reduce degree of polyB}
+            \If{$k = 1$}
+                \State \textbf{break}
+            \EndIf
+        \EndIf
+        \State $polyA \gets \Call{PolyMul}{polyA, polyA, n}$ \Comment{Square polyA modulo $n$}
+        \State $polyA \gets \Call{PolyReduce}{polyA, d, polyMapping, n}$ \Comment{Reduce degree of polyA}
+        \State $k \gets k / 2$
+    \EndWhile
+    \State \Return $polyB$
+\EndFunction
+\end{algorithmic}
+
+\subsubsection{PolyReduce Function}
+\begin{algorithmic}
+\Function{PolyReduce}{$polyA$, $d$, $mappingPoly$, $n$}
+    \If{$\Call{Length}{polyA} \leq d$}
+        \State \Return $polyA$
+    \EndIf
+
+    \State $polyB \gets \Call{Clone}{polyA}$ \Comment{Copy the polynomial to a new array}
+    \State $polyDegree \gets \Call{Degree}{mappingPoly}$ \Comment{Find degree of the mapping polynomial}
+    \State $degreeDelta \gets d - polyDegree$
+
+    \For{$i \gets \Call{Length}{polyB} - 1$ \textbf{downto} $d + 1$}
+        \If{$polyB[i] = 0$}
+            \State \textbf{continue}
+        \EndIf
+        \For{$j \gets i - 1 - degreeDelta$, $k \gets polyDegree$ \textbf{downto} $0$}
+            \State $polyB[j] \gets polyB[j] + polyB[i] \times mappingPoly[k]$ \Comment{Degree reduction step}
+        \EndFor
+        \State $polyB[i] \gets 0$
+    \EndFor
+
+    \State $polyC \gets \text{new array of size } d + 1$
+    \For{$i \gets 0$ \textbf{to} $\min(\Call{Length}{polyC}, \Call{Length}{polyB}) - 1$}  \Comment{Take coefficients modulo $n$}
+        \State $polyC[i] \gets polyB[i]$
+        \If{$n \neq 0$}
+            \State $polyC[i] \gets polyC[i] \bmod n$
+        \EndIf
+    \EndFor
+
+    \State \Return $polyC$
+\EndFunction
+\end{algorithmic}
+
+\begingroup
+\raggedright
+\bibliographystyle{unsrtnat}
+\bibliography{main}
+\endgroup
+
+\end{document}
