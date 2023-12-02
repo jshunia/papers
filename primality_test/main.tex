@@ -155,7 +155,7 @@ In this case, the congruence cannot hold.
 
 Since $\sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$, we may add or subtract $\sum_{k=1}^{n-1} \binom{n}{k}$ from our congruence an arbitrary number of times and $n$ must still divide the sum. That means we must have:
 \begin{align}
-\sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - X\right) \equiv \sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1)\right) \equiv 0 \pmod{n}, \text{for all } X \in \mathbb{Z}.
+\sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - X\right) \equiv 0 \pmod{n} \text{, for all } X \in \mathbb{Z}.
 \end{align}
 
 For composite $n$, there is at least one $k$ such that $\binom{n}{k} \not\equiv 0 \pmod{n}$. Therefore, if $X$ can be any value, then so to can our sum:
