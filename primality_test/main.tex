@@ -45,7 +45,7 @@ In the field of cryptography, the unique properties of prime numbers are widely 
 
 We present a new deterministic primality test that operates in polynomial time with a time complexity of $O(\log(n)^3 \log\log(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. Our main theorem posits a condition for an odd integer \( n \) to be prime, based on specific modular congruences related to the binomial transforms of powers of $2$. The basis for our test is the following main theorem: Let \( n \) be an odd integer satisfying \( 2^{n-1} \equiv 1 \pmod{n} \). Denote \( D \) as the least integer strictly greater than \( 2 \) and less than \( n \) which does not divide \( n-1 \). Then, \( n \) is prime if and only if a set of simultaneous modular congruences involving \( D \), \( n \), and binomial coefficients hold.
 
-This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by two critical lemmas. The first lemma demonstrates the test's validity for odd prime numbers, while the second confirms its failure for odd composite numbers. Through these lemmas, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We also give a pseudocode implementation for our test to show how it can be implemented.
+This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by supporting lemmas. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We also give a pseudocode implementation for our test to show how it can be implemented.
 
 \section{Main Theorem}
 
@@ -60,12 +60,35 @@ This paper is structured as follows: We begin by presenting the main theorem and
 \subsection{Supporting Lemmas}
 \begin{lemma}
 \label{lemma:1}
-    Let $n$ be an odd composite integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $2^{\left\lfloor\frac{n-1}{D}\right\rfloor} \not\equiv 1 \pmod{n}$.
+    Let $n$ be an odd composite integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $D$ does not divide $\text{ord}_n(2)$.
 \end{lemma}
 \begin{proof}
 We are given odd composite $n > 3$ with $2^{n-1} \equiv 1 \pmod{n}$. By the properties of the order of an integer modulo composite $n$, the smallest $k$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \text{ord}_n(2)$, must be a divisor of $n-1$. Hence, $\text{ord}_n(2) \mid n-1$. Since $\left\lfloor\frac{n-1}{D}\right\rfloor$ is strictly less than $n-1$ and $D$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{D}\right\rfloor} \not\equiv 1 \pmod{n}$.
 \end{proof}
+\begin{lemma} \label{lemma:2}
+If $n$ is an odd composite integer $>3$, then for each prime factor $p_i$ of $n$, there exists at least one integer $k_i$ with $0 < k_i < n$, such that $\binom{n}{k_i} \not\equiv 0 \pmod{n}$.
+\end{lemma}
+\begin{proof}
+A result of Kummer's theorem is that \( \binom{n}{k} \) is divisible by \( n \) if and only if at least one of the base-\( p \) digits of \( k \) is greater than the corresponding digit of \( n \), where \( p \) is a prime dividing \( n \). Consider the base-$p$ representation of $n$, where $0 \leq a_j < p$ for each digit $a_j$:
+\begin{align}
+    n = a_m p^m + a_{m-1} p^{m-1} + \cdots + a_1 p + a_0
+\end{align}
 
+The base-$p$ representation of $n$ may also be represented as:
+\begin{align}
+n = \sum_{j=0}^{L} p^{j} \left\lfloor\frac{n \bmod p^{j+1}}{p^{j}}\right\rfloor,
+\end{align}
+where \( L = \lfloor \log_p{n} \rfloor \) is the number of digits in the base-\( p \) representation of \( n \) minus one.
+
+We examine a prime factor $p_i$ of $n$, call it $p$. Since $n$ is divisible by $p$, its base-$p$ representation must have at least one non-zero digit. To identify such a $k$, we can choose the lowest place value, say $j$, where $n$'s base-$p$ digit $a_j$ is non-zero ($a_j > 0$). Such a place must exist because $n$ is divisible by $p$. We construct $k$ by reducing this digit $a_j$ by one and keeping all more significant digits the same. Formally:
+\begin{align}
+    k = a_m p^m + a_{m-1} p^{m-1} + \cdots + (a_j - 1) p^j.
+\end{align}
+
+When we add $k$ and $n-k$ in base-$p$, the sum at the $j$-th place is exactly $p$, without a carry to the next higher place. This is because $k$'s $j$-th digit is $a_j - 1$ and $n-k$'s $j$-th digit is $1$, summing up to $a_j$ (the original digit of $n$ at the $j$-th place). Since there is no carry in the base-$p$ addition of $k$ and $n-k$, it follows that $\binom{n}{k}$ is not divisible by $p$. Hence, it is not divisible by $n$.
+
+This construction works for any prime factor $p_i$ of $n$. We can always find a $j$ where $n$ has a non-zero base-$p_i$ digit (since $p_i$ divides $n$), and we can always form a $k_i$ as described above. Thus, for every prime factor $p_i$ of $n$, there must exist at least one such $k_i$ for which $\binom{n}{k_i}$ is not divisible by $p_i$.
+\end{proof}
 \subsection{Proof of the Main Theorem}
 \begin{proof}[Proof of Theorem \ref{theorem:1}]
 Let \( n \) be an odd integer $>3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$.
@@ -100,7 +123,7 @@ Setting common terms to zero:
       \sum_{k=1}^{n-1} \binom{n}{k} f(n)^k \equiv \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv 0 \pmod{n}
 \end{align}
 
-We have defined $n$ such that $2^{n-1} \equiv 1 \pmod{n}$, which implies $\sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$. Plugging it in:
+We have defined $n$ such that $2^{n-1} \equiv 1 \pmod{n}$, which implies $2^n - 2 \equiv \sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$. Plugging it in:
 \begin{align}
       \sum_{k=1}^{n-1} \binom{n}{k} \equiv \sum_{k=1}^{n-1} \binom{n}{k} f(n)^k \equiv \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv 0 \pmod{n}
 \end{align}
@@ -116,60 +139,54 @@ Combining the summations:
 \sum_{k=1}^{n-1} \left(\binom{n}{k} f(n)^k - \binom{n}{k} f(k+1) - \binom{n}{k}\right) \equiv 0 \pmod{n}
 \end{align}
 
-Factoring out the common $\binom{n}{k}$ from the inner terms gives:
+Factoring out the common $\binom{n}{k}$ from the inner terms reveals:
 \begin{align}
 \sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - 1\right) \equiv 0 \pmod{n}
 \end{align}
 
-Looking back at \cref{equation:congruence1}, we must also have:
-\begin{align}
-    \sum_{k=1}^{n-1} \binom{n}{k} f(n)^k \equiv \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv 0 \pmod{n} \\
-    \sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1)\right) \equiv 0 \pmod{n}
-\end{align}
-
-Which implies:
-\begin{align}
-\sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - 1\right) \equiv \sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1)\right) \equiv 0 \pmod{n}
-\end{align}
-
 For the above congruence, there are three potential cases we must examine.
 
-\item \textbf{Case 1:} $n$ is prime
+\textbf{Case 1:} $n$ is prime
     
 In this case, the congruence always holds. By the binomial theorem, $\binom{n}{k} \equiv 0 \pmod{n}$ for $0 < k < n$ and the congruence simplifies trivially to zero.
 
-\item \textbf{Case 2:} $n$ is composite with $f(n) \equiv 1 \pmod{n}$
+\textbf{Case 2:} $n$ is composite and $f(n) \equiv 1 \pmod{n}$
 
 In this case, the congruence may or may not hold. With $f(n) \equiv 1 \pmod{n}$, the congruence simplifies significantly, making it possible:
 \begin{align}
-    \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv \sum_{k=1}^{n-1} \binom{n}{k} \left(1 - f(k+1)\right) \equiv 0 \pmod{n} \\
-    \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv \sum_{k=1}^{n-1} \left(\binom{n}{k} - \binom{n}{k} f(k+1)\right) \equiv 0 \pmod{n} \\
-    \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv \sum_{k=1}^{n-1} \binom{n}{k} - \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv 0 \pmod{n} \\
-    \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv 0 \pmod{n} \\
-    \sum_{k=1}^{n-1} \binom{n}{k} f(k+1) \equiv 0 \pmod{n}
+    \sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - 1\right) \equiv 0 \pmod{n} \\
+    \sum_{k=1}^{n-1} \binom{n}{k} \left(1^k - f(k+1) - 1\right) \equiv 0 \pmod{n} \\
+    \sum_{k=1}^{n-1} \binom{n}{k} \cdot \left(-f(k+1)\right) \equiv 0 \pmod{n}
 \end{align}
 
-\item \textbf{Case 3:} $n$ is composite with $f(n) \not\equiv 1 \pmod{n}$
+\textbf{Case 3:} $n$ is composite and $f(n) \not\equiv 1 \pmod{n}$
 
-In this case, the congruence cannot hold. 
+In this case, the congruence cannot hold.
 
-Since $\sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$, we may add or subtract $\sum_{k=1}^{n-1} \binom{n}{k}$ from our congruence an arbitrary number of times and $n$ must still divide the sum. As a result, we must have:
+Since $\sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$, we may add or subtract $\sum_{k=1}^{n-1} \binom{n}{k}$ from our congruence an arbitrary number of times and $n$ must still divide the sum. The same applies to $\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k$ and $\sum_{k=1}^{n-1} \binom{n}{k} f(k+1)$. Therefore, we surmise that the following must hold for all $A,B,C \in \mathbb{Z}$:
 \begin{align}
-\sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - X\right) \equiv 0 \pmod{n} \text{, for all } X \in \mathbb{Z}.
+A \left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k\right) - B \left(\sum_{k=1}^{n-1} \binom{n}{k} f(k+1)\right) - C \left(\sum_{k=1}^{n-1} \binom{n}{k}\right) \equiv 0 \pmod{n} \\
+\left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k A\right) - \left(\sum_{k=1}^{n-1} \binom{n}{k} f(k+1) B\right) - \left(\sum_{k=1}^{n-1} \binom{n}{k} C\right) \equiv 0 \pmod{n} \\
+\sum_{k=1}^{n-1} \binom{n}{k} \left( A \cdot f(n)^k - B \cdot f(k+1) - C\right) \equiv 0 \pmod{n}
 \end{align}
 
-For composite $n$, there is at least one $k$ such that $\binom{n}{k} \not\equiv 0 \pmod{n}$. Therefore, if $X$ can be any value, then so to can our sum:
+If $\binom{n}{k}$ is nonzero for any $k$ and, as we know it must be for some $k$, and $f(n)^k \not\equiv f(k+1) \pmod{n}$, then the summation within our congruence may sum to any value by adjusting the values of $A$, $B$, and $C$. For the congruence to hold, we would require all integers to be equivalent to $0 \pmod{n}$. However, this is a contradiction, as $n\not=1$ and it is impossible. Therefore, to prove that the congruence cannot hold, it suffices to show that $f(n)^k \not\equiv f(k+1) \pmod{n}$ for some $k$ with $\binom{n}{k} \not\equiv 0 \pmod{n}$.
+
+For composite \( n \), \( \binom{n}{k} \) is divisible by \( n \) if and only if at least one of the base-\( p \) digits of \( k \) is greater than the corresponding digit of \( n \), where \( p \) is a prime dividing \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k \) and \( f(k+1) \) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
 \begin{align}
-\sum_{k=1}^{n-1} \binom{n}{k} \left(f(n)^k - f(k+1) - X\right)
+    \left\lfloor \frac{n-1}{D} \right\rfloor k - \left\lfloor \frac{k}{D} \right\rfloor \equiv 0 \pmod{\text{ord}_n(2)}
 \end{align}
 
-Hence, in order for our congruence to hold, all integers must be equivalent to $0 \pmod{n}$. Since $n\not=1$, this is impossible.
+\begin{itemize}
+    \item \textbf{Cycling of \( f(n) = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
+    \item \textbf{Behavior of \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
+\end{itemize}    
+
+Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( \binom{n}{k} \left(f(n)^k - f(k+1)\right) \not\equiv 0 \pmod{n} \). This nonzero term in the sum, when multiplied by the nonzero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $A, B, C$.
 
 \textbf{Conclusion:}
 
 When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd composite integer $>3$, by Lemma \ref{lemma:1} we have $f(n) \not\equiv 1 \pmod{n}$ and therefore, the congruence cannot hold. Hence, the theorem is proven.
-
-This completes the proof.
 \end{proof}
 
 \section{Algorithm}
@@ -242,7 +259,7 @@ Harvey and van Der Heoven (2021) have given an algorithm for integer multiplicat
 The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
 
 \subsection{Psuedocode Implementation}
-To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved.
+To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved. A sample .NET implementation, with test data, is also available on the author's Github page \cite{githubrepo}.
 
 \subsubsection{IsPrime Function}
 
