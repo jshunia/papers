@@ -20,6 +20,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
 \usepackage{graphicx}
 \usepackage{multicol}
 
@@ -167,77 +168,8 @@ Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least on
 When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd composite integer $>3$, by Lemma \ref{lemma:1} we have $f(n) \not\equiv 1 \pmod{n}$ and therefore, the congruence cannot hold. Hence, the theorem is proven.
 \end{proof}
 
-\section{Algorithm}
-\textbf{INPUT}: An integer $n > 1$.
-\begin{center}
-    \begin{enumerate}
-        \item If $n \equiv 0 \mod{2}$:
-            \begin{enumerate}
-                \item If $n$ equals $2$, output PRIME.
-                \item Otherwise, output COMPOSITE.
-            \end{enumerate}
-        \item If $n$ equals $3$, output PRIME.
-        \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
-        \item Find the least integer $D$ that is greater than 2 and less than $n$ which does not divide $n-1$.
-        \item Set $A = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \bmod{n}$.
-        \item Set $B = (1 + A)^n \bmod{n}$.
-        \item If $B \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
-        \item Set $C = \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \bmod{n}$.
-        \item If $C \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
-        \item Output PRIME;
-    \end{enumerate}
-\end{center}
-
-\subsection{Time Complexity Analysis}
-
-\subsubsection{Algorithm Overview}
-The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring \(\mathbb{Z}/n\mathbb{Z}\).
-
-\subsubsection{Analysis of Individual Operations}
-\begin{enumerate}
-    \item \textbf{Check for Even \( n \)}:
-    
-        This step involves calculating $n \bmod{2}$ and has a time complexity of \( O(1) \).
-
-    \item \textbf{Modular Exponentiation \( 2^{n-1} \mod n \)}:
-    
-        This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
-
-    \item \textbf{Finding \( D \)}:
-    
-        Finding the least integer \( D > 2 \) that does not divide \( n-1 \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
-
-    \item \textbf{Computing \( A \) and \( B \)}:
-    
-        Each of these steps involves modular exponentiation similar to Step 2, and thus each has a time complexity of \( O(\log(n) M(n)) \).
-
-    \item \textbf{Computing \( C \)}:
-    
-        Computing \( C \) involves exponentiating a polynomial in the ring \(\mathbb{Z}/n\mathbb{Z}\) with \( O(\log(n)) \) terms and summing the coefficients.
-        \begin{enumerate}
-            \item Summing the polynomial coefficients can be done in \( O(\log^2(n)) \) time.
-            \item Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \).
-        \end{enumerate}
-         Therefore, the overall complexity for computing \( C \) is \( O(\log^2(n) M(n)) \).
-
-    \item \textbf{Comparisons}:
-    
-        The final steps involve comparisons which are \( O(1) \) operations.
-\end{enumerate}
-
-\subsubsection{Overall Time Complexity}
-The dominant time complexity in the algorithm comes from computing \( C \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log^2(n) M(n)) \).
-
-Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
-\begin{align}
-    T(n) = O(\log^2(n) M(n)) = O(\log^2(n) \log(n) \log\log(n)) = O(\log^3(n) \log\log(n)) = \tilde{O}(\log^3(n))
-\end{align}
-
-\subsubsection{Conclusion}
-The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
-
-\section{Efficient Computations Using Polynomial Rings}
-In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently compute the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+\section{Efficient Calculations via Polynomial Rings} \label{section:polyrings}
+In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently calculate the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. The standard approach to calculating this value requires evaluating $\binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$ for each $k$ and summing the results, which takes time exponential in $n$. Conversely, our approach offers an efficient polynomial time complexity of $\tilde{O}(\log(D) \cdot \log^2(n))$ (See: \S \ref{subsection:timecomplexity}).
 
 \subsection{Ring Definition}
 
@@ -254,9 +186,8 @@ x \ast x^{d-1} = x^d = \Phi(x^d) = N, \text{ where } N \in R
 For any polynomial in our ring $R$, the function \( \Phi \) is distributed to the individual terms and implicitly applied to reduce terms. Whenever the term $x^d$ appears, it is replaced with its defined mapping. The mappings in $\Phi$ are extended to terms of higher degrees, meaning $\Phi(x^{d+k}) = \Phi(x^d \ast x^k) = N x^k$, for $k > 1$. $\Phi$ is applied recursively to the polynomial until and its terms until the degree of the polynomial is less than $d$. For terms which do not match a defined substitution rule, $\Phi$ returns them as they are.
 \end{definition}
 
-\textbf{Example.}
-
-Define the ring $R$ as defined by Definition \ref{definition:ring} with $N = 2$, $d = 3$. Hence, $\Phi(x^3) = 2$. $P(x) := 1 + x + 3x^3 + x^{4} + x^{6}, P(x) \in R$.
+\begin{example}
+We take the ring $R$ as defined in Definition \ref{definition:ring} with $N = 2$, $d = 3$. Hence, $\Phi(x^3) = 2$. $P(x) := 1 + x + 3x^3 + x^{4} + x^{6}, P(x) \in R$.
 \begin{align}
     \Phi(P(x)) &= \Phi(1 + x + 3x^3 + x^{4} + x^{6}) \\
     &= \Phi(1) + \Phi(x) + \Phi(3x^3) + \Phi(x^{4}) + \Phi(x^{6}) \\
@@ -265,6 +196,7 @@ Define the ring $R$ as defined by Definition \ref{definition:ring} with $N = 2$,
     &= 7 + 3x + 4 \\
     &= 11 + 3x
 \end{align}
+\end{example}
 
 \subsection{Ring Axioms}
 We assert that the ring \( R \) with the modified operation \(\ast\) still satisfies the standard ring axioms. Specifically, we show that \((R, +, \ast)\) is associative, commutative (with respect to addition), and has an additive identity and an additive inverse for every element. Additionally, the distributive property of multiplication over addition is preserved under the operation \(\ast\).
@@ -336,25 +268,25 @@ The ring \( M = (\mathbb{Z}/n\mathbb{Z})[x] \) with the modified multiplication 
 Since the ring \( M \) is structurally analogous to \( R \) with the only difference being the coefficient domain (\(\mathbb{Z}/n\mathbb{Z}\) instead of \(\mathbb{Z}\)), and the modified multiplication operation \(\ast\) in \( M \) is defined similarly to \( R \) using \(\Phi_M\), analogous to \(\Phi\), \( M \) inherits the ring properties of \( R \). This includes the associativity and commutativity of addition, the existence of an additive identity and inverses, the distributivity of multiplication over addition, and the associativity of multiplication. These properties are preserved under the transition from \(\mathbb{Z}\) to \(\mathbb{Z}/n\mathbb{Z}\) coefficients and the analogous definition of \(\ast\) in \( M \).
 \end{proof}
 
-\subsection{Ring Computations}
-We now demonstrate how our modular polynomial ring $M$ can be used to efficiently compute the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{k+1} \pmod{n}$.
+\subsection{Ring Calculations}
+We now demonstrate how our modular polynomial ring $M$ can be used to efficiently calculate the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 
-In an earlier paper relating the central binomial coefficients and Gould's sequence to polynomial rings \cite{shunia2023polynomial}, we showed how a multivariate polynomial ring, analogous to the univariate polynomial ring we have defined herein, can be used generally to compute the binomial transforms of recursive integer sequences. We apply the same technique.
+In an earlier paper relating the central binomial coefficients and Gould's sequence to polynomial rings \cite{shunia2023polynomial}, we showed how a multivariate polynomial ring, analogous to the univariate polynomial ring we have defined herein, can be used generally to compute the binomial transforms of recursive integer sequences. We apply the same technique here.
 
 \begin{theorem} \label{theorem:2}
-Let $n$, $k$ be non-negative integers. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\Phi(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( P(x)^k \), gives $2^{\left\lfloor \frac{k-1}{D} \right\rfloor} \pmod{n}$.
+Let $n$, $k$ be non-negative integers. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\Phi(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( P(x)^k \), gives $2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 \end{theorem}
 \begin{proof}
 Examining $D = 2$, we can see:
 \begin{align*}
-    P(x)^0 = 2^{\left\lfloor -1/2 \right\rfloor} = 2^0 = 1 \\
-    P(x)^1 = 2^{\left\lfloor 0/2 \right\rfloor} = 2^0 = 1 \\
-    P(x)^2 = 2^{\left\lfloor 1/2 \right\rfloor} = 2^0 = 1 \\
-    P(x)^3 = 2^{\left\lfloor 2/2 \right\rfloor} = 2^1 = 2 \\
-    P(x)^4 = 2^{\left\lfloor 3/2 \right\rfloor} = 2^1 = 2 \\
-    P(x)^5 = 2^{\left\lfloor 4/2 \right\rfloor} = 2^2 = 4 \\
-    P(x)^6 = 2^{\left\lfloor 5/2 \right\rfloor} = 2^2 = 4 \\
-    \vdots
+P(x)^0 &= 1 = 2^{\left\lfloor 0/2 \right\rfloor} \\
+P(x)^1 &= x = 1 = 2^{\left\lfloor 1/2 \right\rfloor} \\
+P(x)^2 &= x^2 = 2 = 2^{\left\lfloor 2/2 \right\rfloor}\\
+P(x)^3 &= x^3 = 2x = 2 = 2^{\left\lfloor 3/2 \right\rfloor}\\
+P(x)^4 &= x^4 = 2x^2 = 4 = 2^{\left\lfloor 4/2 \right\rfloor}\\
+P(x)^5 &= x^5 = 4x = 4 = 2^{\left\lfloor 5/2 \right\rfloor}\\
+P(x)^6 &= x^6 = 4x^2 = 8 = 2^{\left\lfloor 6/2 \right\rfloor}\\
+\vdots
 \end{align*}
 
 We proceed by induction.
@@ -363,9 +295,9 @@ We proceed by induction.
 For \( k = 0 \), we have \( P(x)^0 = 1 \), and the sum of coefficients is \( 2^{\left\lfloor \frac{0-1}{D} \right\rfloor} = 2^{0} = 1 \).
 
 \textbf{Inductive Step:}
-Assume the theorem holds for some \( k \geq 0 \), i.e., the sum of coefficients modulo \( n \) in \( P(x)^k \) is \( 2^{\left\lfloor \frac{k-1}{D} \right\rfloor} \pmod{n} \). We need to show it also holds for \( k+1 \).
+Assume the theorem holds for some \( k \geq 0 \), i.e., the sum of coefficients modulo \( n \) in \( P(x)^k \) is \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n} \). We need to show it also holds for \( k+1 \).
 
-Consider \( P(x)^{k+1} = P(x)^k \ast P(x) \). By the definition of \( \ast \) and \( \Phi \), the degree of \( P(x)^{k+1} \) gets reduced by \( \Phi \) every time it reaches \( D \). The number of times this reduction happens is \( \left\lfloor \frac{k}{D} \right\rfloor \). Therefore, the sum of coefficients in \( P(x)^{k+1} \) should be \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \), as each reduction by \( \Phi \) doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \).
+Consider \( P(x)^{k+1} = P(x)^k \ast P(x) \). By the definition of \( \ast \) and \( \Phi \), the degree of \( P(x)^{k+1} \) gets reduced by \( \Phi \) every time it reaches \( D \). The number of times this reduction happens is \( \left\lfloor \frac{k}{D} \right\rfloor \). Therefore, the sum of coefficients in \( P(x)^{k+1} \) should be \( 2^{\left\lfloor \frac{k+1}{D} \right\rfloor} \), as each reduction by \( \Phi \) doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \).
 
 \textbf{Conclusion:}
 By the principle of mathematical induction, the theorem is proven.
@@ -377,13 +309,92 @@ Let $n$ an integer $>0$. Let $D$ be an integer $>2$. Define the ring $M$ as in D
 \begin{proof}
 By the binomial theorem, we have:
 \begin{align}
-    (1 + x)^n = \sum_{k=0}^{n} \binom{n}{k} P(x)^{k+1}
+    (1 + x)^n = \sum_{k=0}^{n} \binom{n}{k} P(x)^{k}
 \end{align}
-Hence, evaluating the expanded polynomial $(1+P(x))^n = (1+x)^n$ at \( x=1 \) yields the binomial transform of the sequence generated by \( P(x)^k \). This follows from the design of our polynomial ring. The remainder of the proof follows from Theorem \ref{theorem:2}, which shows that the sum of coefficients in the expansion of $P(x)^{k+1}$ is equivalent to $2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. 
+Hence, when we evaluate this polynomial at \( x = 1 \), we sum the coefficients of the polynomial to get:
+\begin{align}
+    \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \quad \text{(by Theorem \ref{theorem:2})}
+\end{align}
+This completes the proof.
 \end{proof}
 
-\section{Pseudocode Implementation}
-To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved. A sample .NET implementation, with test data, is also available on the author's Github page \cite{githubrepo}.
+\section{Algorithm} \label{section:algorithm}
+\textbf{INPUT}: An integer $n > 1$.
+\begin{center}
+    \begin{enumerate}
+        \item If $n \equiv 0 \mod{2}$:
+            \begin{enumerate}
+                \item If $n$ equals $2$, output PRIME.
+                \item Otherwise, output COMPOSITE.
+            \end{enumerate}
+        \item If $n$ equals $3$, output PRIME.
+        \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
+        \item Find the least integer $D$ that is greater than 2 and less than $n$ which does not divide $n-1$.
+        \item Set $A = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \bmod{n}$.
+        \item Set $B = (1 + A)^n \bmod{n}$.
+        \item If $B \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
+        \item Set $C = \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \bmod{n}$.
+        \item If $C \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
+        \item Output PRIME;
+    \end{enumerate}
+\end{center}
+
+\subsection{Time Complexity Analysis} \label{subsection:timecomplexity}
+
+\subsubsection{Algorithm Overview}
+The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring \(\mathbb{Z}/n\mathbb{Z}\).
+
+\subsubsection{Analysis of Individual Operations}
+\begin{enumerate}
+    \item \textbf{Check for Even \( n \)}:
+    
+        This step involves calculating $n \bmod{2}$ and has a time complexity of \( O(1) \).
+
+    \item \textbf{Modular Exponentiation \( 2^{n-1} \mod n \)}:
+    
+        This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
+
+    \item \textbf{Finding \( D \)}:
+    
+        Finding the least integer \( D > 2 \) that does not divide \( n-1 \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
+
+    \item \textbf{Computing \( A \) and \( B \)}:
+    
+        Each of these steps involves modular exponentiation similar to Step 2, and thus each has a time complexity of \( O(\log(n) M(n)) \).
+
+    \item \textbf{Computing \( C \)}:
+    
+        Computing \( C \) involves exponentiating a polynomial in the ring \(\mathbb{Z}/n\mathbb{Z}\) with \( O(\log(n)) \) terms and summing the coefficients.
+        \begin{enumerate}
+            \item Summing the polynomial coefficients can be done in \( O(\log^2(n)) \) time.
+            \item Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \).
+        \end{enumerate}
+         Therefore, the overall complexity for computing \( C \) is \( O(\log^2(n) M(n)) \).
+         
+         \textbf{Note.} \textit{The mathematics underlying the computation of \( C \) is described and proven in \S \ref{section:polyrings}.}
+
+    \item \textbf{Comparisons}:
+    
+        The final steps involve comparisons which are \( O(1) \) operations.
+\end{enumerate}
+
+\subsubsection{Overall Time Complexity}
+The dominant time complexity in the algorithm comes from computing \( C \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log^2(n) M(n)) \).
+
+Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
+\begin{align}
+    T(n) = O(\log^2(n) M(n)) = O(\log^2(n) \log(n) \log\log(n)) = O(\log^3(n) \log\log(n)) = \tilde{O}(\log^3(n))
+\end{align}
+
+\subsubsection{Conclusion}
+The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
+
+\section{Implementation Details}
+\subsection{Reference Implementation}
+ A sample open source .NET implementation, with test data, is available on the author's Github page \cite{githubrepo}.
+
+ \subsection{Pseudocode Implementation}
+To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved.
 
 \subsubsection{IsPrime Function}
 
