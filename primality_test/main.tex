@@ -238,7 +238,7 @@ Harvey and van Der Heoven (2021) have given an algorithm for integer multiplicat
 The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
 
 \section{Efficient Calculations via Polynomial Rings} \label{section:polyrings}
-In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently calculate the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. The standard approach to calculating this value requires evaluating $\binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$ for each $k$ and summing the results, which takes time exponential in $n$. Conversely, our approach offers an efficient polynomial time complexity of $\tilde{O}(\log(D) \cdot \log^2(n))$ (See: \S \ref{subsection:timecomplexity}).
+In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently calculate the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. The standard approach to calculating this value requires evaluating $\binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$ for each $k$ and summing the results, which takes time exponential in $n$. Conversely, our approach offers an efficient polynomial time complexity of $\tilde{O}(D \cdot \log^2(n))$ (See: \S \ref{subsection:timecomplexity}).
 
 \subsection{Ring Definition}
 
