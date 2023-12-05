@@ -65,7 +65,30 @@ This paper is structured as follows: We begin by presenting the main theorem and
 \begin{proof}
 We are given odd composite $n > 3$ with $2^{n-1} \equiv 1 \pmod{n}$. By the properties of the order of an integer modulo composite $n$, the smallest $k$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \text{ord}_n(2)$, must be a divisor of $n-1$. Hence, $\text{ord}_n(2) \mid n-1$. Since $\left\lfloor\frac{n-1}{D}\right\rfloor$ is strictly less than $n-1$ and $D$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{D}\right\rfloor} \not\equiv 1 \pmod{n}$.
 \end{proof}
+\begin{lemma} \label{lemma:2}
+If $n$ is an odd composite integer $>3$, then for each prime factor $p_i$ of $n$, there exists at least one integer $k_i$ with $0 < k_i < n$, such that $\binom{n}{k_i} \not\equiv 0 \pmod{n}$.
+\end{lemma}
+\begin{proof}
+A result of Kummer's theorem is that \( \binom{n}{k} \) is divisible by \( n \) if and only if at least one of the base-\( p \) digits of \( k \) is greater than the corresponding digit of \( n \), where \( p \) is a prime dividing \( n \). Consider the base-$p$ representation of $n$, where $0 \leq a_j < p$ for each digit $a_j$:
+\begin{align}
+    n = a_m p^m + a_{m-1} p^{m-1} + \cdots + a_1 p + a_0
+\end{align}
 
+The base-$p$ representation of $n$ may also be represented as:
+\begin{align}
+n = \sum_{j=0}^{L} p^{j} \left\lfloor\frac{n \bmod p^{j+1}}{p^{j}}\right\rfloor,
+\end{align}
+where \( L = \lfloor \log_p{n} \rfloor \) is the number of digits in the base-\( p \) representation of \( n \) minus one.
+
+We examine a prime factor $p_i$ of $n$, call it $p$. Since $n$ is divisible by $p$, its base-$p$ representation must have at least one non-zero digit. To identify such a $k$, we can choose the lowest place value, say $j$, where $n$'s base-$p$ digit $a_j$ is non-zero ($a_j > 0$). Such a place must exist because $n$ is divisible by $p$. We construct $k$ by reducing this digit $a_j$ by one and keeping all more significant digits the same. Formally:
+\begin{align}
+    k = a_m p^m + a_{m-1} p^{m-1} + \cdots + (a_j - 1) p^j.
+\end{align}
+
+When we add $k$ and $n-k$ in base-$p$, the sum at the $j$-th place is exactly $p$, without a carry to the next higher place. This is because $k$'s $j$-th digit is $a_j - 1$ and $n-k$'s $j$-th digit is $1$, summing up to $a_j$ (the original digit of $n$ at the $j$-th place). Since there is no carry in the base-$p$ addition of $k$ and $n-k$, it follows that $\binom{n}{k}$ is not divisible by $p$. Hence, it is not divisible by $n$.
+
+This construction works for any prime factor $p_i$ of $n$. We can always find a $j$ where $n$ has a non-zero base-$p_i$ digit (since $p_i$ divides $n$), and we can always form a $k_i$ as described above. Thus, for every prime factor $p_i$ of $n$, there must exist at least one such $k_i$ for which $\binom{n}{k_i}$ is not divisible by $p_i$.
+\end{proof}
 \subsection{Proof of the Main Theorem}
 \begin{proof}[Proof of Theorem \ref{theorem:1}]
 Let \( n \) be an odd integer $>3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$.
@@ -155,7 +178,7 @@ For composite \( n \), \( \binom{n}{k} \) is divisible by \( n \) if and only if
 \end{align}
 
 \begin{itemize}
-    \item \textbf{Cycling of \( f(n) = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
+    \item \textbf{Cycling of \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
     \item \textbf{Behavior of \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
 \end{itemize}    
 
@@ -235,7 +258,7 @@ Harvey and van Der Heoven (2021) have given an algorithm for integer multiplicat
 \subsubsection{Conclusion}
 The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
 
-\subsection{Psuedocode Implementation}
+\subsection{Pseudocode Implementation}
 To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved. A sample .NET implementation, with test data, is also available on the author's Github page \cite{githubrepo}.
 
 \subsubsection{IsPrime Function}
