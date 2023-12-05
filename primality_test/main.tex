@@ -19,6 +19,7 @@
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
 \usepackage{graphicx}
 \usepackage{multicol}
 
@@ -34,18 +35,18 @@
 \end{center}
 
 \begin{abstract}
-A deterministic primality test with a polynomial time complexity of $O(\log(n)^3 \log\log(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. Combining elements of number theory and combinatorics, the proof operates on the basis of simultaneous modular congruences relating to binomial transforms of powers of two.
+A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. Combining elements of number theory and combinatorics, the proof operates on the basis of simultaneous modular congruences relating to binomial transforms of powers of two.
 \end{abstract}
 
 \section{Introduction}
 
-Primality testing has seen remarkable advancements over the past few decades. A significant breakthrough in this field was the AKS primality test, introduced by Agrawal, Kayal, and Saxena (2002) \cite{aks2002}. The AKS test was the first to offer determinism and polynomial-time complexity, a monumental achievement that resolved a longstanding open question in computational number theory \cite{goldreich2008}. However, despite its theoretical importance, the AKS test has practical limitations due to its relatively high polynomial time complexity, rendering it inefficient for most applications. Agrawal, Kayal, and Saxena gave a time complexity of $O(\log(n)^{12})$ for the AKS test \cite{aks2002}. This bound was lowered significantly by Lenstra and Pomerance (2011) to $O(\log^6(n))$ \cite{lenstra2011}. Despite this reduction, AKS remains impractical and is mostly unused.
+Primality testing has seen remarkable advancements over the past few decades. A significant breakthrough in this field was the AKS primality test, introduced by Agrawal, Kayal, and Saxena (2002) \cite{aks2002}. The AKS test was the first to offer determinism and polynomial-time complexity, a monumental achievement that resolved a longstanding open question in computational number theory \cite{goldreich2008}. However, despite its theoretical importance, the AKS test has practical limitations due to its relatively high polynomial time complexity, rendering it inefficient for most applications. Agrawal, Kayal, and Saxena gave a time complexity of $\tilde{O}(\log^{12}(n))$ for the AKS test \cite{aks2002}. This bound was lowered significantly by Lenstra and Pomerance (2011) to $\tilde{O}(\log^6(n))$ \cite{lenstra2011}. Despite this reduction, AKS remains impractical and is mostly unused.
 
 In the field of cryptography, the unique properties of prime numbers are widely exploited to create cryptographic primitives. It is often the case that many large primes must be generated in rapid succession \cite{lenstra1987}. To make these cryptographic operations practical, fast probabilistic primality tests such as the Baille-PSW primality test (BPSW) \cite{baillie1980} or Miller-Rabin (MR) \cite{rabin1980} \cite{miller1976} are used instead of AKS when searching for large primes. Probabilistic primality tests are by definition non-deterministic and may erroneously report a composite integer as being prime. Composite integers which pass a probabilistic primality test are relatively rare and are known as psuedoprimes (PSPs) for the respective test \cite{wagstaff1983}. When generating primes for cryptographic purposes, probabilistic primality tests are often combined or repeated with different parameters in order to achieve an acceptable error-bound that makes it almost certain that no composite integer will pass. However, reducing the error-bound requires additional compute and increases running-time, creating a trade-off.
 
-We present a new deterministic primality test that operates in polynomial time with a time complexity of $O(\log(n)^3 \log\log(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. Our main theorem posits a condition for an odd integer \( n \) to be prime, based on specific modular congruences related to the binomial transforms of powers of $2$. The basis for our test is the following main theorem: Let \( n \) be an odd integer satisfying \( 2^{n-1} \equiv 1 \pmod{n} \). Denote \( D \) as the least integer strictly greater than \( 2 \) and less than \( n \) which does not divide \( n-1 \). Then, \( n \) is prime if and only if a set of simultaneous modular congruences involving \( D \), \( n \), and binomial coefficients hold.
+We present a new deterministic primality test that operates in polynomial time with a time complexity of $\tilde{O}(\log^3(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. Our main theorem posits a condition for an odd integer \( n \) to be prime, based on specific modular congruences related to the binomial transforms of powers of $2$. The basis for our test is the following main theorem: Let \( n \) be an odd integer satisfying \( 2^{n-1} \equiv 1 \pmod{n} \). Denote \( D \) as the least integer strictly greater than \( 2 \) and less than \( n \) which does not divide \( n-1 \). Then, \( n \) is prime if and only if a set of simultaneous modular congruences involving \( D \), \( n \), and binomial coefficients hold.
 
-This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by supporting lemmas. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We also give a pseudocode implementation for our test to show how it can be implemented.
+This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by supporting lemmas. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We also give pseudocode for our test to show how it can be implemented.
 
 \section{Main Theorem}
 
@@ -53,7 +54,7 @@ This paper is structured as follows: We begin by presenting the main theorem and
 \label{theorem:1}
     Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $n$ is prime if and only if the following congruence holds:
     \begin{align}
-        1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \equiv \sum_{k=0}^{n} \binom{n}{k}2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}
+        1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \equiv \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}
     \end{align}
 \end{theorem}
 
@@ -140,16 +141,16 @@ In this case, the congruence may or may not hold. With $f(n) \equiv 1 \pmod{n}$,
 
 In this case, the congruence cannot hold.
 
-Since $\sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$, we may add or subtract $\sum_{k=1}^{n-1} \binom{n}{k}$ from our congruence an arbitrary number of times and $n$ must still divide the sum. The same applies to $\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k$ and $\sum_{k=1}^{n-1} \binom{n}{k} f(k+1)$. Therefore, we surmise that the following must hold for all $A,B,C \in \mathbb{Z}$:
+Since $\sum_{k=1}^{n-1} \binom{n}{k} \equiv 0 \pmod{n}$, we may add or subtract $\sum_{k=1}^{n-1} \binom{n}{k}$ from our congruence an arbitrary number of times and $n$ must still divide the sum. The same applies to $\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k$ and $\sum_{k=1}^{n-1} \binom{n}{k} f(k+1)$. Therefore, we surmise that the following must hold for all $W,X,Y \in \mathbb{Z}$:
 \begin{align}
-A \left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k\right) - B \left(\sum_{k=1}^{n-1} \binom{n}{k} f(k+1)\right) - C \left(\sum_{k=1}^{n-1} \binom{n}{k}\right) \equiv 0 \pmod{n} \\
-\left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k A\right) - \left(\sum_{k=1}^{n-1} \binom{n}{k} f(k+1) B\right) - \left(\sum_{k=1}^{n-1} \binom{n}{k} C\right) \equiv 0 \pmod{n} \\
-\sum_{k=1}^{n-1} \binom{n}{k} \left( A \cdot f(n)^k - B \cdot f(k+1) - C\right) \equiv 0 \pmod{n}
+W \left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k\right) - X \left(\sum_{k=1}^{n-1} \binom{n}{k} f(k+1)\right) - Y \left(\sum_{k=1}^{n-1} \binom{n}{k}\right) \equiv 0 \pmod{n} \\
+\left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k W\right) - \left(\sum_{k=1}^{n-1} \binom{n}{k} f(k+1) X\right) - \left(\sum_{k=1}^{n-1} \binom{n}{k} Y\right) \equiv 0 \pmod{n} \\
+\sum_{k=1}^{n-1} \binom{n}{k} \left( W \cdot f(n)^k - X \cdot f(k+1) - Y\right) \equiv 0 \pmod{n}
 \end{align}
 
-If $\binom{n}{k}$ is nonzero for any $k$ and, as we know it must be for some $k$, and $f(n)^k \not\equiv f(k+1) \pmod{n}$, then the summation within our congruence may sum to any value by adjusting the values of $A$, $B$, and $C$. For the congruence to hold, we would require all integers to be equivalent to $0 \pmod{n}$. However, this is a contradiction, as $n\not=1$ and it is impossible. Therefore, to prove that the congruence cannot hold, it suffices to show that $f(n)^k \not\equiv f(k+1) \pmod{n}$ for some $k$ with $\binom{n}{k} \not\equiv 0 \pmod{n}$.
+If $\binom{n}{k} \not\equiv 0 \pmod{n}$ for any $k$, as we know it must be for some $k$, and $f(n)^k \not\equiv f(k+1) \pmod{n}$, then the summation within our congruence may sum to any value by adjusting the values of $W$, $X$, and $Y$. For the congruence to hold, we would require all integers to be equivalent to $0 \pmod{n}$. However, this is a contradiction, as $n\not=1$ and it is impossible. Therefore, to prove that the congruence cannot hold, it suffices to show that $f(n)^k \not\equiv f(k+1) \pmod{n}$ for some $k$ with $\binom{n}{k} \not\equiv 0 \pmod{n}$.
 
-For composite \( n \), \( \binom{n}{k} \) is divisible by \( n \) if and only if at least one of the base-\( p \) digits of \( k \) is greater than the corresponding digit of \( n \), where \( p \) is a prime dividing \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k \) and \( f(k+1) \) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
+For composite \( n \), Kummer's theorem \cite{kummer1857} states that \( \binom{n}{k} \) is divisible by \( n \) if and only if at least one of the base-\( p \) digits of \( k \) is greater than the corresponding digit of \( n \), where \( p \) is a prime dividing \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k \) and \( f(k+1) \) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
 \begin{align}
     \left\lfloor \frac{n-1}{D} \right\rfloor k - \left\lfloor \frac{k}{D} \right\rfloor \equiv 0 \pmod{\text{ord}_n(2)}
 \end{align}
@@ -159,7 +160,7 @@ For composite \( n \), \( \binom{n}{k} \) is divisible by \( n \) if and only if
     \item \textbf{Behavior of \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
 \end{itemize}    
 
-Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( \binom{n}{k} \left(f(n)^k - f(k+1)\right) \not\equiv 0 \pmod{n} \). This nonzero term in the sum, when multiplied by the nonzero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $A, B, C$.
+Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( \binom{n}{k} \left(f(n)^k - f(k+1)\right) \not\equiv 0 \pmod{n} \). This non-zero term in the sum, when multiplied by the non-zero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $W, X, Y$.
 
 \textbf{Conclusion:}
 
@@ -214,10 +215,10 @@ The given algorithm is a primality test that involves several computational step
     
         Computing \( C \) involves exponentiating a polynomial in the ring \(\mathbb{Z}/n\mathbb{Z}\) with \( O(\log(n)) \) terms and summing the coefficients.
         \begin{enumerate}
-            \item Summing the polynomial coefficients can be done in \( O(\log(n)^2) \) time.
+            \item Summing the polynomial coefficients can be done in \( O(\log^2(n)) \) time.
             \item Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \).
         \end{enumerate}
-         Therefore, the overall complexity for computing \( C \) is \( O(\log(n)^2 M(n)) \).
+         Therefore, the overall complexity for computing \( C \) is \( O(\log^2(n) M(n)) \).
 
     \item \textbf{Comparisons}:
     
@@ -225,17 +226,163 @@ The given algorithm is a primality test that involves several computational step
 \end{enumerate}
 
 \subsubsection{Overall Time Complexity}
-The dominant time complexity in the algorithm comes from computing \( C \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log(n)^2 M(n)) \).
+The dominant time complexity in the algorithm comes from computing \( C \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log^2(n) M(n)) \).
 
 Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
 \begin{align}
-    T(n) = O(\log(n)^2 M(n)) = O(\log(n)^2 \log(n) \log\log(n)) = O(\log(n)^3 \log\log(n))
+    T(n) = O(\log^2(n) M(n)) = O(\log^2(n) \log(n) \log\log(n)) = O(\log^3(n) \log\log(n)) = \tilde{O}(\log^3(n))
 \end{align}
 
 \subsubsection{Conclusion}
 The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
 
-\subsection{Pseudocode Implementation}
+\section{Efficient Computations Using Polynomial Rings}
+In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently compute the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+
+\subsection{Ring Definition}
+
+\begin{definition}[Polynomial ring $R$] \label{definition:ring}
+We construct a polynomial ring \(R = \mathbb{Z}[x]\) in which addition is carried out as usual, and multiplication is followed by polynomial degree reduction via a special substitution function, denoted $\Phi$ \cite{shunia2023polynomial}. The multiplication operation \(\ast\) is defined as follows:
+\begin{align}
+P(x) \ast Q(x) = \Phi(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in R,
+\end{align}
+\(\Phi\) is an operation that enforces any defined substitution rules for the polynomial's terms upon multiplication. In our case, for the generator \(x\), we have:
+\begin{align}
+x \ast x^{d-1} = x^d = \Phi(x^d) = N, \text{ where } N \in R
+\end{align}
+
+For any polynomial in our ring $R$, the function \( \Phi \) is distributed to the individual terms and implicitly applied to reduce terms. Whenever the term $x^d$ appears, it is replaced with its defined mapping. The mappings in $\Phi$ are extended to terms of higher degrees, meaning $\Phi(x^{d+k}) = \Phi(x^d \ast x^k) = N x^k$, for $k > 1$. $\Phi$ is applied recursively to the polynomial until and its terms until the degree of the polynomial is less than $d$. For terms which do not match a defined substitution rule, $\Phi$ returns them as they are.
+\end{definition}
+
+\textbf{Example.}
+
+Define the ring $R$ as defined by Definition \ref{definition:ring} with $N = 2$, $d = 3$. Hence, $\Phi(x^3) = 2$. $P(x) := 1 + x + 3x^3 + x^{4} + x^{6}, P(x) \in R$.
+\begin{align}
+    \Phi(P(x)) &= \Phi(1 + x + 3x^3 + x^{4} + x^{6}) \\
+    &= \Phi(1) + \Phi(x) + \Phi(3x^3) + \Phi(x^{4}) + \Phi(x^{6}) \\
+    &= 1 + x + \Phi(2 \cdot 3) + \Phi(2 \cdot x) + \Phi(2 \cdot x^3) \\
+    &= 1 + x + 6 + 2x + \Phi(2 \cdot 2) \\
+    &= 7 + 3x + 4 \\
+    &= 11 + 3x
+\end{align}
+
+\subsection{Ring Axioms}
+We assert that the ring \( R \) with the modified operation \(\ast\) still satisfies the standard ring axioms. Specifically, we show that \((R, +, \ast)\) is associative, commutative (with respect to addition), and has an additive identity and an additive inverse for every element. Additionally, the distributive property of multiplication over addition is preserved under the operation \(\ast\).
+
+\subsubsection{Multiplicative Properties}
+\begin{proposition}[Distributivity of \(\ast\)] \label{proposition:ring:1}
+The operation \(\ast\) is distributive over addition in the ring \(R\).
+\end{proposition}
+\begin{proof}
+The modified multiplication \(\ast\) is distributive over addition because for any \( P(x), Q(x), S(x) \in R \),
+\begin{align}
+    P(x) \ast (Q(x) + S(x)) &= \Phi(P(x) \cdot (Q(x) + S(x))) \\
+    &= \Phi(P(x) \cdot Q(x) + P(x) \cdot S(x)) \\
+    &= \Phi(P(x) \cdot Q(x)) + \Phi(P(x) \cdot S(x)) \\
+    &= P(x) \ast Q(x) + P(x) \ast S(x)
+\end{align}
+Where the second equality uses the distributive property of the standard multiplication in \( \mathbb{Z}[x] \) and the linearity of \(\Phi\) with respect to polynomial addition.
+\end{proof}
+
+\begin{proposition}[Associativity of \(\ast\)] \label{proposition:ring:2}
+The multiplication operation \(\ast\) in the ring \(R\) is associative.
+\end{proposition}
+\begin{proof}
+To prove associativity, we need to show that for any \( P(x), Q(x), S(x) \in R \):
+\begin{align}
+    (P(x) \ast Q(x)) \ast S(x) = P(x) \ast (Q(x) \ast S(x))
+\end{align}
+Expanding the left-hand side:
+\begin{align}
+    (P(x) \ast Q(x)) \ast S(x) &= \Phi(P(x) \cdot Q(x)) \ast S(x) \\
+    &= \Phi(\Phi(P(x) \cdot Q(x)) \cdot S(x))
+\end{align}
+Similarly, for the right-hand side:
+\begin{align}
+    P(x) \ast (Q(x) \ast S(x)) &= P(x) \ast \Phi(Q(x) \cdot S(x)) \\
+    &= \Phi(P(x) \cdot \Phi(Q(x) \cdot S(x)))
+\end{align}
+Since the standard multiplication in \(\mathbb{Z}[x]\) is associative and \(\Phi\) is a well-defined operation that respects this associativity, we have:
+\begin{align}
+    \Phi(\Phi(P(x) \cdot Q(x)) \cdot S(x)) = \Phi(P(x) \cdot \Phi(Q(x) \cdot S(x)))
+\end{align}
+Which shows that:
+\begin{align}
+    (P(x) \ast Q(x)) \ast S(x) = P(x) \ast (Q(x) \ast S(x))
+\end{align}
+\end{proof}
+
+\subsubsection{Additive Properties}
+\begin{proposition}[Preservation of additive properties] \label{proposition:ring:3}
+The commutative and associative properties of addition, and the existence of an additive identity and inverses, are maintained in the ring \(R\). 
+\end{proposition}
+\begin{proof}
+The additive structure of \(R\) remains unchanged. Thus, the commutative and associative properties of addition, and the existence of an additive identity and inverses, are inherited directly from \( \mathbb{Z}[x] \).
+\end{proof}
+
+\subsection{Modular Ring Definition}
+\begin{definition}[Modular polynomial ring $M$]  \label{definition:modularring}
+Let \( R = \mathbb{Z}[x] \) be our polynomial ring as defined in Definition \ref{definition:ring}, where the multiplication is modified by a substitution function \(\Phi\) as described previously. Let \( n \) be a positive integer. We define the modular variation of \( R \), denoted as \( M \), to be the ring of polynomials with coefficients in \( \mathbb{Z}/n\mathbb{Z} \) and with multiplication modified by a corresponding substitution function \(\Phi_M\). Formally, \( M = (\mathbb{Z}/n\mathbb{Z})[x] \), where the coefficients of the polynomials in \( M \) are taken modulo \( n \), and the multiplication in \( M \) is given by
+\begin{align}
+    P(x) \ast Q(x) = \Phi_M(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in M,
+\end{align}
+\(\Phi_M\) is defined analogously to \(\Phi\) but operates within the context of the coefficients being in \( \mathbb{Z}/n\mathbb{Z} \).
+\end{definition}
+
+\begin{proposition} \label{proposition:modularring:1}
+The ring \( M = (\mathbb{Z}/n\mathbb{Z})[x] \) with the modified multiplication operation \(\ast\), as defined by the substitution function \(\Phi_M\), inherits the standard ring axioms from \( R = \mathbb{Z}[x] \).
+\end{proposition}
+\begin{proof}
+Since the ring \( M \) is structurally analogous to \( R \) with the only difference being the coefficient domain (\(\mathbb{Z}/n\mathbb{Z}\) instead of \(\mathbb{Z}\)), and the modified multiplication operation \(\ast\) in \( M \) is defined similarly to \( R \) using \(\Phi_M\), analogous to \(\Phi\), \( M \) inherits the ring properties of \( R \). This includes the associativity and commutativity of addition, the existence of an additive identity and inverses, the distributivity of multiplication over addition, and the associativity of multiplication. These properties are preserved under the transition from \(\mathbb{Z}\) to \(\mathbb{Z}/n\mathbb{Z}\) coefficients and the analogous definition of \(\ast\) in \( M \).
+\end{proof}
+
+\subsection{Ring Computations}
+We now demonstrate how our modular polynomial ring $M$ can be used to efficiently compute the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{k+1} \pmod{n}$.
+
+In an earlier paper relating the central binomial coefficients and Gould's sequence to polynomial rings \cite{shunia2023polynomial}, we showed how a multivariate polynomial ring, analogous to the univariate polynomial ring we have defined herein, can be used generally to compute the binomial transforms of recursive integer sequences. We apply the same technique.
+
+\begin{theorem} \label{theorem:2}
+Let $n$, $k$ be non-negative integers. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\Phi(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( P(x)^k \), gives $2^{\left\lfloor \frac{k-1}{D} \right\rfloor} \pmod{n}$.
+\end{theorem}
+\begin{proof}
+Examining $D = 2$, we can see:
+\begin{align*}
+    P(x)^0 = 2^{\left\lfloor -1/2 \right\rfloor} = 2^0 = 1 \\
+    P(x)^1 = 2^{\left\lfloor 0/2 \right\rfloor} = 2^0 = 1 \\
+    P(x)^2 = 2^{\left\lfloor 1/2 \right\rfloor} = 2^0 = 1 \\
+    P(x)^3 = 2^{\left\lfloor 2/2 \right\rfloor} = 2^1 = 2 \\
+    P(x)^4 = 2^{\left\lfloor 3/2 \right\rfloor} = 2^1 = 2 \\
+    P(x)^5 = 2^{\left\lfloor 4/2 \right\rfloor} = 2^2 = 4 \\
+    P(x)^6 = 2^{\left\lfloor 5/2 \right\rfloor} = 2^2 = 4 \\
+    \vdots
+\end{align*}
+
+We proceed by induction.
+
+\textbf{Base Case:}
+For \( k = 0 \), we have \( P(x)^0 = 1 \), and the sum of coefficients is \( 2^{\left\lfloor \frac{0-1}{D} \right\rfloor} = 2^{0} = 1 \).
+
+\textbf{Inductive Step:}
+Assume the theorem holds for some \( k \geq 0 \), i.e., the sum of coefficients modulo \( n \) in \( P(x)^k \) is \( 2^{\left\lfloor \frac{k-1}{D} \right\rfloor} \pmod{n} \). We need to show it also holds for \( k+1 \).
+
+Consider \( P(x)^{k+1} = P(x)^k \ast P(x) \). By the definition of \( \ast \) and \( \Phi \), the degree of \( P(x)^{k+1} \) gets reduced by \( \Phi \) every time it reaches \( D \). The number of times this reduction happens is \( \left\lfloor \frac{k}{D} \right\rfloor \). Therefore, the sum of coefficients in \( P(x)^{k+1} \) should be \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \), as each reduction by \( \Phi \) doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \).
+
+\textbf{Conclusion:}
+By the principle of mathematical induction, the theorem is proven.
+\end{proof}
+
+\begin{theorem} \label{theorem:3}
+Let $n$ an integer $>0$. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\Phi(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Then taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( (1 + P(x))^n \) is equivalent to $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+\end{theorem}
+\begin{proof}
+By the binomial theorem, we have:
+\begin{align}
+    (1 + x)^n = \sum_{k=0}^{n} \binom{n}{k} P(x)^{k+1}
+\end{align}
+Hence, evaluating the expanded polynomial $(1+P(x))^n = (1+x)^n$ at \( x=1 \) yields the binomial transform of the sequence generated by \( P(x)^k \). This follows from the design of our polynomial ring. The remainder of the proof follows from Theorem \ref{theorem:2}, which shows that the sum of coefficients in the expansion of $P(x)^{k+1}$ is equivalent to $2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. 
+\end{proof}
+
+\section{Pseudocode Implementation}
 To demonstrate how our test may be implemented, we offer a pseudocode implementation of the key functions involved. A sample .NET implementation, with test data, is also available on the author's Github page \cite{githubrepo}.
 
 \subsubsection{IsPrime Function}
@@ -334,6 +481,9 @@ To demonstrate how our test may be implemented, we offer a pseudocode implementa
     \State \Return $polyC$
 \EndFunction
 \end{algorithmic}
+
+\section{Acknowledgements}
+The author would like to thank the kind users at \url{mersenneforum.org} for their helpful feedback.
 
 \begingroup
 \raggedright
