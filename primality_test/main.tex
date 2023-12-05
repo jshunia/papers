@@ -62,10 +62,10 @@ This paper is structured as follows: We begin by presenting the main theorem and
 \subsection{Supporting Lemmas}
 \begin{lemma}
 \label{lemma:1}
-    Let $n$ be an odd composite integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $D$ does not divide $\text{ord}_n(2)$.
+    Let $n$ be an odd composite integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $\left\lfloor\frac{n-1}{D}\right\rfloor \not= \text{ord}_n(2)$.
 \end{lemma}
 \begin{proof}
-We are given odd composite $n > 3$ with $2^{n-1} \equiv 1 \pmod{n}$. By the properties of the order of an integer modulo composite $n$, the smallest $k$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \text{ord}_n(2)$, must be a divisor of $n-1$. Hence, $\text{ord}_n(2) \mid n-1$. Since $\left\lfloor\frac{n-1}{D}\right\rfloor$ is strictly less than $n-1$ and $D$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{D}\right\rfloor} \not\equiv 1 \pmod{n}$.
+We are given odd composite $n > 3$ with $2^{n-1} \equiv 1 \pmod{n}$. By the properties of the order of an integer modulo composite $n$, the smallest $k$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \text{ord}_n(2)$, must be a divisor of $n-1$. Hence, $\text{ord}_n(2) \mid n-1$. Since $\left\lfloor\frac{n-1}{D}\right\rfloor$ is strictly less than $n-1$ and $D$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{D}\right\rfloor} \not\equiv 1 \pmod{n}$ and therefore, $\left\lfloor\frac{n-1}{D}\right\rfloor \not= \text{ord}_n(2)$.
 \end{proof}
 
 \subsection{Proof of the Main Theorem}
