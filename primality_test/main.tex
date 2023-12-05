@@ -214,15 +214,13 @@ The given algorithm is a primality test that involves several computational step
 
     \item \textbf{Computing \( C \)}:
     
-        Computing \( C \) involves exponentiating a polynomial in the ring \(\mathbb{Z}/n\mathbb{Z}\) with \( O(\log(n)) \) terms and summing the coefficients.
+        Computing \( C \) involves exponentiating a polynomial in the ring \(\mathbb{Z}/n\mathbb{Z}\) with \( O(\log(n)) \) terms and summing the coefficients. The mathematics underlying the computation of \( C \) is described and proven in \S \ref{section:polyrings}.
         \begin{enumerate}
             \item Summing the polynomial coefficients can be done in \( O(\log^2(n)) \) time.
             \item Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \).
         \end{enumerate}
          Therefore, the overall complexity for computing \( C \) is \( O(\log^2(n) M(n)) \).
          
-         \textbf{Note.} \textit{The mathematics underlying the computation of \( C \) is described and proven in \S \ref{section:polyrings}.}
-
     \item \textbf{Comparisons}:
     
         The final steps involve comparisons which are \( O(1) \) operations.
