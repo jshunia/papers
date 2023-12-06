@@ -31,9 +31,6 @@
 \begin{document}
 
 \maketitle
-\begin{center}
-    [Draft]
-\end{center}
 
 \begin{abstract}
 A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. Combining elements of number theory and combinatorics, the proof operates on the basis of simultaneous modular congruences relating to binomial transforms of powers of two.
@@ -47,7 +44,7 @@ In the field of cryptography, the unique properties of prime numbers are widely 
 
 We present a new deterministic primality test that operates in polynomial time with a time complexity of $\tilde{O}(\log^3(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. Our main theorem posits a condition for an odd integer \( n \) to be prime, based on specific modular congruences related to the binomial transforms of powers of $2$. The basis for our test is the following main theorem: Let \( n \) be an odd integer satisfying \( 2^{n-1} \equiv 1 \pmod{n} \). Denote \( D \) as the least integer strictly greater than \( 2 \) and less than \( n \) which does not divide \( n-1 \). Then, \( n \) is prime if and only if a set of simultaneous modular congruences involving \( D \), \( n \), and binomial coefficients hold.
 
-This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by supporting lemmas. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We also give pseudocode for our test to show how it can be implemented.
+This paper is structured as follows: We begin by presenting the main theorem and its proof, substantiated by supporting lemmas. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. A notable challenge in this regard is the computation of a specific congruence that remains infeasible with existing methods. To address this, we introduce an innovative approach utilizing a specialized polynomial ring which provides efficient calculations. We conclude with pseudocode for our test, and a link to an open source implementation, to demonstrate how it can be implemented.
 
 \section{Main Theorem}
 
@@ -61,13 +58,6 @@ Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $
 
 \subsection{Supporting Lemmas}
 
-\begin{lemma}[Bounds on least non-divisor] \label{lemma:leastnondivisor}
-If $n$ is an integer $> 3$, then there exists an integer $1 < D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
-\end{lemma}
-\begin{proof}
-Let $n$ be a composite integer $> 3$. Clearly, $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
-\end{proof}
-
 \begin{lemma}[Floor function and indivisibility]
 \label{lemma:floornondivisor}
 If \(a\) and \(b\) are positive integers with \(b \nmid a\), 
@@ -77,15 +67,18 @@ cannot divide \(a\).
 \begin{proof}
 Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer that is less than \(\frac{a}{b}\). Thus, \(qb < a < (q + 1)b\).
 
-Suppose, for contradiction, that \(q\) divides \(a\). Then there exists an integer \(k\) such that \(a = k q\).
-
-Substituting \(a = k q\) into the inequality \(qb < a < (q + 1) b\), we get \(qb < kq < (q + 1) b\). Dividing this inequality by \(q\) (which is positive, so the direction of the inequality is preserved), we obtain \(b < k < b + \frac{b}{q}\).
+Suppose, for contradiction, that \(q\) divides \(a\). Then there exists an integer \(k\) such that \(a = k q\). Substituting \(a = k q\) into the inequality \(qb < a < (q + 1) b\), we get \(qb < kq < (q + 1) b\). Dividing this inequality by \(q\), we obtain \(b < k < b + \frac{b}{q}\).
 
 Since \(k\) is an integer, and \(b \nmid a\) implies \(k \neq b\), the next possible integer value for \(k\) is \(b + 1\). Therefore, \(k = b + 1\), which gives \(a = k q = (b + 1) q\). 
 
-However, this leads to a contradiction: \(a = (b + 1) q\) implies \(a \geq (q + 1) b\), contradicting the established fact that \(a < (q + 1) b\).
+However, this leads to a contradiction: \(a = (b + 1) q\) implies \(a \geq (q + 1) b\), contradicting the established fact that \(a < (q + 1) b\). Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).
+\end{proof}
 
-Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).
+\begin{lemma}[Bounds on least non-divisor] \label{lemma:leastnondivisor}
+If $n$ is an integer $> 3$, then there exists an integer $1 < D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
+\end{lemma}
+\begin{proof}
+Let $n$ be a composite integer $> 3$. Clearly, $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
 \end{proof}
 
 \begin{lemma}[Multiplicative order inequality] \label{lemma:orderinequality}
@@ -182,7 +175,7 @@ W \left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k\right) - X \left(\sum_{k=1}^{n-1} \
 
 If $\binom{n}{k} \not\equiv 0 \pmod{n}$ for any $k$, as we know it must be for some $k$, and $f(n)^k \not\equiv f(k+1) \pmod{n}$, then the summation within our congruence may sum to any value by adjusting the values of $W$, $X$, and $Y$. For the congruence to hold, we would require all integers to be equivalent to $0 \pmod{n}$. However, this is a contradiction, as $n\not=1$ and it is impossible. Therefore, to prove that the congruence cannot hold, it suffices to show that $f(n)^k \not\equiv f(k+1) \pmod{n}$ for some $k$ with $\binom{n}{k} \not\equiv 0 \pmod{n}$.
 
-For composite \( n \), Kummer's theorem \cite{kummer1857} states that \( \binom{n}{k} \) is divisible by \( n \) if and only if at least one of the base-\( p \) digits of \( k \) is greater than the corresponding digit of \( n \), where \( p \) is a prime dividing \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k \) and \( f(k+1) \) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
+Since \( n \) is composite, it can be represented by its prime factorization, say \( n = p_1^{e_1} p_2^{e_2} \ldots p_i^{e_r} \). A result of Kummer's theorem \cite{kummer1857} is that for \( \binom{n}{k} \) to be divisible by \( n \), when adding \( k \) and \( n-k \) in the base of each prime divisor \( p_i \), there must be at least one carry-over. This condition must hold for all prime divisors \( p_i \) of \( n \). If the condition fails for a single prime divisor, \( \binom{n}{k} \) will not be divisible by \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) and \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor}\) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
 \begin{align}
     \left\lfloor \frac{n-1}{D} \right\rfloor k - \left\lfloor \frac{k}{D} \right\rfloor \equiv 0 \pmod{\text{ord}_n(2)}
 \end{align}
@@ -190,9 +183,9 @@ For composite \( n \), Kummer's theorem \cite{kummer1857} states that \( \binom{
 \begin{itemize}
     \item \textbf{Cycling of \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
     \item \textbf{Behavior of \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
-\end{itemize}    
+\end{itemize}
 
-Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( \binom{n}{k} \left(f(n)^k - f(k+1)\right) \not\equiv 0 \pmod{n} \). This non-zero term in the sum, when multiplied by the non-zero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $W, X, Y$.
+Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( f(n)^k \not\equiv f(k+1) \pmod{n} \) and \( \binom{n}{k} \not\equiv 0 \pmod{n} \). This non-zero term in the sum, when multiplied by the non-zero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $W, X, Y$.
 
 \textbf{Conclusion:}
 
@@ -269,7 +262,7 @@ Harvey and van Der Heoven (2021) have given an algorithm for integer multiplicat
 The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
 
 \section{Efficient Calculations via Polynomial Rings} \label{section:polyrings}
-In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently calculate the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. The standard approach to calculating this value requires evaluating $\binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$ for each $k$ and summing the results, which takes time exponential in $n$. Conversely, our approach offers an efficient polynomial time complexity of $\tilde{O}(D \cdot \log^2(n))$ (See: \S \ref{subsection:timecomplexity}).
+In this section, we define a special polynomial ring $R$ with a modular variation $M$, and show how $M$ can be used to efficiently calculate the value of $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. The standard approach to calculating this value requires evaluating $\binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$ for each $k$ and summing the results, which takes time exponential in $n$. Conversely, our approach offers an efficient polynomial time complexity of $\tilde{O}(D \log^2(n))$ (See: \S \ref{subsection:timecomplexity}).
 
 \subsection{Ring Definition}
 
