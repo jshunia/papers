@@ -62,10 +62,10 @@ Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $
 \subsection{Supporting Lemmas}
 
 \begin{lemma}[Bounds on least non-divisor] \label{lemma:leastnondivisor}
-If $n$ is an integer $> 3$, then there exists an integer $1 < D \leq \left\lceil\log_2(n-1)\right\rceil$ which does not divide $n-1$.
+If $n$ is an integer $> 3$, then there exists an integer $1 < D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
 \end{lemma}
 \begin{proof}
-Let $n$ be a composite integer $> 3$. Clearly, $n-1$ can have at most $\log_2(n-1)$ prime factors (when $n-1$ is a power of $2$). Hence, there must exist a $D \leq \left\lceil\log_2(n-1)\right\rceil$ which does not divide $n-1$.
+Let $n$ be a composite integer $> 3$. Clearly, $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
 \end{proof}
 
 \begin{lemma}[Floor function and indivisibility]
@@ -94,7 +94,7 @@ Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lflo
 \begin{proof}
 Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \text{ord}_n(2) \), i.e., \( k = \text{ord}_n(2) \). This order, \( \text{ord}_n(2) \), must divide \( n-1 \) due to the nature of the multiplicative order in modular arithmetic, particularly for composite moduli.
 
-Since \( D \) is the least integer greater than 2 and less than \( n \) that does not divide \( n-1 \), and \( \text{ord}_n(2) \) divides \( n-1 \), it follows that \( D \) cannot equal \( \text{ord}_n(2) \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = D \), it follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\log_2(n-1)$, which is clearly less than $\left\lfloor\frac{n}{2}\right\rfloor$. Thus we have \( 1 < D < \left\lfloor \frac{n-1}{D} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{D} \right\rfloor \) cannot divide \( n-1 \).
+Since \( D \) is the least integer greater than 2 and less than \( n \) that does not divide \( n-1 \), and \( \text{ord}_n(2) \) divides \( n-1 \), it follows that \( D \) cannot equal \( \text{ord}_n(2) \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = D \), it follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$. For $n \geq 341$, $D$ is clearly less than $\left\lfloor\frac{n}{2}\right\rfloor$. Thus we have \( 1 < D < \left\lfloor \frac{n-1}{D} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{D} \right\rfloor \) cannot divide \( n-1 \).
 
 Since \( \text{ord}_n(2) \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is not, it must be that \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is not equal to \( \text{ord}_n(2) \), as this would imply a contradiction with the nature of \( \text{ord}_n(2) \) as a divisor of \( n-1 \). Therefore, \( \left\lfloor\frac{n-1}{D}\right\rfloor \not= \text{ord}_n(2) \).
 \end{proof}
