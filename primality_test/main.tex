@@ -60,36 +60,95 @@ Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $
 
 \begin{lemma}[Floor function and indivisibility]
 \label{lemma:floornondivisor}
-If \(a\) and \(b\) are positive integers with \(b \nmid a\), 
-and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor\) 
-cannot divide \(a\).
+Given $a,b \in \mathbb{Z}^{+}$ with \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor \) cannot divide \(a\).
 \end{lemma}
 \begin{proof}
-Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer that is less than \(\frac{a}{b}\). Thus, \(qb < a < (q + 1)b\).
+Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer that is less than \(\frac{a}{b}\). Thus, \(q \cdot b < a < b \cdot (q + 1)\).
 
-Suppose, for contradiction, that \(q\) divides \(a\). Then there exists an integer \(k\) such that \(a = k q\). Substituting \(a = k q\) into the inequality \(qb < a < (q + 1) b\), we get \(qb < kq < (q + 1) b\). Dividing this inequality by \(q\), we obtain \(b < k < b + \frac{b}{q}\).
+Suppose, for contradiction, that \(q\) divides \(a\). Then there exists an integer \(k\) such that \(a = k \cdot q\). Substituting \(a = k \cdot q\) into the inequality \(q \cdot b < a < b \cdot (q + 1) \), we get \(q \cdot b < k \cdot q < b \cdot (q + 1) \). Dividing this inequality by \(q\), we obtain \(b < k < b + \frac{b}{q}\).
 
-Since \(k\) is an integer, and \(b \nmid a\) implies \(k \neq b\), the next possible integer value for \(k\) is \(b + 1\). Therefore, \(k = b + 1\), which gives \(a = k q = (b + 1) q\). 
+Since \(k\) is an integer, and \(b \nmid a\) implies \(k \neq b\), the next possible integer value for \(k\) is \(b + 1\). Therefore, \(k = b + 1\), which gives \(a = k \cdot q = q \cdot (b + 1)\). However, this leads to a contradiction: \(a = q \cdot (b + 1) \) implies \(a \geq b \cdot (q + 1) \), contradicting the established fact that \(a < b \cdot (q + 1) \). Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).
+\end{proof}
 
-However, this leads to a contradiction: \(a = (b + 1) q\) implies \(a \geq (q + 1) b\), contradicting the established fact that \(a < (q + 1) b\). Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).
+\begin{lemma}[Upper bound on floor function and indivisibility]
+\label{lemma:floornondivisorupperbound}
+Given $a,b \in \mathbb{Z}^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(b \leq \left\lfloor \sqrt{a} \right\rfloor\).
+\end{lemma}
+\begin{proof}
+Assume \( a, b \in \mathbb{Z}^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
 \end{proof}
 
 \begin{lemma}[Bounds on least non-divisor] \label{lemma:leastnondivisor}
-If $n$ is an integer $> 3$, then there exists an integer $1 < D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
+Let $n$ be an integer such that $n > 3$, then there exists an integer $1 < D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
 \end{lemma}
 \begin{proof}
-Let $n$ be a composite integer $> 3$. Clearly, $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
+If $n$ is a composite integer $> 3$, clearly $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
 \end{proof}
 
 \begin{lemma}[Multiplicative order inequality] \label{lemma:orderinequality}
-    Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer greater than 2 and less than \( n \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{D}\right\rfloor \) is not equal to \( \text{ord}_n(2) \).
+Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{D}\right\rfloor \not= \text{ord}_n(2) \).
 \end{lemma}
 \begin{proof}
-Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \text{ord}_n(2) \), i.e., \( k = \text{ord}_n(2) \). This order, \( \text{ord}_n(2) \), must divide \( n-1 \) due to the nature of the multiplicative order in modular arithmetic, particularly for composite moduli.
+Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \text{ord}_n(2) \), i.e., \( k = \text{ord}_n(2) \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \text{ord}_n(2) \), must divide \( n-1 \).
 
-Since \( D \) is the least integer greater than 2 and less than \( n \) that does not divide \( n-1 \), and \( \text{ord}_n(2) \) divides \( n-1 \), it follows that \( D \) cannot equal \( \text{ord}_n(2) \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = D \), it follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$. For $n \geq 341$, $D$ is clearly less than $\left\lfloor\frac{n}{2}\right\rfloor$. Thus we have \( 1 < D < \left\lfloor \frac{n-1}{D} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{D} \right\rfloor \) cannot divide \( n-1 \).
+Given \( D \) is the least integer greater than 2 and less than \( n \) that does not divide \( n-1 \), and \( \text{ord}_n(2) \) divides \( n-1 \), it follows that \( D \) cannot equal \( \text{ord}_n(2) \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = D \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. It follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. For $n \geq 341$, clearly $D < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < D < \left\lfloor \frac{n-1}{D} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{D} \right\rfloor \) cannot divide \( n-1 \).
 
 Since \( \text{ord}_n(2) \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is not, it must be that \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is not equal to \( \text{ord}_n(2) \), as this would imply a contradiction with the nature of \( \text{ord}_n(2) \) as a divisor of \( n-1 \). Therefore, \( \left\lfloor\frac{n-1}{D}\right\rfloor \not= \text{ord}_n(2) \).
+\end{proof}
+
+\begin{lemma}[Binomial term inequality for composites] \label{lemma:compositeterminequality}
+Let \( n \) be an odd composite integer greater than $3$ such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). Then, there exists at least one integer $k$ in $1 < k < n$ for which $\binom{n}{k} \not\equiv 0 \pmod{n}$ and $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+\end{lemma}
+\begin{proof}
+Let $f(x) = 2^{\left\lfloor \frac{x-1}{D} \right\rfloor}$. Hence, we have: $f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k}$, $f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor}$.
+
+Since \( n \) is composite, it can be represented by its prime factorization, say \( n = p_1^{e_1} p_2^{e_2} \ldots p_i^{e_r} \). A result of Kummer's theorem \cite{kummer1857} is that for \( \binom{n}{k} \) to be divisible by \( n \), when adding \( k \) and \( n-k \) in the base of each prime divisor \( p_i \), there must be at least one carry-over. This condition must hold for all prime divisors \( p_i \) of \( n \). If the condition fails for a single prime divisor, \( \binom{n}{k} \) will not be divisible by \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) and \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor}\) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
+\begin{align} \label{equation:kcongruence}
+    \left\lfloor \frac{n-1}{D} \right\rfloor k \equiv \left\lfloor \frac{k}{D} \right\rfloor \pmod{\text{ord}_n(2)}
+\end{align}
+
+\begin{itemize}
+    \item \textbf{Cycling of \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
+    \item \textbf{Behavior of \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
+\end{itemize}
+
+We choose $p$ to be a prime factor of $n$. As shown by Ogilvy (1956) \cite{ogilvy1956binomial}:
+\begin{align}
+\binom{n}{p} \not\equiv 0 \pmod{n}
+\end{align}
+
+Denote $\varphi(n)$ as the valuation of Euler's totient function for $n$. Given $p \mid n$, we have $p-1 \mid \varphi(n)$. Therefore, $p \nmid \varphi(n)$ and thus $p \nmid \text{ord}_n(2)$. We now examine the exponents of $f(n)^k$ and $f(k+1)$ in the case that $k=p$. Recall \cref{equation:kcongruence}. Translating this to our current situation, in order for $f(n)^p \equiv f(p+1) \pmod{n}$ to hold, we require:
+\begin{align}
+    \left\lfloor\frac{n-1}{D}\right\rfloor p \equiv \left\lfloor\frac{p}{D}\right\rfloor \pmod{\varphi(n) \text{, } \text{ord}_n(2)}
+\end{align}
+
+Given $p$ is prime, it is obvious that $\frac{p}{D}$ cannot be an integer and also that $\left\lfloor\frac{p}{D}\right\rfloor \nmid p$. Further, since $n$ is odd, $p$ must be odd. It follows that $\left\lfloor\frac{p}{D}\right\rfloor = \left\lfloor\frac{p-1}{D}\right\rfloor$. As such, by Lemma \ref{lemma:floornondivisor} we may say that $\left\lfloor\frac{p-1}{D}\right\rfloor \nmid p-1$. While we know $p-1 \mid \text{ord}_n(2)$, $\left\lfloor\frac{p-1}{D}\right\rfloor \nmid p-1$ does not imply $p(k+1) \not\equiv 1 \pmod{n}$, as it is still possible for $\left\lfloor\frac{p}{D}\right\rfloor$ to be equal to $\text{ord}_n(2)$ or a multiple of $\text{ord}_n(2)$.
+
+%And since $p-1 \mid \text{ord}_n(2)$, by Lemma \ref{lemma:orderinequality} we have $f(p+1) \not\equiv 1 \pmod{n}$ unless $p \leq D$ or $\left\lfloor\frac{p}{D}\right\rfloor = $.
+
+Conversely, $\left\lfloor\frac{n-1}{D}\right\rfloor p$ is a multiple of a prime $p$. Since we know ${\left\lfloor\frac{n-1}{D}\right\rfloor} \not= \text{ord}_n(2)$, it follows that ${\left\lfloor\frac{n-1}{D}\right\rfloor p} \not= \text{ord}_n(2)$ and $f(n)^p = 2^{\left\lfloor\frac{n-1}{D}\right\rfloor p} \not\equiv 1 \pmod{n}$.
+
+Based on the above, it is plausible for $\left\lfloor\frac{n-1}{D}\right\rfloor p \equiv \left\lfloor\frac{p}{D}\right\rfloor \pmod{\text{ord}_n(2)}$ to hold for a given prime factor $p$ of $n$ in isolation. However, for our purposes it must hold for all prime factors of $n$. Let's examine the case where $n$ is the product of two prime factors $n = p \cdot q$. We must have:
+\begin{align}
+\left\lfloor\frac{n-1}{D}\right\rfloor p - \left\lfloor\frac{p}{D}\right\rfloor \equiv \left\lfloor\frac{n-1}{D}\right\rfloor q - \left\lfloor\frac{q}{D}\right\rfloor \equiv 0 \pmod{\text{ord}_n(2)}
+\end{align}
+
+Rewriting this:
+\begin{align} \label{equation:pqcongruence}
+\left\lfloor\frac{n-1}{D}\right\rfloor p - \left\lfloor\frac{n-1}{D}\right\rfloor q \equiv \left\lfloor\frac{p}{D}\right\rfloor - \left\lfloor\frac{q}{D}\right\rfloor \equiv 0 \pmod{\text{ord}_n(2)}
+\end{align}
+
+We focus on the left-hand side:
+\begin{align}
+\left\lfloor\frac{n-1}{D}\right\rfloor p - \left\lfloor\frac{n-1}{D}\right\rfloor q \equiv 0 \pmod{\text{ord}_n(2)}
+\end{align}
+
+We know $p,q \nmid \text{ord}_n(2)$ and $\left\lfloor\frac{n-1}{D}\right\rfloor \not= \pmod{\text{ord}_n(2)}$. This implies that the difference $\left\lfloor\frac{n-1}{D}\right\rfloor p - \left\lfloor\frac{n-1}{D}\right\rfloor q$ is not equal to $\text{ord}_n(2)$, and further, that it it is not a multiple of $\text{ord}_n(2)$. Thus:
+\begin{align}
+\left\lfloor\frac{n-1}{D}\right\rfloor p - \left\lfloor\frac{n-1}{D}\right\rfloor q \not\equiv 0 \pmod{\text{ord}_n(2)}
+\end{align}
+
+Which gives us a contradiction in \cref{equation:pqcongruence}. Consequently, we may conclude that for at least $1$ prime divisor $k = p_i$ of composite \( n = p_1^{e_1} p_2^{e_2} \ldots p_i^{e_r} \), we have $\binom{n}{k} \not\equiv 0 \pmod{n}$ and $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This completes the proof.
 \end{proof}
 
 \subsection{Proof of the Main Theorem}
@@ -173,23 +232,13 @@ W \left(\sum_{k=1}^{n-1} \binom{n}{k} f(n)^k\right) - X \left(\sum_{k=1}^{n-1} \
 \sum_{k=1}^{n-1} \binom{n}{k} \left( W \cdot f(n)^k - X \cdot f(k+1) - Y\right) \equiv 0 \pmod{n}
 \end{align}
 
-If $\binom{n}{k} \not\equiv 0 \pmod{n}$ for any $k$, as we know it must be for some $k$, and $f(n)^k \not\equiv f(k+1) \pmod{n}$, then the summation within our congruence may sum to any value by adjusting the values of $W$, $X$, and $Y$. For the congruence to hold, we would require all integers to be equivalent to $0 \pmod{n}$. However, this is a contradiction, as $n\not=1$ and it is impossible. Therefore, to prove that the congruence cannot hold, it suffices to show that $f(n)^k \not\equiv f(k+1) \pmod{n}$ for some $k$ with $\binom{n}{k} \not\equiv 0 \pmod{n}$.
+If $\binom{n}{k} \not\equiv 0 \pmod{n}$ for any $k$, as we know it must be for some $k$, and $f(n)^k \not\equiv f(k+1) \pmod{n}$, then the summation within our congruence may sum to any value by adjusting the values of $W$, $X$, and $Y$. For the congruence to hold, we would require all integers to be equivalent to $0 \pmod{n}$. However, this is a contradiction, as $n\not=1$ and it is impossible.
 
-Since \( n \) is composite, it can be represented by its prime factorization, say \( n = p_1^{e_1} p_2^{e_2} \ldots p_i^{e_r} \). A result of Kummer's theorem \cite{kummer1857} is that for \( \binom{n}{k} \) to be divisible by \( n \), when adding \( k \) and \( n-k \) in the base of each prime divisor \( p_i \), there must be at least one carry-over. This condition must hold for all prime divisors \( p_i \) of \( n \). If the condition fails for a single prime divisor, \( \binom{n}{k} \) will not be divisible by \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) and \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor}\) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
-\begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor k - \left\lfloor \frac{k}{D} \right\rfloor \equiv 0 \pmod{\text{ord}_n(2)}
-\end{align}
-
-\begin{itemize}
-    \item \textbf{Cycling of \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) Modulo \( n \):} This term cycles through all possible residues of powers of 2 modulo \( n \), as \( k \) varies from 1 to \( n-1 \). This is because \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is fixed for a given \( n \), and as \( k \) increases, the exponent \( \left\lfloor \frac{n-1}{D} \right\rfloor k \) effectively cycles through various powers.
-    \item \textbf{Behavior of \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) Modulo \( n \):} In contrast, this term does not cycle through all residues in the same way. The exponent \( \left\lfloor \frac{k}{D} \right\rfloor \) changes more slowly with \( k \), as it's the floor of a fraction. Therefore, for multiple consecutive values of \( k \), the value of \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \) remains the same.
-\end{itemize}
-
-Applying the Pigeonhole Principle \cite{rosen2012}, there must exist at least one value of \( k \) such that \( f(n)^k \not\equiv f(k+1) \pmod{n} \) and \( \binom{n}{k} \not\equiv 0 \pmod{n} \). This non-zero term in the sum, when multiplied by the non-zero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $W, X, Y$.
+Consequently, to prove that the congruence cannot hold, it suffices to show that $f(n)^k \not\equiv f(k+1) \pmod{n}$ for some $k$ with $\binom{n}{k} \not\equiv 0 \pmod{n}$. By Lemma \ref{lemma:compositeterminequality}, we know that at least one such $k$ exists. For this $k$, the non-zero term in the sum, when multiplied by the non-zero binomial coefficient, ensures that the sum cannot be congruent to zero modulo \( n \) for all possible permutations of $W, X, Y$ and hence, the congruence fails.
 
 \textbf{Conclusion:}
 
-When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd composite integer $>3$, by Lemma \ref{lemma:orderinequality} we have $f(n) \not\equiv 1 \pmod{n}$ and therefore, the congruence cannot hold. Hence, the theorem is proven.
+When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd composite integer $>3$, by Lemma \ref{lemma:orderinequality} we have $f(n) \not\equiv 1 \pmod{n}$ and therefore, the congruence cannot hold. The theorem is proven.
 \end{proof}
 
 \section{Algorithm} \label{section:algorithm}
