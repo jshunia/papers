@@ -32,6 +32,10 @@
 
 \maketitle
 
+\begin{center}
+    Draft
+\end{center}
+
 \begin{abstract}
 A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. Combining elements of number theory and combinatorics, the proof operates on the basis of simultaneous modular congruences relating to binomial transforms of powers of two.
 \end{abstract}
@@ -97,9 +101,11 @@ Since \( \text{ord}_n(2) \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{
 \end{proof}
 
 \begin{lemma}[Binomial term inequality for composites] \label{lemma:compositeterminequality}
+
 Let \( n \) be an odd composite integer greater than $3$ such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). Then, there exists at least one integer $k$ in $1 < k < n$ for which $\binom{n}{k} \not\equiv 0 \pmod{n}$ and $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 \end{lemma}
 \begin{proof}
+\textbf{NOTE: THIS PROOF IS INCORRECT! I need to fix it.}
 Let $f(x) = 2^{\left\lfloor \frac{x-1}{D} \right\rfloor}$. Hence, we have: $f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k}$, $f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor}$.
 
 Since \( n \) is composite, it can be represented by its prime factorization, say \( n = p_1^{e_1} p_2^{e_2} \ldots p_i^{e_r} \). A result of Kummer's theorem \cite{kummer1857} is that for \( \binom{n}{k} \) to be divisible by \( n \), when adding \( k \) and \( n-k \) in the base of each prime divisor \( p_i \), there must be at least one carry-over. This condition must hold for all prime divisors \( p_i \) of \( n \). If the condition fails for a single prime divisor, \( \binom{n}{k} \) will not be divisible by \( n \). For these values of \( k \), the congruence \( f(n)^k \equiv f(k+1) \pmod{n} \) is unlikely because \( f(n)^k = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \) and \( f(k+1) = 2^{\left\lfloor \frac{k}{D} \right\rfloor}\) represent different powers of 2 modulo \( n \). It would necessarily imply $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$. This can only occur at values $k$ in the range $0 < k < n$ which are solutions to the modular congruence:
