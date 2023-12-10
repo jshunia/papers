@@ -116,7 +116,7 @@ Let $k=p$ and assume that $p$ satisfies $2^{\left\lfloor \frac{n-1}{D} \right\rf
     \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\text{ord}_n(2)} 
 \end{align}
 
-Since we know $D$ is the least non-divisor of $n-1$, and $n$ does not have a prime factor $\leq D+1$ (hence $D \nmid \ordn{2}$), we can assume that $D^{-1}$ exists modulo $\ordn{2}$. Using a well known identity at for the floor function $\floor{\frac{a}{b}} = b^{-1} \cdot (a - (a \bmod{b}))$, simplifying gives:
+Since we know $D$ is the least non-divisor of $n-1$, and $n$ does not have a prime factor $\leq D+1$ (hence $\gcd(D, \ordn{2}) = 1$), we can assume that $D^{-1}$ exists modulo $\ordn{2}$. Using a well known identity at for the floor function $\floor{\frac{a}{b}} = b^{-1} \cdot (a - (a \bmod{b}))$, simplifying gives:
 \begin{align}
     \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\text{ord}_n(2)} \\
     D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) - D^{-1} \cdot (p - (p \bmod{D})) \equiv 0 \pmod{\ordn{2}} \\
