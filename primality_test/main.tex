@@ -23,6 +23,13 @@
 \newtheorem{example}{Example}
 \usepackage{graphicx}
 \usepackage{multicol}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\bigO}[1]{O(#1)}
+\newcommand{\softO}[1]{\tilde{O}(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\redu}{\mathfrak{r}}
+\newcommand{\ord}[2]{\text{ord}_\text{#1}(#2)}
+\newcommand{\ordn}[1]{\text{ord}_n(#1)}
 
 \title{An Efficient Deterministic Primality Test}
 \author{Joseph M. Shunia}
@@ -50,7 +57,7 @@ This paper is structured as follows: We begin by presenting the main theorem and
 
 \begin{theorem}
 \label{theorem:1}
-Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. Then, $n$ is prime if and only if the following congruence holds:
+Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. If $n$ does not have a prime factor $\leq D+1$, then $n$ is prime if and only if the following congruence holds:
 \begin{align}
     1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \equiv \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}
 \end{align}
@@ -97,53 +104,68 @@ Since \( \text{ord}_n(2) \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{
 \end{proof}
 
 \begin{lemma}[Binomial term inequality for composites] \label{lemma:compositeterminequality}
-Let \( n \) be an odd composite integer greater than $3$ such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). Then, there exists at least one integer $k$ in $1 < k < n$ for which $\binom{n}{k} \not\equiv 0 \pmod{n}$, $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$, and $\binom{n}{k} \left(2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} - 2^{\left\lfloor \frac{k}{D} \right\rfloor}\right) \not\equiv 0 \pmod{n}$.
+Let \( n \) be an odd composite integer greater than $3$ such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). If $n$ does not have a prime factor $p$ such that $p \leq D+1$, then there exists at least one integer $k$ in $1 < k < n$ for which $\binom{n}{k} \not\equiv 0 \pmod{n}$ and $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 \end{lemma}
 \begin{proof}
 Let \( p \) be a prime factor of \( n \). We will examine the cases \( k = p \) and \( k = n - p \).
 
-As shown in \cite{ogilvy1956binomial}, for any prime \( p \) dividing \( n \), we have \( \binom{n}{p} \not\equiv 0 \pmod{n} \). Due to the inherit symmetry of binomial coefficients for $n$ around the term at $k = \left\lfloor\frac{n}{2}\right\rfloor + (n \bmod{2})$, we have:
+As shown in \cite{ogilvy1956binomial}, for any prime \( p \) dividing \( n \), we have \( \binom{n}{p} \not\equiv 0 \pmod{n} \). Due to the inherit symmetry of binomial coefficients, $\binom{n}{k} = \binom{n}{n-k}$, it follows that $\binom{n}{n-p} = \binom{n}{p} \not\equiv 0 \pmod{n}$.
+
+Let $k=p$ and assume that $p$ satisfies $2^{\left\lfloor \frac{n-1}{D} \right\rfloor p} - 2^{\left\lfloor \frac{p}{D} \right\rfloor} \equiv 0 \pmod{n}$. Regarding $\text{ord}_n(2)$, this implies: 
 \begin{align}
-\binom{n}{n-p} = \binom{n}{p} \not\equiv 0 \pmod{n}
+    \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\text{ord}_n(2)} 
 \end{align}
 
-First, we briefly examine the exponents at $k=p$ and $k=n-p$:
-\begin{itemize}
-    \item For \( k = p \), we have \( 2^{\left\lfloor \frac{n-1}{D} \right\rfloor p} \) and \( 2^{\left\lfloor \frac{p}{D} \right\rfloor} \).
-    \item For \( k = n - p \), we have \( 2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n - p)} \) and \( 2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \).
-\end{itemize}
-
-Now, let $k=p$. Assume that $p$ satisfies:
+Since we know $D$ is the least non-divisor of $n-1$, and $n$ does not have a prime factor $\leq D+1$ (hence $D \nmid \ordn{2}$), we can assume that $D^{-1}$ exists modulo $\ordn{2}$. Using a well known identity at for the floor function $\floor{\frac{a}{b}} = b^{-1} \cdot (a - (a \bmod{b}))$, simplifying gives:
 \begin{align}
-    2^{\left\lfloor \frac{n-1}{D} \right\rfloor p} - 2^{\left\lfloor \frac{p}{D} \right\rfloor} \equiv 0 \pmod{n}
+    \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\text{ord}_n(2)} \\
+    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) - D^{-1} \cdot (p - (p \bmod{D})) \equiv 0 \pmod{\ordn{2}} \\
+    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) \equiv D^{-1} \cdot (p - (p \bmod{D})) \pmod{\ordn{2}} \\
+    n - 1 - ((n-1) \bmod{D})) \equiv p - (p \bmod{D}) \pmod{\ordn{2}} \\
+    n - 1 \equiv p - (p \bmod{D}) + ((n-1) \bmod{D})) \pmod{\ordn{2}} \\
+    n - p - 1 \equiv ((n-1) \bmod{D})) - (p \bmod{D})  \pmod{\ordn{2}} \\
+    -p - 1 \equiv ((n-1) \bmod{D})) - (p \bmod{D}) - n  \pmod{\ordn{2}} \\
+    p + 1 \equiv -((n-1) \bmod{D})) + (p \bmod{D}) + n  \pmod{\ordn{2}} \\
+    p + 1 \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n  \pmod{\ordn{2}} \\
+    p \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n - 1  \pmod{\ordn{2}}
+\end{align}'
+
+Comparing to the simplification at $k=n-p$:
+\begin{align}
+    \left\lfloor \frac{n-1}{D} \right\rfloor (n-p) \equiv \left\lfloor \frac{n-p}{D} \right\rfloor \pmod{\text{ord}_n(2)} \\
+    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) - D^{-1} \cdot (n - p - ((n-p) \bmod{D})) \equiv 0 \pmod{\ordn{2}} \\
+    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) \equiv D^{-1} \cdot (n - p - ((n-p) \bmod{D})) \pmod{\ordn{2}} \\
+    n - 1 - ((n-1) \bmod{D})) \equiv n - p - ((n-p) \bmod{D}) \pmod{\ordn{2}} \\
+    n - 1 \equiv n - p - ((n-p) \bmod{D}) + ((n-1) \bmod{D})) \pmod{\ordn{2}} \\
+    n - n - p - 1 \equiv ((n-1) \bmod{D})) - ((n-p) \bmod{D})  \pmod{\ordn{2}} \\
+    -p - 1 \equiv ((n-1) \bmod{D})) - ((n-p) \bmod{D}) \pmod{\ordn{2}} \\
+    p + 1 \equiv ((n-p) \bmod{D}) - ((n-1) \bmod{D})) \pmod{\ordn{2}} \\
+    p \equiv ((n-p) \bmod{D}) - ((n-1) \bmod{D})) - 1 \pmod{\ordn{2}}
 \end{align}
 
-Regarding $\text{ord}_n(2)$, this implies: 
+Due to the equivalence of the above congruences at $k=p$ and $k=n-p$, we must have:
 \begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor p - \left\lfloor \frac{p}{D} \right\rfloor \equiv 0 \pmod{\text{ord}_n(2)} 
+    ((n-p) \bmod{D}) - ((n-1) \bmod{D})) - 1 \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n - 1 \pmod{\ordn{2}}
 \end{align}
 
-Now, let's examine what it means for $k=n-p$. Recall of course that $p$ and $n-p$ are both odd and $D > 2$. Consequently, the rounding down which occurs during the flooring of $\left\lfloor \frac{n-p}{D} \right\rfloor$ causes an off-by-one error to accumulate in the difference of the exponents modulo $\text{ord}_n(2)$, perturbing the congruence. As a result of this action, we must have:
+We may simplify further using the fact that $((n-1) \bmod{D}) = D-1$:
 \begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor (n-p) - \left\lfloor \frac{n-p}{D} \right\rfloor \equiv -1 \pmod{\text{ord}_n(2)} 
+    ((n-p) \bmod{D}) - (D-1) - 1 \equiv (p \bmod{D}) - (D-1) + n - 1 \pmod{\ordn{2}} \\
+    ((n-p) \bmod{D}) - D + 1 - 1 \equiv (p \bmod{D}) - D + 1 + n - 1 \pmod{\ordn{2}} \\
+    ((n-p) \bmod{D}) - D \equiv (p \bmod{D}) + n - D \pmod{\ordn{2}} \\
+    ((n-p) \bmod{D}) \equiv (p \bmod{D}) + n \pmod{\ordn{2}} \\
+    ((n-p) \bmod{D}) - (p \bmod{D})\equiv n \pmod{\ordn{2}}
 \end{align}
 
-Which means $2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n-p)} \equiv 1 \pmod{n}$ and $2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \equiv 2^{-1} \pmod{n}$, leading to:
+By the properties of the multiplicative order modulo $n$, $n \equiv 1 \pmod{\ordn{2}}$. We apply this to see:
 \begin{align}
-    2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n-p)} - 2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \equiv 2^{-1} \pmod{n}
+    ((n-p) \bmod{D}) - (p \bmod{D})\equiv 1 \pmod{\ordn{2}}
 \end{align}
 
-Thus, we have shown:
+The congruence above implies that $n \equiv 0 \pmod{D}$, hence $D$ must divide $n$. However, this contradicts our requirement that $n$ not have a prime divisor $\leq D+1$. Therefore, we may conclude:
 \begin{align}
     2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n-p)} - 2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \not\equiv 0 \pmod{n}
 \end{align}
-
-Further, since $\binom{n}{k}$ is non-zero, we may also conclude:
-\begin{align}
-\binom{n}{k} \left(2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} - 2^{\left\lfloor \frac{k}{D} \right\rfloor}\right) \not\equiv 0 \pmod{n}
-\end{align}
-
-Finally, given the symmetry of binomial coefficients as described earlier, this proof also applies in the case that $2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n-p)} - 2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \equiv 0 \pmod{n}$ by swapping the exponents $k=p$ and $k=n-p$.
 
 This completes the proof.
 \end{proof}
@@ -249,7 +271,8 @@ When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd 
             \end{enumerate}
         \item If $n$ equals $3$, output PRIME.
         \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
-        \item Find the least integer $D$ that is greater than 2 and less than $n$ which does not divide $n-1$.
+        \item Find the least integer $D$ that is greater than $2$ and less than $n$ which does not divide $n-1$.
+        \item If $n$ has a prime factor $\leq D + 1$, output COMPOSITE.
         \item Set $A = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \bmod{n}$.
         \item Set $B = (1 + A)^n \bmod{n}$.
         \item If $B \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
@@ -277,6 +300,10 @@ The given algorithm is a primality test that involves several computational step
     \item \textbf{Finding \( D \)}:
     
         Finding the least integer \( D > 2 \) that does not divide \( n-1 \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
+
+    \item \textbf{Checking for a prime factor \(\leq D+1 \)}:
+    
+        Checking all integers \( \leq D+1 \) to verify they do not divide \( n \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
 
     \item \textbf{Computing \( A \) and \( B \)}:
     
@@ -313,25 +340,25 @@ In this section, we define a special polynomial ring $R$ with a modular variatio
 \subsection{Ring Definition}
 
 \begin{definition}[Polynomial ring $R$] \label{definition:ring}
-We construct a polynomial ring \(R = \mathbb{Z}[x]\) in which addition is carried out as usual, and multiplication is followed by polynomial degree reduction via a special substitution function, denoted $\Phi$ \cite{shunia2023polynomial}. The multiplication operation \(\ast\) is defined as follows:
+We construct a polynomial ring \(R = \mathbb{Z}[x]\) in which addition is carried out as usual, and multiplication is followed by polynomial degree reduction via a special substitution function, denoted $\redu$ \cite{shunia2023polynomial}. The multiplication operation \(\ast\) is defined as follows:
 \begin{align}
-P(x) \ast Q(x) = \Phi(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in R,
+P(x) \ast Q(x) = \redu(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in R,
 \end{align}
-\(\Phi\) is an operation that enforces any defined substitution rules for the polynomial's terms upon multiplication. In our case, for the generator \(x\), we have:
+\(\redu\) is an operation that enforces any defined substitution rules for the polynomial's terms upon multiplication. In our case, for the generator \(x\), we have:
 \begin{align}
-x \ast x^{d-1} = x^d = \Phi(x^d) = N, \text{ where } N \in R
+x \ast x^{d-1} = x^d = \redu(x^d) = N, \text{ where } N \in R
 \end{align}
 
-For any polynomial in our ring $R$, the function \( \Phi \) is distributed to the individual terms and implicitly applied to reduce terms. Whenever the term $x^d$ appears, it is replaced with its defined mapping. The mappings in $\Phi$ are extended to terms of higher degrees, meaning $\Phi(x^{d+k}) = \Phi(x^d \ast x^k) = N x^k$, for $k > 1$. $\Phi$ is applied recursively to the polynomial until and its terms until the degree of the polynomial is less than $d$. For terms which do not match a defined substitution rule, $\Phi$ returns them as they are.
+For any polynomial in our ring $R$, the function \( \redu \) is distributed to the individual terms and implicitly applied to reduce terms. Whenever the term $x^d$ appears, it is replaced with its defined mapping. The mappings in $\redu$ are extended to terms of higher degrees, meaning $\redu(x^{d+k}) = \redu(x^d \ast x^k) = N x^k$, for $k > 1$. $\redu$ is applied recursively to the polynomial until and its terms until the degree of the polynomial is less than $d$. For terms which do not match a defined substitution rule, $\redu$ returns them as they are.
 \end{definition}
 
 \begin{example}
-We take the ring $R$ as defined in Definition \ref{definition:ring} with $N = 2$, $d = 3$. Hence, $\Phi(x^3) = 2$. $P(x) := 1 + x + 3x^3 + x^{4} + x^{6}, P(x) \in R$.
+We take the ring $R$ as defined in Definition \ref{definition:ring} with $N = 2$, $d = 3$. Hence, $\redu(x^3) = 2$. $P(x) := 1 + x + 3x^3 + x^{4} + x^{6}, P(x) \in R$.
 \begin{align}
-    \Phi(P(x)) &= \Phi(1 + x + 3x^3 + x^{4} + x^{6}) \\
-    &= \Phi(1) + \Phi(x) + \Phi(3x^3) + \Phi(x^{4}) + \Phi(x^{6}) \\
-    &= 1 + x + \Phi(2 \cdot 3) + \Phi(2 \cdot x) + \Phi(2 \cdot x^3) \\
-    &= 1 + x + 6 + 2x + \Phi(2 \cdot 2) \\
+    \redu(P(x)) &= \redu(1 + x + 3x^3 + x^{4} + x^{6}) \\
+    &= \redu(1) + \redu(x) + \redu(3x^3) + \redu(x^{4}) + \redu(x^{6}) \\
+    &= 1 + x + \redu(2 \cdot 3) + \redu(2 \cdot x) + \redu(2 \cdot x^3) \\
+    &= 1 + x + 6 + 2x + \redu(2 \cdot 2) \\
     &= 7 + 3x + 4 \\
     &= 11 + 3x
 \end{align}
@@ -347,12 +374,12 @@ The operation \(\ast\) is distributive over addition in the ring \(R\).
 \begin{proof}
 The modified multiplication \(\ast\) is distributive over addition because for any \( P(x), Q(x), S(x) \in R \),
 \begin{align}
-    P(x) \ast (Q(x) + S(x)) &= \Phi(P(x) \cdot (Q(x) + S(x))) \\
-    &= \Phi(P(x) \cdot Q(x) + P(x) \cdot S(x)) \\
-    &= \Phi(P(x) \cdot Q(x)) + \Phi(P(x) \cdot S(x)) \\
+    P(x) \ast (Q(x) + S(x)) &= \redu(P(x) \cdot (Q(x) + S(x))) \\
+    &= \redu(P(x) \cdot Q(x) + P(x) \cdot S(x)) \\
+    &= \redu(P(x) \cdot Q(x)) + \redu(P(x) \cdot S(x)) \\
     &= P(x) \ast Q(x) + P(x) \ast S(x)
 \end{align}
-Where the second equality uses the distributive property of the standard multiplication in \( \mathbb{Z}[x] \) and the linearity of \(\Phi\) with respect to polynomial addition.
+Where the second equality uses the distributive property of the standard multiplication in \( \mathbb{Z}[x] \) and the linearity of \(\redu\) with respect to polynomial addition.
 \end{proof}
 
 \begin{proposition}[Associativity of \(\ast\)] \label{proposition:ring:2}
@@ -365,17 +392,17 @@ To prove associativity, we need to show that for any \( P(x), Q(x), S(x) \in R \
 \end{align}
 Expanding the left-hand side:
 \begin{align}
-    (P(x) \ast Q(x)) \ast S(x) &= \Phi(P(x) \cdot Q(x)) \ast S(x) \\
-    &= \Phi(\Phi(P(x) \cdot Q(x)) \cdot S(x))
+    (P(x) \ast Q(x)) \ast S(x) &= \redu(P(x) \cdot Q(x)) \ast S(x) \\
+    &= \redu(\redu(P(x) \cdot Q(x)) \cdot S(x))
 \end{align}
 Similarly, for the right-hand side:
 \begin{align}
-    P(x) \ast (Q(x) \ast S(x)) &= P(x) \ast \Phi(Q(x) \cdot S(x)) \\
-    &= \Phi(P(x) \cdot \Phi(Q(x) \cdot S(x)))
+    P(x) \ast (Q(x) \ast S(x)) &= P(x) \ast \redu(Q(x) \cdot S(x)) \\
+    &= \redu(P(x) \cdot \redu(Q(x) \cdot S(x)))
 \end{align}
-Since the standard multiplication in \(\mathbb{Z}[x]\) is associative and \(\Phi\) is a well-defined operation that respects this associativity, we have:
+Since the standard multiplication in \(\mathbb{Z}[x]\) is associative and \(\redu\) is a well-defined operation that respects this associativity, we have:
 \begin{align}
-    \Phi(\Phi(P(x) \cdot Q(x)) \cdot S(x)) = \Phi(P(x) \cdot \Phi(Q(x) \cdot S(x)))
+    \redu(\redu(P(x) \cdot Q(x)) \cdot S(x)) = \redu(P(x) \cdot \redu(Q(x) \cdot S(x)))
 \end{align}
 Which shows that:
 \begin{align}
@@ -393,18 +420,18 @@ The additive structure of \(R\) remains unchanged. Thus, the commutative and ass
 
 \subsection{Modular Ring Definition}
 \begin{definition}[Modular polynomial ring $M$]  \label{definition:modularring}
-Let \( R = \mathbb{Z}[x] \) be our polynomial ring as defined in Definition \ref{definition:ring}, where the multiplication is modified by a substitution function \(\Phi\) as described previously. Let \( n \) be a positive integer. We define the modular variation of \( R \), denoted as \( M \), to be the ring of polynomials with coefficients in \( \mathbb{Z}/n\mathbb{Z} \) and with multiplication modified by a corresponding substitution function \(\Phi_M\). Formally, \( M = (\mathbb{Z}/n\mathbb{Z})[x] \), where the coefficients of the polynomials in \( M \) are taken modulo \( n \), and the multiplication in \( M \) is given by
+Let \( R = \mathbb{Z}[x] \) be our polynomial ring as defined in Definition \ref{definition:ring}, where the multiplication is modified by a substitution function \(\redu\) as described previously. Let \( n \) be a positive integer. We define the modular variation of \( R \), denoted as \( M \), to be the ring of polynomials with coefficients in \( \mathbb{Z}/n\mathbb{Z} \) and with multiplication modified by a corresponding substitution function \(\redu_M\). Formally, \( M = (\mathbb{Z}/n\mathbb{Z})[x] \), where the coefficients of the polynomials in \( M \) are taken modulo \( n \), and the multiplication in \( M \) is given by
 \begin{align}
-    P(x) \ast Q(x) = \Phi_M(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in M,
+    P(x) \ast Q(x) = \redu_M(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in M,
 \end{align}
-\(\Phi_M\) is defined analogously to \(\Phi\) but operates within the context of the coefficients being in \( \mathbb{Z}/n\mathbb{Z} \).
+\(\redu_M\) is defined analogously to \(\redu\) but operates within the context of the coefficients being in \( \mathbb{Z}/n\mathbb{Z} \).
 \end{definition}
 
 \begin{proposition} \label{proposition:modularring:1}
-The ring \( M = (\mathbb{Z}/n\mathbb{Z})[x] \) with the modified multiplication operation \(\ast\), as defined by the substitution function \(\Phi_M\), inherits the standard ring axioms from \( R = \mathbb{Z}[x] \).
+The ring \( M = (\mathbb{Z}/n\mathbb{Z})[x] \) with the modified multiplication operation \(\ast\), as defined by the substitution function \(\redu_M\), inherits the standard ring axioms from \( R = \mathbb{Z}[x] \).
 \end{proposition}
 \begin{proof}
-Since the ring \( M \) is structurally analogous to \( R \) with the only difference being the coefficient domain (\(\mathbb{Z}/n\mathbb{Z}\) instead of \(\mathbb{Z}\)), and the modified multiplication operation \(\ast\) in \( M \) is defined similarly to \( R \) using \(\Phi_M\), analogous to \(\Phi\), \( M \) inherits the ring properties of \( R \). This includes the associativity and commutativity of addition, the existence of an additive identity and inverses, the distributivity of multiplication over addition, and the associativity of multiplication. These properties are preserved under the transition from \(\mathbb{Z}\) to \(\mathbb{Z}/n\mathbb{Z}\) coefficients and the analogous definition of \(\ast\) in \( M \).
+Since the ring \( M \) is structurally analogous to \( R \) with the only difference being the coefficient domain (\(\mathbb{Z}/n\mathbb{Z}\) instead of \(\mathbb{Z}\)), and the modified multiplication operation \(\ast\) in \( M \) is defined similarly to \( R \) using \(\redu_M\), analogous to \(\redu\), \( M \) inherits the ring properties of \( R \). This includes the associativity and commutativity of addition, the existence of an additive identity and inverses, the distributivity of multiplication over addition, and the associativity of multiplication. These properties are preserved under the transition from \(\mathbb{Z}\) to \(\mathbb{Z}/n\mathbb{Z}\) coefficients and the analogous definition of \(\ast\) in \( M \).
 \end{proof}
 
 \subsection{Ring Calculations}
@@ -413,7 +440,7 @@ We now demonstrate how our modular polynomial ring $M$ can be used to efficientl
 In an earlier paper relating the central binomial coefficients and Gould's sequence to polynomial rings \cite{shunia2023polynomial}, we showed how a multivariate polynomial ring, analogous to the univariate polynomial ring we have defined herein, can be used generally to compute the binomial transforms of recursive integer sequences. We apply the same technique here.
 
 \begin{theorem} \label{theorem:2}
-Let $n$, $k$ be non-negative integers. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\Phi(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( P(x)^k \), gives $2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+Let $n$, $k$ be non-negative integers. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\redu(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( P(x)^k \), gives $2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 \end{theorem}
 \begin{proof}
 Examining $D = 2$, we can see:
@@ -436,14 +463,14 @@ For \( k = 0 \), we have \( P(x)^0 = 1 \), and the sum of coefficients is \( 2^{
 \textbf{Inductive Step:}
 Assume the theorem holds for some \( k \geq 0 \), i.e., the sum of coefficients modulo \( n \) in \( P(x)^k \) is \( 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n} \). We need to show it also holds for \( k+1 \).
 
-Consider \( P(x)^{k+1} = P(x)^k \ast P(x) \). By the definition of \( \ast \) and \( \Phi \), the degree of \( P(x)^{k+1} \) gets reduced by \( \Phi \) every time it reaches \( D \). The number of times this reduction happens is \( \left\lfloor \frac{k}{D} \right\rfloor \). Therefore, the sum of coefficients in \( P(x)^{k+1} \) should be \( 2^{\left\lfloor \frac{k+1}{D} \right\rfloor} \), as each reduction by \( \Phi \) doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \).
+Consider \( P(x)^{k+1} = P(x)^k \ast P(x) \). By the definition of \( \ast \) and \( \redu \), the degree of \( P(x)^{k+1} \) gets reduced by \( \redu \) every time it reaches \( D \). The number of times this reduction happens is \( \left\lfloor \frac{k}{D} \right\rfloor \). Therefore, the sum of coefficients in \( P(x)^{k+1} \) should be \( 2^{\left\lfloor \frac{k+1}{D} \right\rfloor} \), as each reduction by \( \redu \) doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \).
 
 \textbf{Conclusion:}
 By the principle of mathematical induction, the theorem is proven.
 \end{proof}
 
 \begin{theorem} \label{theorem:3}
-Let $n$ an integer $>0$. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\Phi(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Then taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( (1 + P(x))^n \) is equivalent to $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+Let $n$ an integer $>0$. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\redu(x^{D-1}) = 2$. $P(x) := x, P(x) \in M$. Then taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( (1 + P(x))^n \) is equivalent to $\sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 \end{theorem}
 \begin{proof}
 By the binomial theorem, we have:
@@ -485,11 +512,17 @@ To demonstrate how our test may be implemented, we offer a pseudocode implementa
     \EndIf
     \State $D \gets 2$
     \State $log \gets \Call{Log2}{n}$
-    \For{$i \gets 3$ \textbf{to} $\Call{Max}{log, 3}$}
+    \For{$i \gets 3$ \textbf{to} $\Call{Max}{log, 3}$} \Comment{Find $D$, the least non-divisor of $n-1$}
         \State $D \gets i$
         \State $m \gets (n-1) \bmod D$
         \If{$m \neq 0$}
             \State \textbf{break}
+        \EndIf
+    \EndFor
+    \For{$i \gets 3$ \textbf{to} $D+1$} \Comment{Check for divisibility of $n$ up to $D+1$}
+        \State $m \gets n \bmod i$
+        \If{$m = 0$}
+            \Return \textbf{false} \Comment{$n$ is composite}
         \EndIf
     \EndFor
     \State $A \gets \Call{Pow}{2, \lfloor (n-1) / D \rfloor, n}$
