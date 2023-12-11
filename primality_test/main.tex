@@ -128,8 +128,7 @@ We examine a well-known identity for the floor function \cite{niven2008introduct
 
 Applying it to our equation gives:
 \begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor p - \left\lfloor \frac{p}{D} \right\rfloor = x \cdot \ordn{2} \\
-    \frac{n-1 - ((n-1) \bmod{D})}{D} \cdot p - \frac{p - (p \bmod{D})}{D} = x \cdot \ordn{2} 
+    \frac{(n-1 - ((n-1) \bmod{D})) \cdot p}{D}  - \frac{p - (p \bmod{D})}{D} = x \cdot \ordn{2} 
 \end{align}
 
 Multiplying both sides by $D$:
@@ -137,7 +136,7 @@ Multiplying both sides by $D$:
     (n-1 - ((n-1) \bmod{D})) \cdot p - (p - (p \bmod{D})) = (D \cdot x) \cdot \ordn{2} 
 \end{align}
 
-The above equation informs us that any solutions to the congruence at both $k=p$ and $k=n-p$ must be of the form $y = D \cdot x$. Translating this to modular arithmetic, we now look at the corresponding congruence for $k=p$:
+The above equation informs us that any solutions to the congruence at both $k=p$ and $k=n-p$ must be of the form $y = D \cdot x$, where $x$ is an integer. Translating this to modular arithmetic, we now look at the corresponding congruence for $k=p$:
 \begin{align}
     n - 1 - ((n-1) \bmod{D})) \equiv p - (p \bmod{D}) \pmod{\ordn{2}}
 \end{align}
