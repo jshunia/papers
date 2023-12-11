@@ -27,7 +27,7 @@
 \newcommand{\bigO}[1]{O(#1)}
 \newcommand{\softO}[1]{\tilde{O}(#1)}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\redu}{\mathfrak{r}}
+\newcommand{\redu}{\Phi}
 \newcommand{\ord}[2]{\text{ord}_\text{#1}(#2)}
 \newcommand{\ordn}[1]{\text{ord}_n(#1)}
 
@@ -57,7 +57,7 @@ This paper is structured as follows: We begin by presenting the main theorem and
 
 \begin{theorem}
 \label{theorem:1}
-Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. If $n$ does not have a prime factor $\leq D+1$, then $n$ is prime if and only if the following congruence holds:
+Let $n$ be an odd integer $> 3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. Denote $D$ as the least integer greater than $2$ and less than $n$ which does not divide $n-1$. If $D$ does not divide $n$ and the following congruence holds, then $n$ is prime:
 \begin{align}
     1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \equiv \left(1 + 2^{\left\lfloor \frac{n-1}{D} \right\rfloor}\right)^{n} \equiv \sum_{k=0}^{n} \binom{n}{k} 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}
 \end{align}
@@ -96,7 +96,7 @@ If $n$ is a composite integer $> 3$, clearly $n-1$ can have at most $\left\lfloo
 Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{D}\right\rfloor \not= \text{ord}_n(2) \).
 \end{lemma}
 \begin{proof}
-Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \text{ord}_n(2) \), i.e., \( k = \text{ord}_n(2) \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \text{ord}_n(2) \), must divide \( n-1 \).
+Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \text{ord}_n(2) \), that is, \( k = \text{ord}_n(2) \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \text{ord}_n(2) \), must divide \( n-1 \).
 
 Given \( D \) is the least integer greater than 2 and less than \( n \) that does not divide \( n-1 \), and \( \text{ord}_n(2) \) divides \( n-1 \), it follows that \( D \) cannot equal \( \text{ord}_n(2) \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = D \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. It follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. For $n \geq 341$, clearly $D < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < D < \left\lfloor \frac{n-1}{D} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{D} \right\rfloor \) cannot divide \( n-1 \).
 
@@ -104,7 +104,7 @@ Since \( \text{ord}_n(2) \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{
 \end{proof}
 
 \begin{lemma}[Binomial term inequality for composites] \label{lemma:compositeterminequality}
-Let \( n \) be an odd composite integer greater than $3$ such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). If $n$ does not have a prime factor $p$ such that $p \leq D+1$, then there exists at least one integer $k$ in $1 < k < n$ for which $\binom{n}{k} \not\equiv 0 \pmod{n}$ and $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
+Let \( n \) be an odd composite integer greater than $3$ such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the smallest integer \(2 < D < n \) which does not divide \( n-1 \). If $D$ does not divide $n$, then there exists at least one integer $k$ in $1 < k < n$ for which $\binom{n}{k} \not\equiv 0 \pmod{n}$ and $2^{\left\lfloor \frac{n-1}{D} \right\rfloor k} \not\equiv 2^{\left\lfloor \frac{k}{D} \right\rfloor} \pmod{n}$.
 \end{lemma}
 \begin{proof}
 Let \( p \) be a prime factor of \( n \). We will examine the cases \( k = p \) and \( k = n - p \).
@@ -113,42 +113,61 @@ As shown in \cite{ogilvy1956binomial}, for any prime \( p \) dividing \( n \), w
 
 Let $k=p$ and assume that $p$ satisfies $2^{\left\lfloor \frac{n-1}{D} \right\rfloor p} - 2^{\left\lfloor \frac{p}{D} \right\rfloor} \equiv 0 \pmod{n}$. Regarding $\text{ord}_n(2)$, this implies: 
 \begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\text{ord}_n(2)} 
+    \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\ordn{2}} 
 \end{align}
 
-Since we know $D$ is the least non-divisor of $n-1$, and $n$ does not have a prime factor $\leq D+1$ (hence $\gcd(D, \ordn{2}) = 1$), we can assume that $D^{-1}$ exists modulo $\ordn{2}$. Using a well known identity at for the floor function $\floor{\frac{a}{b}} = b^{-1} \cdot (a - (a \bmod{b}))$, simplifying gives:
+This implies that there is an integer $x$ such that:
 \begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor p \equiv \left\lfloor \frac{p}{D} \right\rfloor \pmod{\text{ord}_n(2)} \\
-    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) - D^{-1} \cdot (p - (p \bmod{D})) \equiv 0 \pmod{\ordn{2}} \\
-    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) \equiv D^{-1} \cdot (p - (p \bmod{D})) \pmod{\ordn{2}} \\
-    n - 1 - ((n-1) \bmod{D})) \equiv p - (p \bmod{D}) \pmod{\ordn{2}} \\
+    \left\lfloor \frac{n-1}{D} \right\rfloor p - \left\lfloor \frac{p}{D} \right\rfloor = x \cdot \ordn{2} 
+\end{align}
+
+We examine a well-known identity for the floor function \cite{niven2008introduction}:
+\begin{align}
+    \floor{\frac{a}{b}} = \frac{a - (a \bmod{b})}{b}
+\end{align}
+
+Applying it to our equation gives:
+\begin{align}
+    \left\lfloor \frac{n-1}{D} \right\rfloor p - \left\lfloor \frac{p}{D} \right\rfloor = x \cdot \ordn{2} \\
+    \frac{n-1 - ((n-1) \bmod{D})}{D} \cdot p - \frac{p - (p \bmod{D})}{D} = x \cdot \ordn{2} 
+\end{align}
+
+Multiplying both sides by $D$:
+\begin{align}
+    (n-1 - ((n-1) \bmod{D})) \cdot p - (p - (p \bmod{D})) = (D \cdot x) \cdot \ordn{2} 
+\end{align}
+
+The above equation informs us that any solutions to the congruence at both $k=p$ and $k=n-p$ must be of the form $y = D \cdot x$. Translating this to modular arithmetic, we now look at the corresponding congruence for $k=p$:
+\begin{align}
+    n - 1 - ((n-1) \bmod{D})) \equiv p - (p \bmod{D}) \pmod{\ordn{2}}
+\end{align}
+
+Re-arranging terms and simplifying:
+\begin{align}
     n - 1 \equiv p - (p \bmod{D}) + ((n-1) \bmod{D})) \pmod{\ordn{2}} \\
     n - p - 1 \equiv ((n-1) \bmod{D})) - (p \bmod{D})  \pmod{\ordn{2}} \\
     -p - 1 \equiv ((n-1) \bmod{D})) - (p \bmod{D}) - n  \pmod{\ordn{2}} \\
     p + 1 \equiv -((n-1) \bmod{D})) + (p \bmod{D}) + n  \pmod{\ordn{2}} \\
     p + 1 \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n  \pmod{\ordn{2}} \\
-    p \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n - 1  \pmod{\ordn{2}}
-\end{align}'
+    p \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n - 1  \pmod{\ordn{2}} \label{equation:kpfinalcongruence}
+\end{align}
 
 Comparing to the simplification at $k=n-p$:
 \begin{align}
-    \left\lfloor \frac{n-1}{D} \right\rfloor (n-p) \equiv \left\lfloor \frac{n-p}{D} \right\rfloor \pmod{\text{ord}_n(2)} \\
-    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) - D^{-1} \cdot (n - p - ((n-p) \bmod{D})) \equiv 0 \pmod{\ordn{2}} \\
-    D^{-1} \cdot (n - 1 - ((n-1) \bmod{D})) \equiv D^{-1} \cdot (n - p - ((n-p) \bmod{D})) \pmod{\ordn{2}} \\
     n - 1 - ((n-1) \bmod{D})) \equiv n - p - ((n-p) \bmod{D}) \pmod{\ordn{2}} \\
     n - 1 \equiv n - p - ((n-p) \bmod{D}) + ((n-1) \bmod{D})) \pmod{\ordn{2}} \\
     n - n - p - 1 \equiv ((n-1) \bmod{D})) - ((n-p) \bmod{D})  \pmod{\ordn{2}} \\
     -p - 1 \equiv ((n-1) \bmod{D})) - ((n-p) \bmod{D}) \pmod{\ordn{2}} \\
     p + 1 \equiv ((n-p) \bmod{D}) - ((n-1) \bmod{D})) \pmod{\ordn{2}} \\
-    p \equiv ((n-p) \bmod{D}) - ((n-1) \bmod{D})) - 1 \pmod{\ordn{2}}
+    p \equiv ((n-p) \bmod{D}) - ((n-1) \bmod{D})) - 1 \pmod{\ordn{2}} \label{equation:knpfinalcongruence}
 \end{align}
 
-Due to the equivalence of the above congruences at $k=p$ and $k=n-p$, we must have:
+Notice that the final congruences for $k=p$ and $k=n-p$, \cref{equation:kpfinalcongruence} and \cref{equation:knpfinalcongruence} respectively, both contain an equivalence to $p$ on the left-hand side. Hence, the right-hand sides must be equivalent. Setting it up:
 \begin{align}
     ((n-p) \bmod{D}) - ((n-1) \bmod{D})) - 1 \equiv (p \bmod{D}) - ((n-1) \bmod{D})) + n - 1 \pmod{\ordn{2}}
 \end{align}
 
-We may simplify further using the fact that $((n-1) \bmod{D}) = D-1$:
+We may simplify further using the fact that $((n-1) \bmod{D}) = D-1$, which follows from the definition of $D$ as the least non-divisor of $n-1$:
 \begin{align}
     ((n-p) \bmod{D}) - (D-1) - 1 \equiv (p \bmod{D}) - (D-1) + n - 1 \pmod{\ordn{2}} \\
     ((n-p) \bmod{D}) - D + 1 - 1 \equiv (p \bmod{D}) - D + 1 + n - 1 \pmod{\ordn{2}} \\
@@ -157,17 +176,12 @@ We may simplify further using the fact that $((n-1) \bmod{D}) = D-1$:
     ((n-p) \bmod{D}) - (p \bmod{D})\equiv n \pmod{\ordn{2}}
 \end{align}
 
-By the properties of the multiplicative order modulo $n$, $n \equiv 1 \pmod{\ordn{2}}$. We apply this to see:
-\begin{align}
-    ((n-p) \bmod{D}) - (p \bmod{D})\equiv 1 \pmod{\ordn{2}}
-\end{align}
-
-The congruence above implies that $n \equiv 0 \pmod{D}$, hence $D$ must divide $n$. However, this contradicts our requirement that $n$ not have a prime divisor $\leq D+1$. Therefore, we may conclude:
+Recall that any solutions to this congruence must be of the form $y = D \cdot x$, where $x$ is an integer. However, this would imply that $n = D \cdot x$ and hence, $D$ is a factor of $n$. However, this contradicts our requirement that $n$ not have a prime factor $\leq D$. Therefore, the values at $k=p$ and $k=n-p$ cannot be equivalent. We may conclude:
 \begin{align}
     2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n-p)} - 2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \not\equiv 0 \pmod{n}
 \end{align}
 
-This completes the proof.
+Furthermore, we have already established $\binom{n}{n-p} = \binom{n}{p} \not\equiv 0 \pmod{n}$. This completes the proof.
 \end{proof}
 
 \subsection{Proof of the Main Theorem}
@@ -257,7 +271,7 @@ Consequently, to prove that the congruence cannot hold, it suffices to show that
 
 \textbf{Conclusion:}
 
-When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd composite integer $>3$, by Lemma \ref{lemma:orderinequality} we have $f(n) \not\equiv 1 \pmod{n}$ and therefore, the congruence cannot hold. The theorem is proven.
+When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd composite integer $>3$ satisfying the initial conditions, by Lemma \ref{lemma:orderinequality} we have $f(n) \not\equiv 1 \pmod{n}$ and therefore, the congruence cannot hold. The theorem is proven.
 \end{proof}
 
 \section{Algorithm} \label{section:algorithm}
@@ -270,9 +284,9 @@ When $n$ is an odd prime integer $>3$, the congruence holds. When $n$ is an odd 
                 \item Otherwise, output COMPOSITE.
             \end{enumerate}
         \item If $n$ equals $3$, output PRIME.
-        \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
         \item Find the least integer $D$ that is greater than $2$ and less than $n$ which does not divide $n-1$.
-        \item If $n$ has a prime factor $\leq D + 1$, output COMPOSITE.
+        \item If $n \equiv 0 \mod{D}$, output COMPOSITE.
+        \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
         \item Set $A = 2^{\left\lfloor \frac{n-1}{D} \right\rfloor} \bmod{n}$.
         \item Set $B = (1 + A)^n \bmod{n}$.
         \item If $B \not\equiv 1 + A \pmod{n}$, output COMPOSITE.
@@ -293,17 +307,17 @@ The given algorithm is a primality test that involves several computational step
     
         This step involves calculating $n \bmod{2}$ and has a time complexity of \( O(1) \).
 
-    \item \textbf{Modular Exponentiation \( 2^{n-1} \mod n \)}:
-    
-        This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
-
     \item \textbf{Finding \( D \)}:
     
         Finding the least integer \( D > 2 \) that does not divide \( n-1 \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
 
-    \item \textbf{Checking for a prime factor \(\leq D+1 \)}:
+    \item \textbf{Checking if \(\ D \) Divides \( n \)}:
     
-        Checking all integers \( \leq D+1 \) to verify they do not divide \( n \) takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
+        Checking if \( n \) is divisible by $D$ requires \( O(1) \) time for the mod operation.
+
+    \item \textbf{Modular Exponentiation \( 2^{n-1} \mod n \)}:
+    
+        This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
 
     \item \textbf{Computing \( A \) and \( B \)}:
     
@@ -519,7 +533,7 @@ To demonstrate how our test may be implemented, we offer a pseudocode implementa
             \State \textbf{break}
         \EndIf
     \EndFor
-    \For{$i \gets 3$ \textbf{to} $D+1$} \Comment{Check for divisibility of $n$ up to $D+1$}
+    \For{$i \gets 3$ \textbf{to} $D+1$} \Comment{Check for divisibility of $n$ up to $D$}
         \State $m \gets n \bmod i$
         \If{$m = 0$}
             \Return \textbf{false} \Comment{$n$ is composite}
