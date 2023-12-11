@@ -175,7 +175,7 @@ We may simplify further using the fact that $((n-1) \bmod{D}) = D-1$, which foll
     ((n-p) \bmod{D}) - (p \bmod{D})\equiv n \pmod{\ordn{2}}
 \end{align}
 
-Recall that any solutions to this congruence must be of the form $y = D \cdot x$, where $x$ is an integer. However, this would imply that $n = D \cdot x$ and hence, $D$ is a factor of $n$. However, this contradicts our requirement that $n$ not have a prime factor $\leq D$. Therefore, the values at $k=p$ and $k=n-p$ cannot be equivalent. We may conclude:
+Recall that any solutions to this congruence must be of the form $y = D \cdot x$, where $x$ is an integer. However, this would imply that $n = D \cdot x$ and hence, $D$ is a factor of $n$. However, this contradicts our requirement that $D$ not divide $n$. Therefore, the values at $k=p$ and $k=n-p$ cannot be equivalent. We may conclude:
 \begin{align}
     2^{\left\lfloor \frac{n-1}{D} \right\rfloor (n-p)} - 2^{\left\lfloor \frac{n-p}{D} \right\rfloor} \not\equiv 0 \pmod{n}
 \end{align}
