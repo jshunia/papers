@@ -388,7 +388,7 @@ Let \( n \) be an odd integer $>3$ satisfying $2^{n-1} \equiv 1 \pmod{n}$. If $n
         \item If $2^{n-1} \not\equiv 1 \pmod{n}$, output COMPOSITE.
         \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $\Mx$ and store the result (See: Definition \ref{definition:modularring}).
         \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $\Mx$ and store the result.
-        \item If $1 + x^n \not= (1 + x)^n$, output COMPOSITE.
+        \item If $(1 + x)^n \not= 1 + x^n$, output COMPOSITE.
         \item Output PRIME;
     \end{enumerate}
 \end{center}
