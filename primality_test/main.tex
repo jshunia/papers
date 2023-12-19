@@ -311,7 +311,7 @@ Since \( \ordn{2} \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{n-1}{D}
 \end{proof}
 
 \begin{lemma} \label{lemma:primes}
-Let $n$ be an odd prime integer such that $n > 3$. Denote $D$ as the least integer greater than $2$ which does not divide $n-1$, then the conditions of the Main Theorem \ref{theorem:main} hold unconditionally.
+Let $n$ be an odd prime integer such that $n > 3$. Denote $D$ as the least integer greater than $2$ which does not divide $n-1$, then the conditions of Theorem \ref{theorem:main} hold unconditionally.
 \end{lemma}
 \begin{proof}
 For this proof, we will examine all of the cases individually and show that they are satisfied for prime $n$.
@@ -336,7 +336,7 @@ All of the individual conditions are satisfied when $n > 3$ is an odd prime. Hen
 \end{proof}
 
 \begin{lemma} \label{lemma:composites}
-Let $n$ be an odd composite integer such that $n > 3$. Denote $D$ as the least integer greater than $2$ which does not divide $n-1$. If $2^{n-1} \equiv 1 \pmod{n}$, $2^{\floor{\frac{n}{D}}} \not\equiv 1 \pmod{n}$, then the conditions of the Main Theorem \ref{theorem:main} cannot hold and $n$ will fail the test unconditionally.
+Let $n$ be an odd composite integer such that $n > 3$. Denote $D$ as the least integer greater than $2$ which does not divide $n-1$. If $2^{n-1} \equiv 1 \pmod{n}$, $2^{\floor{\frac{n}{D}}} \not\equiv 1 \pmod{n}$, then the conditions of Theorem \ref{theorem:main} cannot hold and $n$ will fail the test unconditionally.
 \end{lemma}
 \begin{proof}
 A fundamental theorem in polynomial ring theory states that an integer $n$ is prime if and only if $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \Z[x]$ \cite{granville2004primes}. This congruence was used as the basis for the AKS test \cite{aks2002}. A short proof of the theorem, given by Granville (2004) \cite{granville2004primes}, is that since $(x + 1)^n - (x^n + 1) = \sum_{k=1}^{n-1} \binom{n}{k} x^k$, we may have $(1 + x)^n \equiv 1 + x^n \pmod{n}$ if and only if $n$ divides $\binom{n}{k}$ for all $k$ in the range $1 \leq k \leq n-1$.
