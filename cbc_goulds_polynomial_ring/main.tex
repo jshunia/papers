@@ -85,9 +85,9 @@ We define the function $\BT_t$, which takes in an integer sequence $a = \{ a_0, 
     \begin{cases}
         a_n &\text{if } t = 0 \\
         \sum_{k=0}^{n} \binom{n}{k} \cdot a_k &\text{if } t = 1 \\
-        \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^k \cdot a_k  &\text{if } t = -1 \\
         \sum_{k=0}^{n} \binom{n}{k} \cdot \BT_{t-1}(a_k) &\text{if } t > 1 \\
-        \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^k \cdot \BT_{t+1}(a_k) &\text{if } t < -1 \\
+        \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^{n-k} \cdot a_k  &\text{if } t = -1 \\
+        \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^{n-k} \cdot \BT_{t+1}(a_k) &\text{if } t < -1 \\
     \end{cases}
 \end{align*}
 \end{definition}
