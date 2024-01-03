@@ -29,15 +29,19 @@
 \newcommand{\totient}[1]{\phi\left({#1}\right)}
 \newcommand{\bigO}[1]{O(#1)}
 \newcommand{\softO}[1]{\tilde{O}(#1)}
-\newcommand{\redu}{\textbf{r}}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Zn}{\Z/n\Z}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Zn}{\Z/n}
 \newcommand{\Zx}{\Z[x]}
 \newcommand{\Znx}{(\Zn)[x]}
 \newcommand{\Rx}{R}
-\newcommand{\Mx}{M}
+\newcommand{\Mx}{(\Zn)[x]/(x^d-2)}
 \newcommand{\ord}[2]{\text{ord}_\text{#1}\left((#2)\right)}
+\newcommand{\dtotient}[3]{\sigma_{#1}( #2^{\floor{\frac{1}{#3}}} )}
 \newcommand{\ordn}[1]{\text{ord}_n\left({#1}\right)}
+\newcommand{\indicator}[2]{\substack{#1 \\ #2}}
+\newcommand{\glaisher}[2]{\left[ \begin{array}{c} #1 \\ #2 \end{array} \right]}
+\newcommand{\kronecker}[2]{\left(#1\mid#2\right)}
 
 \title{An Efficient Deterministic Primality Test}
 \author{Joseph M. Shunia}
@@ -48,7 +52,7 @@
 \maketitle
 
 \begin{abstract}
-A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3(n))$ is presented. Central to our test is a novel polynomial reduction ring, applied to efficiently validate the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n}$, a condition that holds exclusively for prime $n$. The test is grounded in our main theorem, supported by a series of lemmas, which collectively show how the congruence is verified through polynomial expansion within our reduction ring.
+A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. Combining elements of number theory and combinatorics, the proof operates on the basis of simultaneous modular congruences relating to binomial transforms of powers of two.
 \end{abstract}
 
 \section{Introduction}
@@ -57,180 +61,77 @@ Primality testing has seen remarkable advancements over the past few decades. A 
 
 In the field of cryptography, the unique properties of prime numbers are widely exploited to create cryptographic primitives. It is often the case that many large primes must be generated in rapid succession \cite{lenstra1987}. To make these cryptographic operations practical, fast probabilistic primality tests such as the Baille-PSW primality test (BPSW) \cite{baillie1980} or Miller-Rabin (MR) \cite{rabin1980} \cite{miller1976} are used instead of AKS when searching for large primes. Probabilistic primality tests are by definition non-deterministic and may erroneously report a composite integer as being prime. Composite integers which pass a probabilistic primality test are relatively rare and are known as pseudoprimes (PSPs) for the respective test \cite{wagstaff1983}. When generating primes for cryptographic purposes, probabilistic primality tests are often combined or repeated with different parameters in order to achieve an acceptable error-bound that makes it almost certain that no composite integer will pass. However, reducing the error-bound requires additional compute and increases running-time, creating a trade-off.
 
-We present a new deterministic primality test that operates in polynomial time with a time complexity of $\tilde{O}(\log^3(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. Our main theorem posits a condition for an odd integer \( n \) to be prime, based on specific modular congruences related to the binomial transforms of powers of $2$. The basis for our test is the following main theorem: Let \( n \) be an odd integer greater than \(3\). Denote \( D \) as the least integer strictly greater than \( 2 \) and less than \( n \) such that $n \not\equiv 1 \pmod{D}$. Then, \( n \) is prime if and only if a set of simultaneous modular congruences involving \( D \), \( n \), and powers of $2$ hold. We show how these congruences are equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n}$, which is known to hold for only prime integers $n$ \cite{granville2004primes}. To efficiently calculate our congruences, we construct a specialized polynomial ring which limits the polynomial degree to $O(\log(n))$.
+We present a new deterministic primality test that operates in polynomial time with a time complexity of $\tilde{O}(\log^3(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. 
+
+Our test is based on a famous conjecture issued by Manindra Argawal while he was an undergraduate student \cite{aks2002}. Let $n$ and $d$ be two coprime positive integers. If the following polynomial congruence holds, then $n$ is prime or $n^2 = 1 \pmod{d}$:
+\begin{align}
+    (x - 1)^n \equiv x^n - 1 \pmod{n, x^d - 1}
+\end{align}
+
+We alter the conditions slightly to use roots of $2$ instead of roots of unity. Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n}$, a congruence which is known to hold for only prime integers $n$ \cite{granville2004primes}.
 
 \subsection{Structure of the Paper}
-This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. The computation of certain congruences required for our test is infeasible using existing methods; to address this, we introduce an innovative approach utilizing a specialized polynomial reduction ring, which provides efficient calculations. We follow up with the proof of our main theorem, substantiated by supporting identities and lemmas. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with pseudocode for our test, and a link to an open source implementation, to demonstrate how our test can be implemented.
+This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. We follow up with supporting theorems, identities, and lemmas. Then, we present the proof of our main theorem. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with pseudocode for our test, and a link to an open source implementation, to demonstrate how our test can be implemented.
 
 \section{Statement of Main Theorem}
 \begin{theorem}[Main theorem]
 \label{theorem:main}
-Let $n$ be an odd integer $> 3$. Denote $D$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{D}$. If the following condition holds for all $0 \leq j < D$, then $n$ is prime:
-
+Let $n$ be an odd integer $> 3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Denote $d$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. If the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:
 \begin{align}
-    \sum_{k=0}^{n} \binom{n}{Dk + j} 2^k
-    \equiv
-    \begin{cases} 
-        1 & \text{if } j=0, \\
-        0 & \text{if } 0 < j < D \text{ and } j \neq n \bmod{D}, \\
-        2^{\floor{\frac{n}{D}}} & \text{if } j = n \bmod{D}
-    \end{cases}
-    \pmod{n}
+    (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}
 \end{align}
 \end{theorem}
-
-\section{Preliminaries and Definitions}
-
-\subsection{Polynomial Reduction Ring} \label{section:polyrings}
-In this section, we define a special polynomial ring $\Rx$, with a modular variation $\Mx$, and show how $\Mx$ can be used to efficiently calculate the congruences required by Theorem \ref{theorem:main}. The standard approach to calculating the congruences requires evaluating $\binom{n}{Dk+j} 2^k \pmod{n}$ for each $k,j$ and summing the results, which takes time exponential in $n$. Conversely, our approach offers an efficient polynomial time complexity of $\tilde{O}(D \log^2(n))$.
-
-In a preliminary paper relating the central binomial coefficients and Gould's sequence to polynomial rings \cite{shunia2023polynomial}, we showed how a multivariate polynomial ring, analogous to the univariate polynomial ring we have defined herein, can be used generally to compute the binomial transforms of recursive integer sequences. We apply the same technique here.
-
-\begin{definition}[Polynomial reduction ring] \label{definition:ring}
-We construct a polynomial ring \(\Rx = \Z[x]\) in which addition is carried out as usual, and multiplication is followed by polynomial degree reduction via a special substitution function, denoted $\redu$ \cite{shunia2023polynomial}. The multiplication operation \(\ast\) is defined as follows:
-\begin{align}
-P(x) \ast Q(x) = \redu(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in \Rx,
-\end{align}
-\(\redu\) is an operation that enforces any defined substitution rules for the polynomial's terms upon multiplication. In our case, for the generator \(x\), we have:
-\begin{align}
-x \ast x^{d-1} = x^d = \redu(x^d) = N, \text{ where } N \in \Rx
-\end{align}
-
-For any polynomial in our ring $\Rx$, the function \( \redu \) is distributed to the individual terms and implicitly applied to reduce terms. Whenever the term $x^d$ appears, it is replaced with its defined mapping. The mappings in $\redu$ are extended to terms of higher degrees, meaning $\redu(x^{d+k}) = \redu(x^d \ast x^k) = N x^k$, for $k > 1$. $\redu$ is applied recursively to the polynomial until and its terms until the degree of the polynomial is less than $d$. For terms which do not match a defined substitution rule, $\redu$ returns them as they are.
-\end{definition}
-
-\begin{example}
-We take the ring $R$ as defined in Definition \ref{definition:ring} with $N = 2$, $d = 3$. Hence, $\redu(x^3) = 2$. $P(x) := 1 + x + 3x^3 + x^{4} + x^{6}, P(x) \in R$.
-\begin{align}
-    \redu(P(x)) &= \redu(1 + x + 3x^3 + x^{4} + x^{6}) \\
-    &= \redu(1) + \redu(x) + \redu(3x^3) + \redu(x^{4}) + \redu(x^{6}) \\
-    &= 1 + x + \redu(2 \cdot 3) + \redu(2 \cdot x) + \redu(2 \cdot x^3) \\
-    &= 1 + x + 6 + 2x + \redu(2 \cdot 2) \\
-    &= 7 + 3x + 4 \\
-    &= 11 + 3x
-\end{align}
-\end{example}
-
-\subsection{Modular Polynomial Reduction Ring}
-\begin{definition}[Modular polynomial ring $\Mx$]  \label{definition:modularring}
-Let \( \Rx = \Z[x] \) be our polynomial ring as defined in Definition \ref{definition:ring}, where the multiplication is modified by a substitution function \(\redu\) as described previously. Let \( n \) be a positive integer. We define the modular variation of \( \Rx \), denoted as \( \Mx \), to be the ring of polynomials with coefficients in \( \Z/n\Z \) and with multiplication modified by a corresponding substitution function \(\redu_M\). Formally, \( \Mx = (\Z/n\Z)[x] \), where the coefficients of the polynomials in \( \Mx \) are taken modulo \( n \), and the multiplication in \( \Mx \) is given by
-\begin{align}
-    P(x) \ast Q(x) = \redu_M(P(x) \cdot Q(x)) \text{ for all } P(x), Q(x) \in \Mx,
-\end{align}
-\(\redu_M\) is defined correspondent to \(\redu\) but operates within the context of the coefficients being in \( \Z/n\Z \).
-\end{definition}
-
-\subsection{Polynomial Reduction Ring Axioms}
-We assert that the ring \( \Rx \) with the modified operation \(\ast\) still satisfies the standard ring axioms. Specifically, we show that \((R, +, \ast)\) is associative, commutative (with respect to addition), and has an additive identity and an additive inverse for every element. Additionally, the distributive property of multiplication over addition is preserved under the operation \(\ast\).
-
-\subsubsection{Multiplicative Properties}
-\begin{proposition}[Distributivity of \(\ast\)] \label{proposition:ring:1}
-The operation \(\ast\) is distributive over addition in the ring \(R\).
-\end{proposition}
-\begin{proof}
-The modified multiplication \(\ast\) is distributive over addition because for any \( P(x), Q(x), S(x) \in R \),
-\begin{align}
-    P(x) \ast (Q(x) + S(x)) &= \redu(P(x) \cdot (Q(x) + S(x))) \\
-    &= \redu(P(x) \cdot Q(x) + P(x) \cdot S(x)) \\
-    &= \redu(P(x) \cdot Q(x)) + \redu(P(x) \cdot S(x)) \\
-    &= P(x) \ast Q(x) + P(x) \ast S(x)
-\end{align}
-Where the second equality uses the distributive property of the standard multiplication in \( \Z[x] \) and the linearity of \(\redu\) with respect to polynomial addition.
-\end{proof}
-
-\begin{proposition}[Associativity of \(\ast\)] \label{proposition:ring:2}
-The multiplication operation \(\ast\) in the ring \(R\) is associative.
-\end{proposition}
-\begin{proof}
-To prove associativity, we need to show that for any \( P(x), Q(x), S(x) \in R \):
-\begin{align}
-    (P(x) \ast Q(x)) \ast S(x) = P(x) \ast (Q(x) \ast S(x))
-\end{align}
-Expanding the left-hand side:
-\begin{align}
-    (P(x) \ast Q(x)) \ast S(x) &= \redu(P(x) \cdot Q(x)) \ast S(x) \\
-    &= \redu(\redu(P(x) \cdot Q(x)) \cdot S(x))
-\end{align}
-Similarly, for the right-hand side:
-\begin{align}
-    P(x) \ast (Q(x) \ast S(x)) &= P(x) \ast \redu(Q(x) \cdot S(x)) \\
-    &= \redu(P(x) \cdot \redu(Q(x) \cdot S(x)))
-\end{align}
-Since the standard multiplication in \(\Z[x]\) is associative and \(\redu\) is a well-defined operation that respects this associativity, we have:
-\begin{align}
-    \redu(\redu(P(x) \cdot Q(x)) \cdot S(x)) = \redu(P(x) \cdot \redu(Q(x) \cdot S(x)))
-\end{align}
-Which shows that:
-\begin{align}
-    (P(x) \ast Q(x)) \ast S(x) = P(x) \ast (Q(x) \ast S(x))
-\end{align}
-\end{proof}
-
-\subsubsection{Additive Properties}
-\begin{proposition}[Preservation of additive properties] \label{proposition:ring:3}
-The commutative and associative properties of addition, and the existence of an additive identity and inverses, are maintained in the ring \(R\). 
-\end{proposition}
-\begin{proof}
-The additive structure of \(R\) remains unchanged. Thus, the commutative and associative properties of addition, and the existence of an additive identity and inverses, are inherited directly from \( \Z[x] \).
-\end{proof}
-
-\begin{proposition} \label{proposition:modularring:1}
-The ring \( \Mx = (\Z/n\Z)[x] \) with the modified multiplication operation \(\ast\), as defined by the substitution function \(\redu_M\), inherits the standard ring axioms from \( R = \Z[x] \).
-\end{proposition}
-\begin{proof}
-Since the ring \( \Mx \) is structurally identical to \( \Rx \) with the only difference being the coefficient domain (\(\Z/n\Z\) instead of \(\Z\)), and the modified multiplication operation \(\ast\) in \( \Mx \) is defined similarly to \( \Rx \) using \(\redu_M\), analogous to \(\redu\), \( \Mx \) inherits the ring properties of \( \Rx \). This includes the associativity and commutativity of addition, the existence of an additive identity and inverses, the distributivity of multiplication over addition, and the associativity of multiplication. These properties are preserved under the transition from \(\Z\) to \(\Z/n\Z\) coefficients and the analogous definition of \(\ast\) in \( \Mx \).
-\end{proof}
 
 \section{Supporting Identities}
 
 \begin{identity}[Powers of two] \label{identity:powersoftwobinomialgroups}
-Let $n, D \in \Z^+$, with $1 \leq D < n$:
+Let $n, d \in \Z^+$, with $1 \leq d < n$:
 \begin{align}
-    2^n = \sum_{j=0}^{D-1} \sum_{k=0}^{n} \binom{n}{D k + j}
+    2^n = \sum_{j=0}^{d-1} \sum_{k=0}^{n} \binom{n}{kd + j}
 \end{align}
 \end{identity}
 \begin{proof}
-    By the binomial theorem, $2^n = \sum_{k=0}^{n} \binom{n}{k}$. We can split this sum up into $D$ groups of at most $\floor{\frac{n}{D}}$ terms, like so:
+    By the binomial theorem, $2^n = \sum_{k=0}^{n} \binom{n}{k}$. We can split this sum up into $d$ groups of at most $\floor{\frac{n}{d}}$ terms, like so:
     \begin{align}
-        2^n = \sum_{k=0}^{n} \binom{n}{k} = \sum_{j=0}^{D-1} \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + j}
+        2^n = \sum_{k=0}^{n} \binom{n}{k} = \sum_{j=0}^{d-1} \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{kd + j}
     \end{align}
 
-    For $k > \floor{\frac{n}{D}}$, we have $D k + j > n$. In such case, $\binom{n}{D k + j} = 0$. Hence, we can say:
+    For $k > \floor{\frac{n}{d}}$, we have $d k + j > n$. In such case, $\binom{n}{d k + j} = 0$. Hence, we can say:
     \begin{align}
-        \sum_{j=0}^{D-1} \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + j} = \sum_{j=0}^{D-1} \sum_{k=0}^{n} \binom{n}{D k + j}
+        \sum_{j=0}^{d-1} \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{kd + j} = \sum_{j=0}^{d-1} \sum_{k=0}^{n} \binom{n}{kd + j}
     \end{align}
 \end{proof}
 
 \begin{identity}[Binomial transform of floored powers of two] \label{identity:flooredpowersoftwobinomialgroups}
-Let $n, D \in \Z^+$, with $1 \leq D < n$:
+Let $n, d \in \Z^+$, with $1 \leq d < n$:
 \begin{align}
-    \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}} = \sum_{j=0}^{D-1} \sum_{k=0}^{n} \binom{n}{D k + j} 2^{k}
+    \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}} = \sum_{j=0}^{d-1} \sum_{k=0}^{n} \binom{n}{kd + j} 2^{k}
 \end{align}
 \end{identity}
 \begin{proof}
     By Identity \ref{identity:powersoftwobinomialgroups}, we have:
     \begin{align}
-        \sum_{k=0}^{n} \binom{n}{k} = \sum_{j=0}^{D-1} \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + j}
+        \sum_{k=0}^{n} \binom{n}{k} = \sum_{j=0}^{d-1} \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{kd + j}
     \end{align}
 
-    Applying this to $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}}$, since the exponent in $2^{\floor{\frac{k}{D}}}$ is partitioned by $D$, it splits over the groups. We may rewrite our equation as:
+    Applying this to $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}}$, since the exponent in $2^{\floor{\frac{k}{d}}}$ is partitioned by $d$, it splits over the groups. We may rewrite our equation as:
     \begin{align}
-        \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}} = \sum_{j=0}^{D-1} \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + j} 2^{k}
+        \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}} = \sum_{j=0}^{d-1} \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{kd + j} 2^{k}
     \end{align}
 
-    As in Identity \ref{identity:powersoftwobinomialgroups}, for $k > \floor{\frac{n}{D}}$, we have $D k + j > n$. In such case, $\binom{n}{D k + j} = 0$. Hence, we can say:
+    As in Identity \ref{identity:powersoftwobinomialgroups}, for $k > \floor{\frac{n}{d}}$, we have $d k + j > n$. In such case, $\binom{n}{kd + j} = 0$. Hence, we can say:
     \begin{align}
-        \sum_{j=0}^{D-1} \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + j} 2^{k} = \sum_{j=0}^{D-1} \sum_{k=0}^{n} \binom{n}{D k + j} 2^{k}
+        \sum_{j=0}^{d-1} \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{kd + j} 2^{k} = \sum_{j=0}^{d-1} \sum_{k=0}^{n} \binom{n}{kd + j} 2^{k}
     \end{align}
 \end{proof}
 
-\section{Polynomial Reduction Ring Theorems}
+\section{Polynomial Ring Theorems}
 
 \begin{theorem} \label{theorem:polyflooredpowersoftwo}
-Let $n, D \in \Z^+$ with $D>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\redu(x^{D-1}) = 2$. Let $x^k$ be a polynomial in $M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( x^k \), gives $2^{\floor{\frac{k}{D}}} \pmod{n}$.
+Let $n, d \in \Z^+$ with $d>2$. Let $x^k$ be a polynomial in $(\Zn)[x]/(x^d-2)$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of \( x^k \), gives $2^{\floor{\frac{k}{d}}} \pmod{n}$.
 \end{theorem}
 \begin{proof}
-Examining $D = 2$, we can see:
+Examining $d = 2$, we can see:
 \begin{align*}
 & x^0 = 1 = 2^{\floor{0/2}} \\
 & x^1 = 1 = 2^{\floor{1/2}} \\
@@ -242,13 +143,11 @@ Examining $D = 2$, we can see:
 \vdots
 \end{align*}
 
-We proceed by induction. For \( k = 0 \), we have \( x^0 = 1 \), and the sum of coefficients is \( 2^{\floor{\frac{0-1}{D}}} = 2^{0} = 1 \). Assume the theorem holds for some \( k \geq 0 \), i.e., the sum of coefficients modulo \( n \) in \( x^k \) is \( 2^{\floor{\frac{k}{D}}} \pmod{n} \). We need to show it also holds for \( k+1 \). Consider \( x^{k+1} = x^k \ast x \). By the definition of \( \ast \) and \( \redu \), the degree of \( x^{k+1} \) gets reduced by \( \redu \) every time it reaches \( D \). The number of times this reduction happens is \( \floor{\frac{k}{D}} \). Therefore, the sum of coefficients in \( x^{k+1} \) should be \( 2^{\left\lfloor \frac{k+1}{D} \right\rfloor} \), as each reduction by \( \redu \) doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \).
-
-By the principle of mathematical induction, the theorem is proven.
+We proceed by induction. For \( k = 0 \), we have \( x^0 = 1 \), and the sum of coefficients is \( 2^{\floor{\frac{0-1}{d}}} = 2^{0} = 1 \). Assume the theorem holds for some \( k \geq 0 \), that is, the sum of coefficients modulo \( n \) in \( x^k \) is \( 2^{\floor{\frac{k}{d}}} \pmod{n} \). We need to show it also holds for \( k+1 \). Consider \( x^{k+1} = x^k \cdot x \). By the definition of the ideal $I = x^d-2$, the degree of \( x^{k+1} \) gets reduced every time it reaches \( d \). The number of times this reduction happens is \( \floor{\frac{k}{d}} \). Therefore, the sum of coefficients in \( x^{k+1} \) should be \( 2^{\floor{\frac{k+1}{d}}} \), as each reduction doubles the sum of coefficients. Hence, the theorem holds for \( k+1 \). By the principle of mathematical induction, the theorem is proven.
 \end{proof}
 
 \begin{theorem} \label{theorem:polybinomialtransform}
-Let $n$ an integer $>0$. Let $D$ be an integer $>2$. Define the ring $M$ as in Definition \ref{definition:modularring} with $d=D-1$, $N=2$, hence $\redu(x^{D-1}) = 2$. Let $(1 + x)^n$ be a polynomial in $M$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of $ (1 + x)^n $ is equivalent to $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}} \pmod{n}$.
+Let $n$ an integer $>0$. Let $d$ be an integer $>2$. Let $(1 + x)^n$ be a polynomial in $(\Zn)[x]/(x^d-2)$. Taking the sum of the coefficients modulo $n$ in the polynomial expansion of $ (1 + x)^n$ is equivalent to $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}} \pmod{n}$.
 \end{theorem}
 \begin{proof}
 By the binomial theorem, we have:
@@ -257,86 +156,113 @@ By the binomial theorem, we have:
 \end{align}
 Hence, when we evaluate this polynomial at \( x = 1 \), we sum the coefficients of the polynomial to get:
 \begin{align}
-    \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}} \quad \text{(by Theorem \ref{theorem:polyflooredpowersoftwo})}
+    \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}} \quad \text{(by Theorem \ref{theorem:polyflooredpowersoftwo})}
 \end{align}
 \end{proof}
 
 \section{Supporting Lemmas}
+\begin{lemma} \label{lemma:floornondivisor}
+Given $a,b \in \Z^{+}$ with \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor \) cannot divide \(a\).
+\end{lemma}
+\begin{proof}
+Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer that is less than \(\frac{a}{b}\). Thus, \(q \cdot b < a < b \cdot (q + 1)\).
+
+Suppose, for contradiction, that \(q\) divides \(a\). Then there exists an integer \(k\) such that \(a = k \cdot q\). Substituting \(a = k \cdot q\) into the inequality \(q \cdot b < a < b \cdot (q + 1) \), we get \(q \cdot b < k \cdot q < b \cdot (q + 1) \). Dividing this inequality by \(q\), we obtain \(b < k < b + \frac{b}{q}\).
+
+Since \(k\) is an integer, and \(b \nmid a\) implies \(k \neq b\), the next possible integer value for \(k\) is \(b + 1\). Therefore, \(k = b + 1\), which gives \(a = k \cdot q = q \cdot (b + 1)\). However, this leads to a contradiction: \(a = q \cdot (b + 1) \) implies \(a \geq b \cdot (q + 1) \), contradicting the established fact that \(a < b \cdot (q + 1) \). Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).
+\end{proof}
+
+\begin{lemma}[Upper bound on floor function and indivisibility]
+\label{lemma:floornondivisorupperbound}
+Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(b \leq \left\lfloor \sqrt{a} \right\rfloor\).
+\end{lemma}
+\begin{proof}
+Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
+\end{proof}
+
+\begin{lemma}[Bounds on least non-divisor] \label{lemma:leastnondivisor}
+Let $n$ be an integer such that $n > 3$, then there exists an integer $1 < D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
+\end{lemma}
+\begin{proof}
+If $n$ is a composite integer $> 3$, clearly $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
+\end{proof}
+
+\begin{lemma}[Multiplicative order inequality] \label{lemma:orderinequality}
+Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( D \) the least integer \(2 < D < n \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{D}\right\rfloor \not= \ordn{2} \).
+\end{lemma}
+\begin{proof}
+Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \ordn{2} \), that is, \( k = \ordn{2} \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \ordn{2} \), must divide \( n-1 \).
+
+Given \( D \) is the least integer greater than 2 and less than \( n \) that does not divide \( n-1 \), and \( \ordn{2} \) divides \( n-1 \), it follows that \( D \) cannot equal \( \ordn{2} \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = D \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. It follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. For $n \geq 341$, clearly $D < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < D < \left\lfloor \frac{n-1}{D} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{D} \right\rfloor \) cannot divide \( n-1 \).
+
+Since \( \ordn{2} \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is not, it must be that \( \left\lfloor \frac{n-1}{D} \right\rfloor \) is not equal to \( \ordn{2} \), as this would imply a contradiction with the nature of \( \ordn{2} \) as a divisor of \( n-1 \). Therefore, \( \left\lfloor\frac{n-1}{D}\right\rfloor \not= \ordn{2} \).
+\end{proof}
 
 \begin{lemma} \label{lemma:polytermcoeffs}
-Let $n, D \in \Z^+$, with $1 \leq D < n$. Let $M$ be our modular polynomial reduction ring as defined in Definition \ref{definition:modularring} with $\redu(x^{D-1}) = 2$. For $(1 + x)^n \in M$, we have:
+Let $n, d \in \Z^+$, with $1 \leq d < n$. For $(1 + x)^n \in (\Zn)[x]/(x^d-2)$, we have:
 \begin{align}
-    [x^j](1 + x)^n \equiv \sum_{k=0}^{n} \binom{n}{D k + j} 2^{k} \pmod{n}
+    [x^j](1 + x)^n \equiv \sum_{k=0}^{n} \binom{n}{d k + j} 2^{k} \pmod{n}
 \end{align}
 \end{lemma}
 \begin{proof}
-By Identity \ref{identity:flooredpowersoftwobinomialgroups}, we have $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}} = \sum_{j=0}^{D-1} \sum_{k=0}^{n} \binom{n}{D k + j} 2^{k}$. In Theorem \ref{theorem:polybinomialtransform}, we showed that evaluating $(1+x)^n \in M$ at $x=1$ yields $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{D}}}$. Upon expansion $(1+x)^n$ will contain at most $D$ terms. By the nature of exponentiation within our ring, these groups are spaced uniformly over the binomial coefficients. That is, the coefficient of the term $x^j$ in the expanded polynomial corresponds to the sum $\sum_{k=0}^{n} \binom{n}{D k + j} 2^{k} \pmod{n}$.
+By Identity \ref{identity:flooredpowersoftwobinomialgroups}, we have $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}} = \sum_{j=0}^{d-1} \sum_{k=0}^{n} \binom{n}{d k + j} 2^{k}$. In Theorem \ref{theorem:polybinomialtransform}, we showed that evaluating $(1+x)^n \in M$ at $x=1$ yields $\sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{d}}}$. Upon expansion $(1+x)^n$ will contain at most $d$ terms. By the nature of exponentiation within our ring, these groups are spaced uniformly over the binomial coefficients. That is, the coefficient of the term $x^j$ in the expanded polynomial corresponds to the sum $\sum_{k=0}^{n} \binom{n}{d k + j} 2^{k} \pmod{n}$.
 \end{proof}
 
-\begin{lemma}[Upper bound on $D$] \label{lemma:leastd}
-Let $n$ be an integer such that $n > 3$, then there exists an integer $D$ such that $1 < D \leq \floor{\log_2(n-1)} + 2$ and $n \not\equiv 1 \pmod{D}$.
+\begin{lemma}[Upper bound on $d$] \label{lemma:leastd}
+Let $n$ be an integer such that $n > 3$, then there exists an integer $d$ such that $1 < d \leq \floor{\log_2(n-1)} + 2$ and $n \not\equiv 1 \pmod{d}$.
 \end{lemma}
 \begin{proof}
-In order to have $n \equiv 1 \pmod{D}$ for some integer $D$, there must exist an integer $k$ such that $D \cdot k + 1 \equiv 0 \pmod{n}$. This implies that any such $D$ will divide $n-1$. Given $n$ is a composite integer $> 3$, clearly $n-1$ can have at most $\floor{\log_2(n-1)}$ prime factors (if $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \floor{\log_2(n-1)} + 2$ which does not divide $n-1$. This implies $n-1 \not\equiv 0 \pmod{D}$ and hence it follows, $n \not\equiv 1 \pmod{D}$.
+In order to have $n \equiv 1 \pmod{d}$ for some integer $d$, there must exist an integer $k$ such that $d \cdot k + 1 \equiv 0 \pmod{n}$. This implies that any such $d$ will divide $n-1$. Given $n$ is a composite integer $> 3$, clearly $n-1$ can have at most $\floor{\log_2(n-1)}$ prime factors (if $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $d \leq \floor{\log_2(n-1)} + 2$ which does not divide $n-1$. This implies $n-1 \not\equiv 0 \pmod{d}$ and hence it follows, $n \not\equiv 1 \pmod{d}$.
 \end{proof}
 
+\subsection{Primes Case}
+
 \begin{lemma}[Primes pass] \label{lemma:primes}
-Let $n$ be an odd prime integer such that $n > 3$. Denote $D$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{D}$. Then, the conditions of Theorem \ref{theorem:main} hold unconditionally and $n$ will pass the test.
+Let $n$ be an odd prime integer such that $n > 3$. Denote $d$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. Then, the conditions of Theorem \ref{theorem:main} hold unconditionally and $n$ will pass the test.
 \end{lemma}
 \begin{proof}
 For this proof, we will examine all of the cases individually and show that they are satisfied for prime $n$.
 
 \textbf{Case 1:} $j=0$ \\
-If $j = 0$, then all $\binom{n}{D k} \equiv 0 \pmod{n}$ except for $k=0$. Hence, we have:
+If $j = 0$, then all $\binom{n}{d k} \equiv 0 \pmod{n}$ except for $k=0$. Hence, we have:
 \begin{align}
-    & \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k} 2^{k} \equiv \binom{n}{0} 2^{0} \equiv 1 \cdot 1 \equiv 1 \pmod{n}
+    & \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{d k} 2^{k} \equiv \binom{n}{0} 2^{0} \equiv 1 \cdot 1 \equiv 1 \pmod{n}
 \end{align}
 
-\textbf{Case 2:} $0 < j < D$ and $j \neq n \bmod{D}$ \\
-If $0 < j < D$ and $j \neq n \bmod{D}$, all $\binom{n}{D k + j} \equiv 0 \pmod{n}$. Hence, the entire sum $\sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + j} 2^{k}$ must be equivalent to $0 \pmod{n}$.
+\textbf{Case 2:} $0 < j < d$ and $j \neq n \bmod{d}$ \\
+If $0 < j < d$ and $j \neq n \bmod{d}$, all $\binom{n}{d k + j} \equiv 0 \pmod{n}$. Hence, the entire sum $\sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{d k + j} 2^{k}$ must be equivalent to $0 \pmod{n}$.
 
-\textbf{Case 3:} $j=n \bmod{D}$ \\
-If $j = n \bmod{D}$, then all $\binom{n}{D k} \equiv 0 \pmod{n}$ except for $k=\floor{\frac{n}{D}}$. Hence, we have:
+\textbf{Case 3:} $j=n \bmod{d}$ \\
+If $j = n \bmod{d}$, then all $\binom{n}{d k} \equiv 0 \pmod{n}$ except for $k=\floor{\frac{n}{d}}$. Hence, we have:
 \begin{align}
-    & \sum_{k=0}^{\floor{\frac{n}{D}}} \binom{n}{D k + (n \bmod{D})} 2^{k} \equiv \binom{n}{n} 2^{\floor{\frac{n}{D}}} \equiv 1 \cdot 2^{\floor{\frac{n}{D}}} \equiv 2^{\floor{\frac{n}{D}}} \pmod{n}
+    & \sum_{k=0}^{\floor{\frac{n}{d}}} \binom{n}{d k + (n \bmod{d})} 2^{k} \equiv \binom{n}{n} 2^{\floor{\frac{n}{d}}} \equiv 1 \cdot 2^{\floor{\frac{n}{d}}} \equiv 2^{\floor{\frac{n}{d}}} \pmod{n}
 \end{align}
 
 \textbf{Conclusion:}
 All of the individual conditions are satisfied when $n > 3$ is an odd prime. Hence, $n$ will pass the test unconditionally.
 \end{proof}
 
+\subsection{Composites Case}
+
+A fundamental theorem in polynomial ring theory states that an integer $n$ is prime if and only if $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \Z[x]$ \cite{granville2004primes}. This congruence was used as the basis for the AKS test \cite{aks2002}. A short proof of the theorem, given by Granville (2004) \cite{granville2004primes}, is that since $(x + 1)^n - (x^n + 1) = \sum_{k=1}^{n-1} \binom{n}{k} x^k$, we may have $(1 + x)^n \equiv 1 + x^n \pmod{n}$ if and only if $n$ divides $\binom{n}{k}$ for all $k$ in the range $1 \leq k \leq n-1$. It is important to note that for the polynomial congruence to be valid, $x^n$ and $(1+x)^n$ must be irreducible in $(\Zn)[x]$.
+
+Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take a similar approach to show that composite integers will always fail our test.
+
 \begin{lemma}[Composites fail] \label{lemma:composites}
-Let $n$ be an odd composite integer such that $n > 3$. Denote $D$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{D}$. Then, the conditions of Theorem \ref{theorem:main} cannot hold and $n$ will fail the test unconditionally.
+Let $n = pq$ be an odd composite integer $>3$ with $p$ a prime divisor. Let $d$ be the least positive integer $>2$ such that $n \not\equiv 1 \pmod{d}$. Suppose $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$, and consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_p[x]$. If $n$ does not have a prime divisor $\leq d$, then $f(x)$ is nonzero when reduced modulo $x^d - 2$.
 \end{lemma}
 \begin{proof}
-A fundamental theorem in polynomial ring theory states that an integer $n$ is prime if and only if $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \Z[x]$ \cite{granville2004primes}. This congruence was used as the basis for the AKS test \cite{aks2002}. A short proof of the theorem, given by Granville (2004) \cite{granville2004primes}, is that since $(x + 1)^n - (x^n + 1) = \sum_{k=1}^{n-1} \binom{n}{k} x^k$, we may have $(1 + x)^n \equiv 1 + x^n \pmod{n}$ if and only if $n$ divides $\binom{n}{k}$ for all $k$ in the range $1 \leq k \leq n-1$.
+Let $p$ be a prime divisor of $n$. Consider the polynomial ring $\mathbb{Z}_p[x]$. We examine the reduction of $ f(x) $ modulo $x^d - 2$, which gives us a polynomial $f(x) \pmod{x^d - 2} \in \mathbb{Z}_p[x]$. After reduction modulo $x^d - 2$, the polynomial $f(x)$ has $\deg(f(x)) = d-1$, and can be written as $f(x) = \sum_{i=0}^{d-1} c_i x^i$.
 
-\textbf{Remark.} It is important to note that for the polynomial congruence to be valid, $x^n$ and $(1+x)^n$ must be irreducible in $(\Zn)[x]$. In this context, ``irreducible" simply means that the polynomial $x^n$ does not collapse to an integer modulo $n$; the property of irreducibility is unrelated to the concept of degree reduction used by our polynomial rings.
+The condition $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$ implies that $x^n \not\equiv 1 \pmod{p}$ for at least $1$ prime divisor $p$ of $n$. Recall also that we are given $d$ which does not divide $n$, and hence $p \not= d$. Together, these imply that the powers $x^k$ in $f(x)$ do not behave in a cyclical manner when reduced modulo $p$, and hence, the polynomial $f(x)$ cannot simplify to the zero polynomial due to any cyclical patterns in the exponents. Furthermore, the fact that $x^d \equiv 2$ in our quotient ring and not $1$ ensures that $x$ is not a $d$th root of unity in $\mathbb{Z}_p$ for any prime $p$ dividing $n$. Hence, $f(x)$ does not exhibit any cyclical reduction that would occur if $x$ were a root of unity.
 
-Now, we define $\Mx$ to be the modular polynomial ring as in Definition \ref{definition:modularring}. Recall that $M \in (\Zn)[x]$ and that the standard ring axioms continue to hold in $\Mx$. Let $\redu(x^{D-1}) = 2$. This implies that $x^{D-1} \equiv 2 \pmod{n} \in \Mx$.
+Assume for contradiction that $f(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/(x^d - 2)$. This would imply that all coefficients $c_i$ are zero in $\mathbb{Z}_p$.
 
-As stated in the remark above, in order to use the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n}$ to test the primality of $n$, we need to ensure that $x^n$ and $(1+x)^n$ are irreducible in $\Mx$. Fortunately, so long as $n \not\equiv 1 \pmod{D}$, these polynomials are irreducible. Conversely, if $n \equiv 1 \pmod{D}$, the polynomial ring structure collapses from $(\Zn)[x]$ to $\Zn$ when expanding $(1 + x)^n$. This ``collapse" of the polynomial ring structure to the integers is caused by the value of $x^n$ being located at the coefficient $[x^1]$ in the expanded polynomials $x^n$ and $(1 + x)^n$. In such situation, when we calculate the binomial transform by expanding $(1 + x)^n \in \Mx$, the polynomial will expanded over degree $0$, and hence, the binomial transform is calculated over the integers. In all other cases, that is, when $n \not\equiv 1 \pmod{D}$, the integrity of the polynomial ring structure is maintained since the binomial transform is taken over a polynomial degree that is greater than $0$, and thus the result is a polynomial.
+Since $p$ is prime, $\mathbb{Z}_p[x]$ is a finite field. Further, since $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$, there must exist at least $1$ prime divisor $p$ of $n$ such that $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{p}$. This implies that $2$ is not a $d$th residue modulo $p$. That is, $a^d \not\equiv 2 \pmod{p}$ for all integers $a$. Hence, it follows that $\mathbb{Z}_p[x]/(x^d - 2)$ is irreducible and therefore, is also a field.
 
-Therefore, so long as $n \not\equiv 1 \pmod{D}$, it is valid to check only the following polynomial congruence to determine the primality of $n$:
-\begin{align}
-    (1 + x)^n \equiv 1 + x^n \pmod{n} \text{ } \in M
-\end{align}
+By the Fundamental Theorem of Algebra, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a field and $\deg(f(x)) = d-1$, then $f(x)$ can have at most $d-1$ roots in $\mathbb{Z}_p[x]/(x^d - 2)$. The assumption that $f(x)$ is zero would imply it has $p$ roots, which is a contradiction unless $p \leq d-1$. However, this is clearly false, since we are given $n$ which does not have a prime divisor $\leq d$.
 
-In the present case, $n$ is an odd composite integer, and by definition, we have $n \not\equiv 1 \pmod{D}$. Hence, and we may conclude that $x^n$ and $(1+x)^n$ are irreducible in $\Mx$.
-
-It follows from Lemma \ref{lemma:polytermcoeffs} that verifying the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n}$ is equivalent to checking the defining congruences of our test:
-\begin{align*}
-    \sum_{k=0}^{n} \binom{n}{Dk + j} 2^k
-    \equiv
-    \begin{cases} 
-        1 & \text{if } j=0, \\
-        0 & \text{if } 0 < j < D \text{ and } j \neq n \bmod{D}, \\
-        2^{\floor{\frac{n}{D}}} & \text{if } j = n \bmod{D}
-    \end{cases}
-    \pmod{n}
-\end{align*}
-
-Finally, since checking the above congruences is equivalent to checking $(1 + x)^n \equiv 1 + x^n \pmod{n}$, composite $n$ will fail the test unconditionally.
+Therefore, $f(x)$ must be nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$ for at least one prime $p$ that divides $n$.
 \end{proof}
 
 \section{Proof of the Main Theorem}
@@ -354,9 +280,9 @@ Let \( n \) be an odd integer $>3$. If $n$ is prime, then by Lemma $\ref{lemma:p
                 \item Otherwise, output COMPOSITE.
             \end{enumerate}
         \item If $n$ equals $3$, output PRIME.
-        \item Find the least integer $D$ that is greater than $2$ such that $n \not\equiv 1 \pmod{D}$.
-        \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $\Mx$ with degree $D$, and store the result (See: Definition \ref{definition:modularring}).
-        \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $\Mx$ with degree $D$, and store the result.
+        \item Find the least integer $d$ that is greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
+        \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $(\Zn)[x]/(x^d-2)$ with degree $d$, and store the result.
+        \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $(\Zn)[x]/(x^d-2)$ with degree $d$, and store the result.
         \item If $(1 + x)^n \not= 1 + x^n$, output COMPOSITE.
         \item Output PRIME;
     \end{enumerate}
@@ -365,7 +291,7 @@ Let \( n \) be an odd integer $>3$. If $n$ is prime, then by Lemma $\ref{lemma:p
 \subsection{Time Complexity Analysis} \label{subsection:timecomplexity}
 
 \subsubsection{Algorithm Overview}
-The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring $\Mx$. To avoid confusion with our polynomial ring $\Mx$, we will denote the time complexity of multiplication as the lower-cased $m(n)$.
+The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring $\Mx$.
 
 \subsubsection{Analysis of Individual Operations}
 \begin{enumerate}
@@ -375,26 +301,26 @@ The given algorithm is a primality test that involves several computational step
 
     \item \textbf{Finding \( D \)}:
     
-        Finding the least integer \( D > 2 \) such that $n \not\equiv 1 \pmod{D}$ takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
+        Finding the least integer \( D > 2 \) such that $n \not\equiv 1 \pmod{d}$ takes at most \( O(\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O(\log(n)) \).
 
     \item \textbf{Computing \( x^n \bmod{n} \in \Mx \)}:
     
-        Computing the polynomial expansion of $x^n \pmod{n}$ in the ring \( \Mx \) with degree $D$ is equivalent to calculating $2^{\floor{\frac{n}{D}}} \pmod{n}$. This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) m(n)) \).
+        Computing the polynomial expansion of $x^n \pmod{n}$ in the ring \( \Mx \) with degree $d$ is equivalent to calculating $2^{\floor{\frac{n}{d}}} \pmod{n}$. This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
 
     \item \textbf{Computing \( (1+x)^n \bmod{n} \in \Mx \)}:
     
-        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( \Mx \)  with degree $D$ involves exponentiating a polynomial in $\Mx$ with \( D = O(\log(n)) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(m(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \). Therefore, the overall complexity is \( O(\log^2(n) m(n)) \).
+        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( (\Zn)[x]/(x^d-2) \)  with degree $d$ involves exponentiating a polynomial in $(\Zn)[x]/(x^d-2)$ with \( D = O(\log(n)) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \). Therefore, the overall complexity is \( O(\log^2(n) m(n)) \).
          
-    \item \textbf{Checking the equality \( (1+x)^n = 1 + x^n \pmod{n} \in \Mx \)}:
+    \item \textbf{Checking the equality \( (1+x)^n = 1 + x^n \pmod{n} \in (\Zn)[x]/(x^d-2) \)}:
         The final steps involve comparing the equality of coefficients in the polynomials $(1+x)^n$ and $1 + x^n$. This requires $O(\log(n))$ comparisons, which are themselves \( O(1) \) operations.
 \end{enumerate}
 
 \subsubsection{Overall Time Complexity}
-The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in \Mx \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log^2(n) m(n)) \).
+The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in (\Zn)[x]/(x^d-2) \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log^2(n) M(n)) \).
 
-Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $m(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
+Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
 \begin{align}
-    T(n) = O(\log^2(n) m(n)) = O(\log^2(n) \log(n) \log\log(n)) = O(\log^3(n) \log\log(n)) = \tilde{O}(\log^3(n))
+    T(n) = O(\log^2(n) M(n)) = O(\log^2(n) \log(n) \log\log(n)) = O(\log^3(n) \log\log(n)) = \tilde{O}(\log^3(n))
 \end{align}
 
 \subsubsection{Conclusion}
@@ -422,23 +348,23 @@ To demonstrate how our test may be implemented, we offer a pseudocode implementa
     \If{$n = 3$}
         \State \Return \textbf{true} \Comment{$n$ is prime}
     \EndIf
-    \State $D \gets 2$
+    \State $d \gets 2$
     \State $log \gets \Call{Log2}{n}$
-    \For{$i \gets 3$ \textbf{to} $\Call{Max}{log+2, 3}$} \Comment{Find $D$, the least non-divisor of $n-1$}
-        \State $D \gets i$
-        \State $m \gets (n-1) \bmod D$
+    \For{$i \gets 3$ \textbf{to} $\Call{Max}{log+2, 3}$} \Comment{Find $d$, the least non-divisor of $n-1$}
+        \State $d \gets i$
+        \State $m \gets (n-1) \bmod d$
         \If{$m \neq 0$}
             \State \textbf{break}
         \EndIf
     \EndFor
-    \State $v_x \gets \Call{Pow}{2, \floor{n / D}, n}$
-    \State $polyDegree \gets D - 1$ \Comment{Subtract 1 to account for zero indexing in polynomials}
+    \State $v_x \gets \Call{Pow}{2, \floor{n / d}, n}$
+    \State $polyDegree \gets d - 1$ \Comment{Subtract 1 to account for zero indexing in polynomials}
     \State $poly \gets \Call{PolyPow}{[1, 1], n, n, polyDegree, [2]}$
     \If{$poly[0] \neq 1$}
         \State \Return \textbf{false} \Comment{$n$ is composite}
     \EndIf
-    \State $x_\text{index} \gets n \bmod{D}$
-    \For{$i \gets 1$ \textbf{to} $D$} \Comment{Check polynomial equality}
+    \State $x_\text{index} \gets n \bmod{d}$
+    \For{$i \gets 1$ \textbf{to} $d$} \Comment{Check polynomial equality}
         \If{$i = x_\text{index}$}
             \If{$poly[i] \neq v_x$}
                 \State \Return \textbf{false} \Comment{$n$ is composite}
