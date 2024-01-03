@@ -258,9 +258,9 @@ The condition $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$ i
 
 Assume for contradiction that $f(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/(x^d - 2)$. This would imply that all coefficients $c_i$ are zero in $\mathbb{Z}_p$.
 
-Since $p$ is prime, $\mathbb{Z}_p[x]$ is a finite field. Further, since $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$, there must exist at least $1$ prime divisor $p$ of $n$ such that $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{p}$. This implies that $2$ is not a $d$th residue modulo $p$. That is, $a^d \not\equiv 2 \pmod{p}$ for all integers $a$. Hence, it follows that $\mathbb{Z}_p[x]/(x^d - 2)$ is irreducible and therefore, is also a field.
+Since $p$ is prime, $\mathbb{Z}_p[x]$ is a finite field. Further, since $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$, there must exist at least $1$ prime divisor $p$ of $n$ such that $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{p}$. This implies that $2$ is not a $d$th power residue modulo $p$. That is, $a^d \not\equiv 2 \pmod{p}$ for all integers $a$. Hence, it follows that $x^d - 2$ is irreducible over $\mathbb{Z}_p[x]$ and therefore, $\mathbb{Z}_p[x]/(x^d - 2)$ is also a field.
 
-By the Fundamental Theorem of Algebra, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a field and $\deg(f(x)) = d-1$, then $f(x)$ can have at most $d-1$ roots in $\mathbb{Z}_p[x]/(x^d - 2)$. The assumption that $f(x)$ is zero would imply it has $p$ roots, which is a contradiction unless $p \leq d-1$. However, this is clearly false, since we are given $n$ which does not have a prime divisor $\leq d$.
+By the Fundamental Theorem of Algebra for finite fields, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a field and $\deg(f(x)) = d-1$, then $f(x)$ can have at most $d-1$ roots in $\mathbb{Z}_p[x]/(x^d - 2)$. The assumption that $f(x)$ is zero would imply it has $p$ roots, which is a contradiction unless $p \leq d-1$. However, this is clearly false, since we are given $n$ which does not have a prime divisor $\leq d$.
 
 Therefore, $f(x)$ must be nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$ for at least one prime $p$ that divides $n$.
 \end{proof}
