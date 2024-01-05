@@ -75,10 +75,10 @@ Our test is based on a famous conjecture issued by Manindra Argawal while he was
     (x - 1)^n \equiv x^n - 1 \pmod{n, x^r - 1}
 \end{align}
 
-We alter the conditions slightly to use roots of $2$ instead of roots of unity. Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n}$, a congruence which is known to hold for only prime integers $n$ \cite{granville2004primes}.
+We alter the conditions slightly to use roots of $2$ instead of roots of unity. Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \mathbb{Z}[x]$, which is known to hold for only prime integers $n$ \cite{granville2004primes}.
 
 \subsection{Structure of the Paper}
-This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. We follow up with supporting theorems, identities, and lemmas. Then, we present the proof of our main theorem. The proof of our main theorem demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with a link to an open source implementation of our test.
+This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. We follow up with supporting lemmas and theorems. Then, we present the proof of our main theorem, which demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with a link to an open source implementation of our test.
 
 \section{Statement of Main Theorem}
 \begin{theorem}[Main theorem]
