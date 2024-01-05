@@ -111,17 +111,6 @@ Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \)
 Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
 \end{proof}
 
-\begin{lemma}[Multiplicative order inequality] \label{lemma:orderinequality}
-Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least prime integer \( > 2 \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{d}\right\rfloor \not= \ordn{2} \).
-\end{lemma}
-\begin{proof}
-Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \ordn{2} \), that is, \( k = \ordn{2} \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \ordn{2} \), must divide \( n-1 \).
-
-Given \( d \) is the least integer greater than $2$ and less than \( n \) that does not divide \( n-1 \), and \( \ordn{2} \) divides \( n-1 \), it follows that $d$ cannot equal \( \ordn{2} \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = d \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. It follows from Lemma \ref{lemma:leastd} that $d$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. For $n \geq 341$, clearly $d < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < d < \left\lfloor \frac{n-1}{d} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{d} \right\rfloor \) cannot divide \( n-1 \).
-
-Since \( \ordn{2} \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{n-1}{d} \right\rfloor \) is not, it must be that \( \left\lfloor \frac{n-1}{d} \right\rfloor \) is not equal to \( \ordn{2} \), as this would imply a contradiction with the nature of \( \ordn{2} \) as a divisor of \( n-1 \). Therefore, \( \left\lfloor\frac{n-1}{d}\right\rfloor \not= \ordn{2} \).
-\end{proof}
-
 \begin{lemma}[Upper bound on $d$] \label{lemma:leastd}
 Let $n$ be an odd composite integer $>3$. Then there exists an odd prime integer $d \leq (1 + o(1)) \log(n)$ such that $n \not\equiv 0 \pmod{d}$.
 \end{lemma}
