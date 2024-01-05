@@ -152,9 +152,9 @@ Applying to Euler's criterion to our situation, since $p$ and $d$ are both odd p
 
 For the sake of contradiction, let's assume that for all prime divisors $p_j$ of $n$, $d \mid p_j-1$ and $2^{\frac{p_j-1}{d}} \equiv 1 \pmod p_j$. Then by the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$.
 
-Furthermore, by the properties of the multiplicative order modulo composite $n$, we must also have $2^{\frac{n-1}{d}} \equiv 1 \pmod p$. However, this also conflicts with of $n$ which requires $2^{\frac{n-1}{d}} \not\equiv 1 \pmod p$.
+Furthermore, by the properties of the multiplicative order modulo composite $n$, we must also have $2^{\floor{\frac{n-1}{d}}} \equiv 1 \pmod p$. However, this also conflicts with our definition of $n$ which has $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod n$.
 
-Therefore, we deduce that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p-1}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion fails to hold, and thus it follows that $2$ is not a $d$th power residue modulo $p$.
+Therefore, we conclude that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p-1}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion fails to hold, and thus it follows that $2$ is not a $d$th power residue modulo $p$.
 \end{proof}
 
 \subsection{Supporting Theorems}
