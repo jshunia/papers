@@ -114,26 +114,26 @@ Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rflo
 \begin{lemma}[Least prime $p$ coprime to $n$] \label{lemma:leastcoprime}
 Let $n > 6$ be an integer. Then there exists a prime $p$ coprime to $n$ such that:
 \begin{align}
-    p < \log (n) \left( \log \log (n) + \log \log \log (n) \right)
+    p < \log(n) \left( \log\log(n) + \log\log\log(n) \right)
 \end{align}
 \end{lemma}
 \begin{proof}
-If $n > 6$ is an integer, by the Prime Number Theorem, it must have fewer than $\log n$ distinct prime factors. Hence, we need to establish an upper bound on the $\log n$-th prime number.
+We are given $n > 6$. By the Prime Number Theorem, $n$ must have fewer than $\log(n)$ distinct prime factors. Hence, we need to establish an upper bound on the $\log(n)$-th prime number.
 
 Let $p_n$ denote the $n$-th prime number. Then for $n \geq 6$, we have the inequality \cite{rosser1941primebounds}:
 \begin{align}
-    \frac{p_n}{n} < \log (n) + \log \log (n)
+    \frac{p_n}{n} < \log(n) + \log\log(n)
 \end{align}
 
 Re-arranging terms:
 \begin{align}
-    p_n < n \log (n) + n \log \log (n)
+    p_n < n \log(n) + n \log\log(n)
 \end{align}
 
-We want to find an upper bound for $p_{\log n}$, the $\log n$-th prime number. Substituting $\log n$ for $n$ in the inequality, we get:
+We want to find an upper bound for $p_{\log(n)}$, the $\log(n)$-th prime number. Substituting $\log(n)$ for $n$ in the inequality, we get:
 
 \begin{align}
-p_{\log n} < \log (n) \left( \log \log (n) + \log \log \log (n) \right)
+p_{\log(n)} < \log(n) \left( \log\log (n) + \log\log\log(n) \right)
 \end{align}
 
 This expression gives an upper bound for the smallest prime $p$ that is coprime to $n$.
