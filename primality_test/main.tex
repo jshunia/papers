@@ -212,7 +212,7 @@ Since $n$ is odd and $d > 2$, by the properties of the floor function, $\left\lf
     \left(2^{\left\lfloor\frac{n}{d}\right\rfloor} = 2^{\left\lfloor\frac{n-1}{d}\right\rfloor}\right) \not\equiv 1 \pmod{n,x^d-2}
 \end{align}
 
-If $f(x) \pmod{x^d-2}$ is to be zero in $\mathbb{Z}[x]_n$, it is necessary that $f(x)$ be zero modulo all of the individual prime factors of $n$ up to at least the prime power that appears in the prime factorization of $n$. This is because if any of the polynomial's coefficients are indivisible by any prime power $p^k$ dividing $n$ (and thus any $\{ p^j \text{ | } 1 < j \leq k \}$), then they cannot be divisible by $n$ (since $n$ is the unique product of its prime factorization).
+If $f(x) \pmod{x^d-2}$ is to be zero in $\mathbb{Z}[x]_n$, it is necessary that $f(x)$ be zero modulo all of the individual prime factors of $n$ up to at least the prime power that appears in the prime factorization of $n$. This is because if any of the polynomial's coefficients are indivisible by any prime power $p^k$ dividing $n$ (and thus any $p^j$ in $\{ p^j \text{ } | \text{ } 1 < j \leq k \}$), then they cannot be divisible by $n$ (since $n$ is the unique product of its prime factorization).
 
 Hence, to prove the theorem, it suffices to show that under the given conditions, there must exist a prime divisor $p$ of $n$ such that $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_p[x]$ is nonzero when reduced modulo $x^d - 2$. Or equivalently, that $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^d-2}$.
 
