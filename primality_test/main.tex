@@ -83,13 +83,15 @@ This paper is structured as follows: We begin by presenting the main theorem whi
 \section{Statement of Main Theorem}
 \begin{theorem}[Main theorem]
 \label{theorem:main}
-Let $n$ be an odd integer $> 3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Denote $d$ as the least prime greater than $2$ such that $n \not\equiv 1 \pmod{d}$. If the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:
+Let $n$ be an odd integer $> 3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Denote by $d$ the least prime integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. If the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:
 \begin{align}
 (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}
 \end{align}
 \end{theorem}
 
-\section{Supporting Lemmas}
+\section{Supporting Lemmas and Theorems}
+
+\subsection{Supporting Lemmas}
 \begin{lemma} \label{lemma:floornondivisor}
 Given $a,b \in \Z^{+}$ with \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor \) cannot divide \(a\).
 \end{lemma}
@@ -109,20 +111,13 @@ Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \)
 Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
 \end{proof}
 
-\begin{lemma}[Bounds on least non-divisor] \label{lemma:leastnondivisor}
-Let $n$ be an integer such that $n > 3$, then there exists an integer $1 < d \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
-\end{lemma}
-\begin{proof}
-If $n$ is a composite integer $> 3$, clearly $n-1$ can have at most $\left\lfloor\log_2(n-1)\right\rfloor$ prime factors (when $n-1$ is a power of $2$). Since $2$ is the least prime that may divide $n-1$, there must exist a $D \leq \left\lfloor\log_2(n-1)\right\rfloor + 2$ which does not divide $n-1$.
-\end{proof}
-
 \begin{lemma}[Multiplicative order inequality] \label{lemma:orderinequality}
-Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least integer \(2 < d < n \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{d}\right\rfloor \not= \ordn{2} \).
+Let \( n \) be an odd composite integer greater than 3 such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least prime integer \( > 2 \) which does not divide \( n-1 \). Then, \( \left\lfloor\frac{n-1}{d}\right\rfloor \not= \ordn{2} \).
 \end{lemma}
 \begin{proof}
 Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \ordn{2} \), that is, \( k = \ordn{2} \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \ordn{2} \), must divide \( n-1 \).
 
-Given \( d \) is the least integer greater than $2$ and less than \( n \) that does not divide \( n-1 \), and \( \ordn{2} \) divides \( n-1 \), it follows that \( D \) cannot equal \( \ordn{2} \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = d \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. It follows from Lemma \ref{lemma:leastnondivisor} that $D$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. For $n \geq 341$, clearly $d < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < d < \left\lfloor \frac{n-1}{d} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{d} \right\rfloor \) cannot divide \( n-1 \).
+Given \( d \) is the least integer greater than $2$ and less than \( n \) that does not divide \( n-1 \), and \( \ordn{2} \) divides \( n-1 \), it follows that $d$ cannot equal \( \ordn{2} \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \). Applying this to our current context with \( a = n-1 \) and \( b = d \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. It follows from Lemma \ref{lemma:leastd} that $d$ must be less than or equal to $\left\lfloor\log_2(n-1)\right\rfloor + 2$. For $n \geq 341$, clearly $d < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < d < \left\lfloor \frac{n-1}{d} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{d} \right\rfloor \) cannot divide \( n-1 \).
 
 Since \( \ordn{2} \) is a divisor of \( n-1 \) and \( \left\lfloor \frac{n-1}{d} \right\rfloor \) is not, it must be that \( \left\lfloor \frac{n-1}{d} \right\rfloor \) is not equal to \( \ordn{2} \), as this would imply a contradiction with the nature of \( \ordn{2} \) as a divisor of \( n-1 \). Therefore, \( \left\lfloor\frac{n-1}{d}\right\rfloor \not= \ordn{2} \).
 \end{proof}
@@ -142,27 +137,66 @@ Therefore, for any odd composite integer $n$, the least odd prime non-divisor of
 
 \textbf{Remark.} The proof for \cref{lemma:leastd} was adapted from a proof given by a MathOverflow user \cite{leastcoprime2021}.
 
+\begin{lemma}[Incongruence modulo $n$] \label{lemma:incongruencemodn}
+Let \( n > 3 \) be an odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least prime integer \( > 2 \) which does not divide \( n-1 \). Then, \( 2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n} \).
+\end{lemma}
+\begin{proof}
+Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \ordn{2} \), that is, \( k = \ordn{2} \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \ordn{2} \), must divide \( n-1 \).
+
+Given \( d \) is the least prime integer greater than $2$ and less than \( n \) that does not divide \( n-1 \), and \( \ordn{2} \) divides \( n-1 \), it follows that $d$ cannot equal \( \ordn{2} \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \).
+
+Applying this to our current context with \( a = n-1 \) and \( b = d \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. By Lemma \ref{lemma:leastd}, we have $d \leq (1 + o(1)) \log(n)$, which is significantly less than $\left\lfloor\sqrt{n}\right\rfloor$ as $n$ grows large. For $n \geq 341$, clearly $d < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < d < \left\lfloor \frac{n-1}{d} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{d} \right\rfloor \) cannot divide \( n-1 \).
+
+By the properties of the order of an integer modulo composite $n$, the smallest $k \in \mathbb{Z}$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \ordn{2}$, must be a divisor of $n-1$. Hence, $\ordn{2} \mid n-1$. Since $\left\lfloor\frac{n-1}{d}\right\rfloor$ is strictly less than $n-1$ and $d$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{D}\right\rfloor} \not\equiv 1 \pmod{n}$.
+\end{proof}
+
 \begin{lemma} \label{lemma:nonresidue}
 Let $n>3$ be an odd composite integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.
 \end{lemma}
 \begin{proof}
-Let $\delta = \gcd(p-1, d)$. For prime $p$, Euler's criterion states that $a \not\equiv 0 \pmod p$ is a $d$th power residue modulo $p$ if and only if:
+Let $p \in \mathbb{Z}$ be prime and $\beta = \gcd(p-1, d)$. Euler's criterion \cite{euler1914powerresidues} states that $a \not\equiv 0 \pmod p$ is a $d$th power residue modulo $p$ if and only if:
 \begin{align}
-a^{\floor{\frac{p-1}{\delta}}} \equiv 1 \pmod p
+a^{\frac{p-1}{\beta}} \equiv 1 \pmod p
 \end{align}
 
 Applying to Euler's criterion to our situation, since $p$ and $d$ are both odd primes and $p \not= d$, we have that $a=2$ is a $d$th power residue modulo $p$ if and only if $d \mid p-1$ and $2^{\frac{p-1}{d}} \equiv 1 \pmod p$.
 
-For the sake of contradiction, let's assume that for all prime divisors $p_i$ of $n$, $d \mid p_i-1$ and $2^{\frac{p_i-1}{d}} \equiv 1 \pmod p_i$. Then by the Chinese Remainder theorem, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$. Therefore, we deduce that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion does not hold and it follows that $2$ is not a $d$th power residue modulo $p$.
+For the sake of contradiction, let's assume that for all prime divisors $p_j$ of $n$, $d \mid p_j-1$ and $2^{\frac{p_j-1}{d}} \equiv 1 \pmod p_j$. Then by the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$.
+
+Furthermore, by the properties of the multiplicative order modulo composite $n$, we must also have $2^{\frac{n-1}{d}} \equiv 1 \pmod p$. However, this also conflicts with of $n$ which requires $2^{\frac{n-1}{d}} \not\equiv 1 \pmod p$.
+
+Therefore, we deduce that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p-1}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion fails to hold, and thus it follows that $2$ is not a $d$th power residue modulo $p$.
 \end{proof}
 
-\subsection{Primes Case}
-
+\subsection{Supporting Theorems}
 \begin{lemma}[Primes pass] \label{lemma:primes}
-Let $n$ be an odd prime integer such that $n > 3$. Denote $d$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. Then, $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.
+Let $n$ be an odd prime integer such that $n > 3$. Denote $d$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.
 \end{lemma}
 \begin{proof}
-The result follows trivially from the binomial theorem.
+We aim to show that the following polynomial congruence holds for all odd prime integers $n > 3$:
+\begin{align}
+    (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2},
+\end{align}
+where $d$ is the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
+
+We begin by taking the binomial expansion of the left-hand side:
+\begin{align}
+    \sum_{k=0}^{n} \binom{n}{k} x^k \equiv 1 + x^n \pmod{n, x^d - 2}
+\end{align}
+
+When $n$ is prime, $\binom{n}{k} \equiv 0 \pmod{n}$ for all integers $k$ in the range $1 \leq k \leq n-1$. Thus, we have $\sum_{k=1}^{n-1} \binom{n}{k} x^k \equiv 0 \pmod{n, x^d - 2}$. With this in mind, we isolate the inner terms in our original congruence and simplify:
+\begin{align}
+    & \binom{n}{0} x^0 + \binom{n}{n} x^n + \sum_{k=1}^{n-1} \binom{n}{k} x^k \equiv 1 + x^n \pmod{n, x^d - 2} \\
+    & \binom{n}{0} x^0 + \binom{n}{n} x^n \equiv 1 + x^n \pmod{n, x^d - 2}
+\end{align}
+
+By the binomial theorem, we have $\binom{n}{0} = \binom{n}{n} = 1$ for all $n \in \mathbb{Z}$. Substituting values and simplifying further reveals:
+\begin{align}
+    & 1 \cdot x^0 + 1 \cdot x^n \equiv 1 + x^n \pmod{n, x^d - 2} \\
+    & 1 + x^n \equiv 1 + x^n \pmod{n, x^d - 2}
+\end{align}
+
+Hence, we have shown that the left-hand side of the congruence is equal to the right-hand side when $n$ is prime. Therefore, we conclude that the polynomial congruence holds under the given conditions.
 \end{proof}
 
 \subsection{Composites Case}
@@ -172,10 +206,14 @@ A fundamental theorem in polynomial ring theory states that an integer $n$ is pr
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take a similar approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Composites case] \label{theorem:composites}
-Let $n = pq$ be an odd composite integer $>3$ with $p$ a prime divisor. Let $d$ be the least positive prime integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. Suppose $x^n = 2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$, and consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_p[x]$. If $n$ does not have a prime divisor $\leq d$, then $f(x)$ is nonzero when reduced modulo $x^d - 2$.
+Let $n = pq$ be an odd composite integer $>3$ with $p$ a prime divisor. Let $d > 2 \in \mathbb{Z}$ be the prime integer such that $n \not\equiv 1 \pmod{d}$. Let $x^d = 2$, and suppose $x^n = 2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$. Consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_n[x]$. If $n$ does not have a prime divisor $\leq d$, then $f(x)$ is nonzero when reduced modulo $x^d - 2$. That is, we must have $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
 \end{theorem}
 \begin{proof}
-We are given composite $n$ with $2^{\left\lfloor\frac{n}{d}\right\rfloor} \not\equiv 1 \pmod{n}$. By \cref{lemma:nonresidue}, there must exist at least one prime divisor $p_i$ of $n$ such that $2$ is not a $d$th power residue modulo $p_i$. Let $p$ be that prime. 
+We are given composite $n$ with $2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$.
+
+If $f(x) = (1 + x)^n - (1 + x^n)$ is to be zero modulo $n$, it is necessary but not sufficient that $f(x)$ be zero modulo all of the individual prime factors of $n$. This is because if any of the polynomial's coefficients are indivisible by some $p$ dividing $n$, then they cannot be divisible by $n$. We will prove that under the given conditions, there must exist a prime divisor $p$ of $n$ such that $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_p[x]$ is nonzero when reduced modulo $x^d - 2$.
+
+By \cref{lemma:nonresidue}, there must exist at least one prime divisor $p$ of $n$ such that $2$ is not a $d$th power residue modulo $p$.
 
 Consider the polynomial ring $\mathbb{Z}_p[x]$. We examine the reduction of $ f(x) $ modulo $x^d - 2$, which gives us a polynomial $f(x) \pmod{x^d - 2} \in \mathbb{Z}_p[x]$. After reduction modulo $x^d - 2$, the polynomial $f(x)$ has $\deg(f(x)) = d-1$, and can be written as $f(x) = \sum_{i=0}^{d-1} c_i x^i$.
 
@@ -183,19 +221,21 @@ Assume for contradiction that $f(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/
 
 Since $p$ is prime, $\mathbb{Z}_p$ is a finite field and $\mathbb{Z}_p[x]$ is a polynomial ring over this field. We aim to establish that $\mathbb{Z}_p[x]/(x^d - 2)$ forms a field. To do so, we must show that $x^d - 2$ is irreducible over $\mathbb{Z}_p[x]$.
 
-We recall a classical theorem from field theory (Irreducibility Theorem):
+We recall a classical theorem from field theory (Irreducibility Theorem) \cite{karpilovsky1989fields}:
 
-\textit{Suppose $c \in F$ where $F$ is a field, and $0 < d \in \mathbb{Z}$. The polynomial $x^k - c$ is irreducible over $F$ if and only if $c$ is not a $q$th power in $F$ for any prime $q$ dividing $k$, and $c$ is not in $-4F^4$ when $4$ divides $k$.} \cite{karpilovsky1989fields}
+\textit{Suppose $c \in F$ where $F$ is a field, and $0 < d \in \mathbb{Z}$. The polynomial $x^k - c$ is irreducible over $F$ if and only if $c$ is not a $q$th power in $F$ for any prime $q$ dividing $k$, and $c$ is not in $-4F^4$ when $4$ divides $k$.}
 
 In our case, $F = \mathbb{Z}_p$, $c = 2$, and $k = d$, where $d$ is prime.
 
-Regarding the first criterion, given $d$ is prime, $d$ does not have any divisors $q$, and hence it suffices to check only $d$ itself. We have chosen $p$ such that $2$ is not a $d$th power residue modulo $p$, which informs that there is no element $b \in \mathbb{Z}_p$ such that $b^d \equiv 2 \pmod{p}$. The first criterion is satisfied. Since $d$ is prime, it is not divisible by $4$, and thus second criterion does not apply.
+Regarding the first criterion, given $d$ is prime, $d$ does not have any divisors $q$, and hence it suffices to check only $d$ itself. We have chosen $p$ such that $2$ is not a $d$th power residue modulo $p$, which informs that there is no element $b \in \mathbb{Z}_p$ such that $b^d \equiv 2 \pmod{p}$. The first criterion is satisfied. Since $d$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
 
-By the Irreducibility Theorem, $x^d - 2$ is irreducible over $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$ forms a field.
+By the Irreducibility Theorem, $x^d - 2$ is irreducible over $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$ forms a finite field.
 
-Applying the Fundamental Theorem of Algebra for finite fields, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a field and $\deg(f(x)) = d-1$, then $f(x)$ can have at most $d-1$ roots in $\mathbb{Z}_p[x]/(x^d - 2)$. The assumption that $f(x)$ is zero would imply it has $p$ roots, which is a contradiction unless $p \leq d-1$. However, this is clearly false, since we are given $n$ which does not have a prime divisor $\leq d$.
+In a finite field, a polynomial of degree $r$ can have at most $r$ roots \cite{dummit2004abstractalgebra}. This is because a polynomial of degree $r$ in a finite field can be factored into at most $r$ linear factors (each corresponding to a root), within an algebraic closure of that field. However, within the field itself, the number of roots can be fewer than $r$, but never more.
 
-Therefore, we conclude that $f(x)$ must be nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$ for at least one prime $p$ which divides $n$.
+In our case, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a finite field and $\deg(f(x)) = d-1$, then $f(x)$ can have at most $d-1$ roots in this field. The assumption that $f(x)$ is the zero polynomial is a direct contradiction unless $p \leq d-1$, as it would necessarily imply that $f(x)$ has infinitely many roots (or more precisely, that every element of $\mathbb{Z}_p$ is a root) \cite{koppartywang2014roots}. However, this is clearly not the case, as we are given $n$ which does not have a prime divisor $\leq d$.
+
+Therefore, we conclude that under the given conditions, $f(x)$ must be nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$ for at least one prime $p$ which divides $n$. This implies $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$, completing the proof.
 \end{proof}
 
 \section{Proof of the Main Theorem}
@@ -224,38 +264,43 @@ Let $n$ be an odd integer $>3$. If $n$ is prime, then by Lemma $\ref{lemma:prime
 \end{center}
 
 \subsection{Time Complexity Analysis} \label{subsection:timecomplexity}
-
-\subsubsection{Algorithm Overview}
-The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring $\Mx$.
+The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring $\Mx$. In this subsection, we use $M(n)$ to denote the worst-case time complexity of integer multiplication in terms of $n$.
 
 \subsubsection{Analysis of Individual Operations}
 \begin{enumerate}
     \item \textbf{Check for Even \( n \)}:
     
-        This step involves calculating $n \bmod{2}$ and has a time complexity of \( O(1) \).
+        This step involves calculating $n \bmod{2}$ and has a time complexity of \( T_1(n) = O(1) \).
 
     \item \textbf{Finding \( d \)}:
     
-        Finding the least integer \( d > 2 \) such that $n \not\equiv 1 \pmod{d}$ takes at most \( O((1 + o(1))\log(n)) \) steps, with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \( O((1 + o(1))\log(n)) \).
+        Finding the least prime integer \( d > 2 \) such that $n \not\equiv 1 \pmod{d}$ takes at most \( O((1 + o(1))\log(n)) \) steps (See \cref{lemma:leastd}), with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity is \(  T_2(n) = O((1 + o(1))\log(n)) \).
 
-    \item \textbf{Computing \( x^n \bmod{n} \in \Mx \)}:
+    \item \textbf{Computing \( x^n \bmod{n, x^d-2} \)}:
     
-        Computing the polynomial expansion of $x^n \pmod{n}$ in the ring \( \Mx \) with degree $d$ is equivalent to calculating $2^{\floor{\frac{n}{d}}} \pmod{n}$. This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \( O(\log(n) M(n)) \).
+        Computing the polynomial expansion of $x^n \pmod{n}$ in the ring \( \Mx \) with degree $d$ is equivalent to calculating $2^{\floor{\frac{n}{d}}} \pmod{n}$. This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \(  T_3(n) = O(\log(n) M(n)) \).
 
-    \item \textbf{Computing \( (1+x)^n \bmod{n} \in \Mx \)}:
+    \item \textbf{Computing \( (1+x)^n \bmod{n, x^d-2} \)}:
     
-        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( (\Zn)[x]/(x^d-2) \)  with degree $d$ involves exponentiating a polynomial in $(\Zn)[x]/(x^d-2)$ with \( D = O(\log(n)) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n)\log(n)) \) time due to the multiplication of polynomials of size \( O(\log(n)) \). Therefore, the overall complexity is \( O(\log^2(n) m(n)) \).
+        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( (\Zn)[x]/(x^d-2) \)  with degree $d$ involves exponentiating a polynomial in $(\Zn)[x]/(x^d-2)$ with \( D = O((1 + o(1))\log(n)) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O((1 + o(1)) \log(n) M(n)) \) time due to the multiplication of polynomials of size \( O((1 + o(1)) \log(n)) \). Therefore, the overall complexity of this step is \(  T_4(n) =O((1 + o(1)) \log^2(n) M(n)) \).
          
     \item \textbf{Checking the equality \( (1+x)^n = 1 + x^n \pmod{n} \in (\Zn)[x]/(x^d-2) \)}:
-        The final steps involve comparing the equality of coefficients in the polynomials $(1+x)^n$ and $1 + x^n$. This requires $O(\log(n))$ comparisons, which are themselves \( O(1) \) operations.
+        The final steps involve comparing the equality of coefficients in the polynomials $(1+x)^n$ and $1 + x^n$. This requires $O(\log(n))$ comparisons, which are themselves \( O(1) \) operations. The overall time complexity of this step is $T_5(n) = O(\log(n))$.
 \end{enumerate}
 
 \subsubsection{Overall Time Complexity}
-The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in (\Zn)[x]/(x^d-2) \). Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log^2(n) M(n)) \).
+The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in (\Zn)[x]/(x^d-2) \). Therefore, the overall time complexity of the algorithm is \( T(n) = O((1 + o(1)) \log^2(n) M(n)) \).
 
-Harvey and van Der Heoven (2021) have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$ \cite{harveyvanderhoeven2021}. This would give our algorithm an overall time complexity of:
+Harvey and van Der Heoven (2021) \cite{harveyvanderhoeven2021} have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$. This would give our algorithm an overall time complexity of:
 \begin{align}
-    T(n) = O(\log^2(n) M(n)) = O(\log^2(n) \log(n) \log\log(n)) = O(\log^3(n) \log\log(n)) = \tilde{O}(\log^3(n))
+    T(n) &= O((1 + o(1)) \log^2(n) M(n)) \\ &= O((1 + o(1)) \log^2(n) \log(n) \log\log(n)) \\ &= O((1 + o(1)) \log^3(n) \log\log(n))
+\end{align}
+
+In soft-O notation \cite{gathengerhard2013softo}, typically denoted as $\tilde{O}$, simplicity is achieved by omitting slower-growing logarithmic and lower-order factors that do not significantly contribute to the overall growth rate of the function.
+
+In the context of our time complexity $T(n) = O((1 + o(1)) \log^3(n) \log\log(n))$, where the dominant term is \(O(\log^3(n))\), the linear factors \(1 + o(1)\) and \(\log\log(n)\) are omitted, and the time complexity simplifies to:
+\begin{align}
+    \tilde{T}(n) = \tilde{O}(\log^3(n))
 \end{align}
 
 \subsubsection{Conclusion}
