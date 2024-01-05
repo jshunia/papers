@@ -243,16 +243,16 @@ Therefore, we conclude that under the given conditions, $f(x)$ must be nonzero i
 
 \section{Proof of the Main Theorem}
 \begin{proof}[Proof of Theorem \ref{theorem:main}]
-Let $n$ be an odd integer $>3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2 \in \mathbb{Z}$ be the least prime such that $n \not\equiv 1 \pmod{d}$. Suppose $n$ does not have a prime divisor $\leq d-1$.
+Let $n$ be an odd integer $>3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$.
 
 \textbf{Case 1}: $n$ is prime
 
 If $n$ is prime, then by $\cref{theorem:primes}$, the polynomial congruence holds and $n$ passes the test as expected.
 
 \textbf{Case 2}: $n$ is composite
-If $n$ composite and is divisible by $d$, then clearly $n$ fails the test as expected.
+If $n$ composite, suppose $n$ has a prime divisor $\leq d$. Clearly, it fails the test as expected.
 
-If $n$ not divisible by $d$, then by \cref{lemma:incongruencemodn} we infer $2^{\floor{n-1}{d}} \not\equiv 1 \pmod{n}$. By \cref{lemma:nonresidue}, it follows that $n$ must have a prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$.  Therefore, all the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. by \cref{theorem:composites}, the polynomial congruence cannot hold, and thus, $n$ fails the test as expected.
+If $n$ does not have a prime divisor $\leq d$, then by \cref{lemma:incongruencemodn} we infer $2^{\floor{n-1}{d}} \not\equiv 1 \pmod{n}$. By \cref{lemma:nonresidue}, it follows that $n$ must have a prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. Hence, all of the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. By \cref{theorem:composites}, the polynomial congruence cannot hold, and therefore $n$ fails the test as expected.
 
 \textbf{Conclusion}:
 
