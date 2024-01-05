@@ -235,17 +235,17 @@ Now, consider the polynomial ring $\mathbb{Z}_p[x]$. We examine the reduction of
 
 Assume for contradiction that $f(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/(x^d - 2)$. This would imply that all coefficients $c_i$ are zero.
 
-Since $p$ is prime, $\mathbb{Z}_p$ is a finite field and $\mathbb{Z}_p[x]$ is a polynomial ring over this field. We aim to establish that $\mathbb{Z}_p[x]/(x^d - 2)$ forms a field. To do so, we must show that $x^d - 2$ is irreducible over $\mathbb{Z}_p$.
+Since $p$ is prime, $\mathbb{Z}_p$ is a finite field and $\mathbb{Z}_p[x]$ is a polynomial ring over this field. We aim to establish that $\mathbb{Z}_p[x]/(x^d - 2)$ forms a field. To do so, we must show that $x^d - 2$ is irreducible in $\mathbb{Z}_p[x]$.
 
 We recall a classical theorem from field theory (Irreducibility Theorem) \cite{karpilovsky1989fields}:
 
 \textit{Suppose $c \in F$ where $F$ is a field, and $0 < d \in \mathbb{Z}$. The polynomial $x^k - c$ is irreducible over $F$ if and only if $c$ is not a $q$th power in $F$ for any prime $q$ dividing $k$, and $c$ is not in $-4F^4$ when $4$ divides $k$.}
 
-In our case, $F = \mathbb{Z}_p$, $c = 2$, and $k = d$, where $d$ is prime.
+In our case, $F = \mathbb{Z}_p[x]$, $c = 2$, and $k = d$, where $d$ is prime.
 
 Regarding the first criterion, given $d$ is prime, $d$ does not have any divisors $q$, and hence it suffices to check only $d$ itself. We have chosen $p$ such that $2$ is not a $d$th power residue modulo $p$, which informs that there is no element $b \in F$ such that $b^d \equiv 2 \pmod{p}$. The first criterion is satisfied. Since $d$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
 
-By the Irreducibility Theorem, $x^d - 2$ is irreducible over $\mathbb{Z}_p$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$ forms a finite field.
+By the Irreducibility Theorem, $x^d - 2$ is irreducible in $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$ forms a finite field.
 
 In a finite field, a polynomial of degree $r$ can have at most $r$ roots \cite{dummit2004abstractalgebra}. This is because a polynomial of degree $r$ in a finite field can be factored into at most $r$ linear factors (each corresponding to a root), within an algebraic closure of that field. However, within the field itself, the number of roots can be fewer than $r$, but never more.
 
