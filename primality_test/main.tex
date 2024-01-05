@@ -197,7 +197,7 @@ A fundamental theorem in polynomial ring theory states that an integer $n$ is pr
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take significant inspiration from their approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Composites case] \label{theorem:composites}
-Let $n = pq$ be an odd composite integer greater than $3$ such that $2^{n-1} \equiv 1 \pmod{n}$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose $n$ does not have a prime divisor $\leq d-1$ and $x^n \not\equiv 1 \pmod{n, x^d-2}$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
+Let $n = pq$ be an odd composite integer greater than $3$ such that $2^{n-1} \equiv 1 \pmod{n}$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose $n$ does not have a prime divisor $\leq d$ and $x^n \not\equiv 1 \pmod{n, x^d-2}$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
 \end{theorem}
 \begin{proof}
 First, consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_n[x]$. Notice that taking $f(x)$ modulo $x^d - 2$ and asserting that the result is nonzero is equivalent to showing $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
