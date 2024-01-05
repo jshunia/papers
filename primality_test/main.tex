@@ -40,9 +40,9 @@
 \newcommand{\F}{\mathbb{F}}
 \newcommand{\Zn}{\Z/n}
 \newcommand{\Zx}{\Z[x]}
-\newcommand{\Znx}{(\Zn)[x]}
+\newcommand{\Znx}{\Z_n[x]}
 \newcommand{\Rx}{R}
-\newcommand{\Mx}{(\Zn)[x]/(x^d-2)}
+\newcommand{\Mx}{\Z_n[x]/(x^d-2)}
 \newcommand{\ord}[2]{\text{ord}_\text{#1}\left((#2)\right)}
 \newcommand{\dtotient}[3]{\sigma_{#1}( #2^{\floor{\frac{1}{#3}}} )}
 \newcommand{\ordn}[1]{\text{ord}_n\left({#1}\right)}
@@ -201,17 +201,27 @@ Hence, we have shown that the left-hand side of the congruence is equal to the r
 
 \subsection{Composites Case}
 
-A fundamental theorem in polynomial ring theory states that an integer $n$ is prime if and only if $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \Z[x]$ \cite{granville2004primes}. This congruence was used as the basis for the AKS test \cite{aks2002}. A short proof of the theorem, given by Granville (2004) \cite{granville2004primes}, is that since $(x + 1)^n - (x^n + 1) = \sum_{k=1}^{n-1} \binom{n}{k} x^k$, we may have $(1 + x)^n \equiv 1 + x^n \pmod{n}$ if and only if $n$ divides $\binom{n}{k}$ for all $k$ in the range $1 \leq k \leq n-1$. It is important to note that for the polynomial congruence to be valid, $x^n$ and $(1+x)^n$ must be irreducible in $(\Zn)[x]$.
+A fundamental theorem in polynomial ring theory states that an integer $n$ is prime if and only if $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \Z[x]$ \cite{granville2004primes}. This congruence was used as the basis for the AKS test \cite{aks2002}. A short proof of the theorem, given by Granville (2004) \cite{granville2004primes}, is that since $(x + 1)^n - (x^n + 1) = \sum_{k=1}^{n-1} \binom{n}{k} x^k$, we may have $(1 + x)^n \equiv 1 + x^n \pmod{n}$ if and only if $n$ divides $\binom{n}{k}$ for all $k$ in the range $1 \leq k \leq n-1$. It is important to note that for the polynomial congruence to be valid, $x^n$ and $(1+x)^n$ must be irreducible in $\Z_n[x]$.
 
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take a similar approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Composites case] \label{theorem:composites}
-Let $n = pq$ be an odd composite integer $>3$ with $p$ a prime divisor. Let $d > 2 \in \mathbb{Z}$ be the prime integer such that $n \not\equiv 1 \pmod{d}$. Let $x^d = 2$, and suppose $x^n = 2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$. Consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_n[x]$. If $n$ does not have a prime divisor $\leq d$, then $f(x)$ is nonzero when reduced modulo $x^d - 2$. That is, we must have $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
+Let $n = pq$ be an odd composite integer $>3$ with $p$ a prime divisor. Let $d > 2 \in \mathbb{Z}$ be the prime integer such that $n \not\equiv 1 \pmod{d}$. Let $x^d = 2$, and suppose $x^n \not\equiv 1 \pmod{n, x^d-2}$. If $n$ does not have a prime divisor $\leq d$, then $f(x)$ is nonzero when reduced modulo $x^d - 2$. then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
 \end{theorem}
 \begin{proof}
-We are given composite $n$ with $2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$.
+First, consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_n[x]$. Note that taking $f(x)$ modulo $x^d - 2$ and asserting that the result is nonzero is equivalent to showing $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
 
-If $f(x) = (1 + x)^n - (1 + x^n)$ is to be zero modulo $n$, it is necessary but not sufficient that $f(x)$ be zero modulo all of the individual prime factors of $n$. This is because if any of the polynomial's coefficients are indivisible by some $p$ dividing $n$, then they cannot be divisible by $n$. We will prove that under the given conditions, there must exist a prime divisor $p$ of $n$ such that $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_p[x]$ is nonzero when reduced modulo $x^d - 2$.
+Now, we are given composite $n$ with $x^n \not\equiv 1 \pmod{n, x^d-2}$. In the quotient ring $\mathbb{Z}_n[x]/(x^d-2)$, we have $x^d = 2$ and thus:
+\begin{align}
+    \left(x^n = (x^{\frac{1}{d}})^n = (2^{\frac{1}{d}})^n = 2^{\left\lfloor\frac{n}{d}\right\rfloor}\right) \not\equiv 1 \pmod{n}
+\end{align}
+
+Since $n$ is odd and $d > 2$, by the properties of the floor function, $\left\lfloor\frac{n}{d}\right\rfloor = \left\lfloor\frac{n-1}{d}\right\rfloor$. It follows that:
+\begin{align}
+    \left(2^{\left\lfloor\frac{n}{d}\right\rfloor} = 2^{\left\lfloor\frac{n-1}{d}\right\rfloor}\right) \not\equiv 1 \pmod{n}
+\end{align}
+
+If $f(x) = (1 + x)^n - (1 + x^n)$ is to be zero modulo $n$, it is necessary but not sufficient that $f(x)$ be zero modulo all of the individual prime factors of $n$. This is because if any of the polynomial's coefficients are indivisible by some $p$ dividing $n$, then they cannot be divisible by $n$. To prove the theorem, it suffices to show that under the given conditions, there must exist a prime divisor $p$ of $n$ such that $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_p[x]$ is nonzero when reduced modulo $x^d - 2$.
 
 By \cref{lemma:nonresidue}, there must exist at least one prime divisor $p$ of $n$ such that $2$ is not a $d$th power residue modulo $p$.
 
@@ -240,7 +250,19 @@ Therefore, we conclude that under the given conditions, $f(x)$ must be nonzero i
 
 \section{Proof of the Main Theorem}
 \begin{proof}[Proof of Theorem \ref{theorem:main}]
-Let $n$ be an odd integer $>3$. If $n$ is prime, then by Lemma $\ref{lemma:primes}$, the polynomial congruence holds and $n$ will pass the test. Conversely, if $n$ is composite, then by Lemma \ref{theorem:composites} the polynomial congruence does not hold and $n$ will fail the test. Hence, the theorem is proven.
+Let $n$ be an odd integer $>3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2 \in \mathbb{Z}$ be the least prime such that $n \not\equiv 1 \pmod{d}$.
+
+\textbf{Case 1}: $n$ is prime
+
+If $n$ is prime, then by $\cref{lemma:primes}$, the polynomial congruence holds and $n$ passes the test as expected.
+
+\textbf{Case 2}: $n$ is composite
+
+If $n$ is composite, then by \cref{lemma:incongruencemodn} we have $2^{\floor{n-1}{d}} \not= 1$. By \cref{lemma:nonresidue}, it follows that $n$ must have a prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. Therefore, all the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. by \cref{theorem:composites}, the polynomial congruence cannot not hold, and thus, $n$ fails the test as expected.
+
+\textbf{Conclusion}:
+
+When $n$ is prime, the polynomial congruence holds and $n$ passes the test as expected. When $n$ is composite, the polynomial congruence does not hold and $n$ fails the test as expected. The theorem is proven.
 \end{proof}
 
 \section{Algorithm} \label{section:algorithm}
@@ -256,8 +278,8 @@ Let $n$ be an odd integer $>3$. If $n$ is prime, then by Lemma $\ref{lemma:prime
         \item If $2^{n-1} \bmod{n}$ does not equal $1$, output COMPOSITE.
         \item Find the least prime integer $d$ that is greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
         \item If $n$ has a prime divisor less than $d$, output COMPOSITE.
-        \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $(\Zn)[x]/(x^d-2)$ with degree $d$, and store the result.
-        \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $(\Zn)[x]/(x^d-2)$ with degree $d$, and store the result.
+        \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $\Z_n[x]/(x^d-2)$ with degree $d$, and store the result.
+        \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $\Z_n[x]/(x^d-2)$ with degree $d$, and store the result.
         \item If $(1 + x)^n \not= 1 + x^n$, output COMPOSITE.
         \item Output PRIME;
     \end{enumerate}
@@ -282,14 +304,14 @@ The given algorithm is a primality test that involves several computational step
 
     \item \textbf{Computing \( (1+x)^n \bmod{n, x^d-2} \)}:
     
-        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( (\Zn)[x]/(x^d-2) \)  with degree $d$ involves exponentiating a polynomial in $(\Zn)[x]/(x^d-2)$ with \( D = O((1 + o(1))\log(n)) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O((1 + o(1)) \log(n) M(n)) \) time due to the multiplication of polynomials of size \( O((1 + o(1)) \log(n)) \). Therefore, the overall complexity of this step is \(  T_4(n) =O((1 + o(1)) \log^2(n) M(n)) \).
+        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( \Z_n[x]/(x^d-2) \)  with degree $d$ involves exponentiating a polynomial in $\Z_n[x]/(x^d-2)$ with \( D = O((1 + o(1))\log(n)) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O((1 + o(1)) \log(n) M(n)) \) time due to the multiplication of polynomials of size \( O((1 + o(1)) \log(n)) \). Therefore, the overall complexity of this step is \(  T_4(n) =O((1 + o(1)) \log^2(n) M(n)) \).
          
-    \item \textbf{Checking the equality \( (1+x)^n = 1 + x^n \pmod{n} \in (\Zn)[x]/(x^d-2) \)}:
+    \item \textbf{Checking the equality \( (1+x)^n = 1 + x^n \pmod{n} \in \Z_n[x]/(x^d-2) \)}:
         The final steps involve comparing the equality of coefficients in the polynomials $(1+x)^n$ and $1 + x^n$. This requires $O(\log(n))$ comparisons, which are themselves \( O(1) \) operations. The overall time complexity of this step is $T_5(n) = O(\log(n))$.
 \end{enumerate}
 
 \subsubsection{Overall Time Complexity}
-The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in (\Zn)[x]/(x^d-2) \). Therefore, the overall time complexity of the algorithm is \( T(n) = O((1 + o(1)) \log^2(n) M(n)) \).
+The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in \Z_n[x]/(x^d-2) \). Therefore, the overall time complexity of the algorithm is \( T(n) = O((1 + o(1)) \log^2(n) M(n)) \).
 
 Harvey and van Der Heoven (2021) \cite{harveyvanderhoeven2021} have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$. This would give our algorithm an overall time complexity of:
 \begin{align}
