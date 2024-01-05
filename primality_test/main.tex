@@ -111,17 +111,22 @@ Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \)
 Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
 \end{proof}
 
-\begin{lemma}[Upper bound on $d$] \label{lemma:leastd}
-Let $n$ be an odd composite integer $>3$. Then there exists an odd prime integer $d \leq (1 + o(1)) \log(n)$ such that $n \not\equiv 0 \pmod{d}$.
+\begin{lemma}[Upper Bound on \( d \)] \label{lemma:leastd}
+Let \( n \) be an odd composite integer greater than 3. Then there exists an odd prime integer \( d \) such that \( d \leq (1 + o(1)) \log(n) \) and \( n \) is not divisible by \( d \) (i.e., \( n \not\equiv 0 \pmod{d} \)).
 \end{lemma}
+
 \begin{proof}
-Define $f(n)$ as the least odd prime not dividing $n$. For primorials $q_m = \prod_{k=1}^m p_k$, with $m \geq 2$, $f(q_m)$ is the $(m+1)$-th prime, as $q_m$ is divisible by the first $m$ primes (including 2).
+Consider the function \( f(n) \) defined as the smallest odd prime that does not divide a given integer \( n \). Our goal is to establish an upper bound for \( f(n) \) for any odd composite integer \( n \).
 
-By the Prime Number Theorem, $p_m \approx m \log m$, so for a primorial $q_m$, $f(q_m) = p_{m+1} \approx (m+1) \log (m+1)$. 
+To derive this upper bound, we first observe the behavior of \( f(n) \) for special integers known as primorials. A primorial, denoted as \( q_m \), is the product of the first \( m \) primes. Formally, \( q_m = \prod_{k=1}^{m} p_k \), where \( p_k \) is the \( k \)-th prime number. Notably, \( q_m \) is divisible by all primes up to and including \( p_m \).
 
-Since the function $f$ is maximized at primorials, for a general $n$, especially when $n$ is large and not necessarily a primorial, we can estimate that $f(n) \leq (1+o(1))\log n$. This upper bound is asymptotic and becomes more accurate for larger $n$.
+For a given primorial \( q_m \), the function \( f(q_m) \) selects the next prime after the first \( m \) primes. Hence, \( f(q_m) = p_{m+1} \), the \( (m+1) \)-th prime number. 
 
-Therefore, for any odd composite integer $n$, the least odd prime non-divisor of $n$ is bounded above by $(1+o(1))\log n$.
+Now, we leverage the Prime Number Theorem, which provides an approximation for the \( m \)-th prime: \( p_m \approx m \log(m) \). Applying this to \( p_{m+1} \), we get an approximation \( f(q_m) = p_{m+1} \approx (m+1) \log(m+1) \). This relation gives us insight into how \( f(n) \) grows with respect to \( n \), especially for large values of \( n \).
+
+Since primorials are specific integers that maximize the number of small prime factors, for a general odd composite integer \( n \), especially when \( n \) is large, \( f(n) \) will be less than or equal to \( f(q_m) \) for some \( m \). Therefore, we can estimate that for any such \( n \), \( f(n) \leq (1 + o(1)) \log(n) \). This estimation is asymptotic, meaning it becomes more precise as \( n \) increases.
+
+In conclusion, for any odd composite integer \( n \) greater than 3, there exists an odd prime integer \( d \), which is the least prime non-divisor of \( n \), such that \( d \) is bounded above by \( (1 + o(1)) \log(n) \), completing the proof.
 \end{proof}
 
 \textbf{Remark.} The proof for \cref{lemma:leastd} was adapted from a proof given by a MathOverflow user \cite{leastcoprime2021}.
