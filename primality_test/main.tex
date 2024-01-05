@@ -204,7 +204,7 @@ First, consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_n[x]
 
 We are given composite $n$ with $x^n \not\equiv 1 \pmod{n, x^d-2}$. In the quotient ring $\mathbb{Z}_n[x]/(x^d-2)$, we have $x^d = 2$ and thus:
 \begin{align}
-    \left(x^n = (x^{\frac{1}{d}})^n = (2^{\frac{1}{d}})^n = 2^{\left\lfloor\frac{n}{d}\right\rfloor}\right) \not\equiv 1 \pmod{n,x^d-2}
+    \left(x^n = (x^{\frac{1}{d}})^n = 2^{\floor{\frac{n}{d}}}\right) \not\equiv 1 \pmod{n,x^d-2}
 \end{align}
 
 Since $n$ is odd and $d > 2$, by the properties of the floor function, $\left\lfloor\frac{n}{d}\right\rfloor = \left\lfloor\frac{n-1}{d}\right\rfloor$. It follows that:
