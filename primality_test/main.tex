@@ -161,14 +161,14 @@ Therefore, we conclude that there must exist at least one prime divisor $p$ of $
 
 \subsection{Primes Case}
 \begin{theorem}[Primes pass] \label{theorem:primes}
-Let $n$ be an odd prime integer such that $n > 3$. Denote $d$ as the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.
+Let $n$ be an odd prime integer such that $n > 3$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.
 \end{theorem}
 \begin{proof}
 We aim to show that the following polynomial congruence holds for all odd prime integers $n > 3$:
 \begin{align}
     (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2},
 \end{align}
-where $d$ is the least integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
+where $d$ is the least prime integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
 
 We begin by taking the binomial expansion of the left-hand side:
 \begin{align}
