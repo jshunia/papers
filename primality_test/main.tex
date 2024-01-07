@@ -83,11 +83,11 @@ Through the proof of our main theorem, we demonstrate that our modified test is 
 This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. We follow up with supporting lemmas and theorems. Then, we present the proof of our main theorem, which demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with a link to an open source implementation of our test.
 
 \subsection{Notice Regarding Title and Content Revision}
-In the initial version of this paper, published as a preprint to the Electronic Colloquium on Computational Complexity (ECCC) in December 2023, the title ``An Efficient Deterministic Primality Test'' was used, and the scope of the proposed primality test was presented as universally applicable to all integers. However, upon further examination and insightful peer feedback, a critical limitation in the proof was identified. While the original claim suggested a universal application, the proof, as it stands, substantiates the test's determinism only for a more confined, yet significant, set of integers.
+In the initial version of this paper, published as a preprint to the Electronic Colloquium on Computational Complexity (ECCC) in December 2023, the title ``An Efficient Deterministic Primality Test'' was used, and the scope of the proposed primality test was presented as universally applicable to all integers. However, upon further examination and insightful peer feedback, a critical limitation in the proof was identified. While the original claim suggested a universal application, the proof, as it stands, substantiates the test's determinism only for a subset of the integers.
 
-We have revised both the title and the content of the paper to more accurately reflect these findings. The new title, ``An Efficient Deterministic Primality Test for Integers Not Divisible by Squares of Wieferich Primes'', focuses on the subset of integers for which we believe our test is provably deterministic: all squarefree integers and those nonsquarefree integers not divisible by any square of a Wieferich prime.
+We have revised both the title and the content of the paper to more accurately reflect these findings. The new title, ``An Efficient Deterministic Primality Test for Integers Not Divisible by Squares of Wieferich Primes'', focuses on the subset of integers for which we believe our test is provably deterministic: all squarefree integers and those nonsquarefree integers not divisible by any square of a Wieferich prime. We have also adjusted the content to use notation and conventions better aligned with the standards in the field of abstract algebra (such as the use of quotient rings). 
 
-It is important to note that while the revised scope may seem more limited compared to the initial assertion, it nevertheless encompasses a vast majority of integers. Given the current knowledge and extreme rarity of Wieferich primes (with only two such primes known as of this writing), the test's practical applicability remains substantial.
+While the revised scope may seem more limited compared to the initial assertion, it nevertheless encompasses a vast majority of integers. Given the current knowledge and extreme rarity of Wieferich primes (with only two such primes known as of this writing), the test's practical applicability remains substantial. And while at present, it appears theoretically possible for an integer which is the product of the square of a Wieferich prime to pass our test, we were unable to find any such $n$. Computational experiments have confirmed that our test is deterministic for all integers up to at least $2^{64}$, including those which are the product of the square of a Wieferich prime.
 
 We regret any confusion or inconvenience our initial publication may have caused and are dedicated to continuing our research in this area. Our goal is to either extend the proof to encompass a broader class of integers or to further refine our understanding of its current applicability.
 
@@ -197,7 +197,7 @@ By necessity, any composite integer $n$ which purports to pass our primality tes
 An intriguing observation is that Fermat pseudoprimes to base $2$ are rarely nonsquarefree. This presents us with the following lemma.
 
 \begin{lemma}
-Let $n$ be an odd composite nonsquarefree integer and a Fermat pseudoprime to base $2$. That is, $2^{n-1} \equiv 1 \pmod{n}$. Then, $n$ is the product of a Wieferich prime (See \cref{definition:wieferichprimes}).
+Let $n$ be an odd composite nonsquarefree integer and a Fermat pseudoprime to base $2$. That is, $2^{n-1} \equiv 1 \pmod{n}$. Then, $n$ is the product of the square of a Wieferich prime (See \cref{definition:wieferichprimes}).
 \end{lemma}
 \begin{proof}
 Given that $n$ is nonsquarefree, it can factorized as $n = p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}$ where $e_i > 1$ for at least one $i$ and each $p_i$ is prime. Since $n$ is a Fermat pseudoprime to base $2$, we have $2^{n-1} \equiv 1 \pmod{n}$. By the properties of modular arithmetic, the congruence $2^{n-1} \equiv 1 \pmod{n}$ implies $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for each $p_i^{e_i}$ dividing $n$.
@@ -206,7 +206,7 @@ To reconcile $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ with the properties of Wieferic
 
 The Fermat pseudoprime condition $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for $e_i > 1$ requires $p_i$ to have the Wieferich property, as this is the only way to satisfy the congruence for higher powers of $p_i$. This follows from the fact that the order of $2$ modulo $p_i^{e_i}$ must divide both $n-1$ and $p_i-1$. Since $n-1$ is a multiple of $p_i-1$ for a nonsquarefree $n$ and $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$, it follows that $p_i$ must be Wieferich.
 
-Therefore, for $n$ to be a Fermat pseudoprime to base $2$ and nonsquarefree, at least one of the $p_i$ in its prime power decomposition must be a Wieferich prime. Hence, $n$ is the product of a Wieferich prime.
+Therefore, for $n$ to be a Fermat pseudoprime to base $2$ and nonsquarefree, at least one of the $p_i^{e_i}$ in its prime power decomposition must be divisible the square of a Wieferich prime. Hence, $n$ is the product of the square of a Wieferich prime.
 \end{proof}
 
 \subsection{Squarefree Fermat Pseudoprimes}
