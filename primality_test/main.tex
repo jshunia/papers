@@ -50,7 +50,7 @@
 \newcommand{\glaisher}[2]{\left[ \begin{array}{c} #1 \\ #2 \end{array} \right]}
 \newcommand{\kronecker}[2]{\left(#1\mid#2\right)}
 
-\title{An Efficient Deterministic Primality Test}
+\title{An Efficient Deterministic Primality Test for Integers Not Divisible by Squares of Wieferich Primes}
 \author{Joseph M. Shunia}
 \date{December 2023 \\ \small Revised: January 2024 \normalsize}
 
@@ -59,7 +59,7 @@
 \maketitle
 
 \begin{abstract}
-A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3(n))$ is presented. The test posits that an integer $n$ satisfying the conditions of the main theorem is prime. The basis for our test is a unique a variation of Agrawal's conjecture, a famous and unresolved conjecture in primality testing which says that $n$ is prime if and only if the polynomial congruence $(x - 1)^n \equiv x^n - 1 \pmod{n}$ holds in the quotient ring $\mathbb{Z}[x]/(x^r - 1)$, where $r$ is an integer such that $n^2 \not\equiv 1 \pmod{r}$. Operating in the quotient ring $\mathbb{Z}[x]/(x^r - 1)$, Argawal's conjecture is premised on the unique properties of roots of unity. We take a different approach, using instead the ring $\mathbb{Z}[x]/(x^d - 2)$, where $d > 2$ is the least prime integer such that $n \not\equiv 1 \pmod{d}$. In doing so, we replace the roots of unity with roots of $2$. This seemingly subtle change enables us to exploit certain number theoretic properties of Fermat pseudoprimes to base $2$, leading to a deterministic primality test.
+We present a primality test with polynomial time complexity $\softO{\log^3(n)}$, which is deterministic for all squarefree integers and for nonsquarefree integers not divisible by any square of a Wieferich prime. Given the extreme scarcity of Wieferich primes, with only two known to date, this test remains highly practical, covering a vast majority of integers. We base our test on a variation of Agrawal's conjecture, a prominent yet unresolved conjecture in primality testing. Agrawal's conjecture states that an integer $n$ is prime if and only if the polynomial congruence $(x - 1)^n \equiv x^n - 1 \pmod{n}$ holds in the quotient ring $\mathbb{Z}[x]/(x^r - 1)$, for some $r$ satisfying $n^2 \not\equiv 1 \pmod{r}$. Our approach deviates from the conventional use of roots of unity in $\mathbb{Z}[x]/(x^r - 1)$, instead utilizing the ring $\mathbb{Z}[x]/(x^d - 2)$, where $d > 2$ is the smallest prime such that $n \not\equiv 1 \pmod{d}$. This shift to roots of $2$ allows us to exploit the number-theoretic properties of Fermat pseudoprimes to base $2$. In doing so, we establish an efficient deterministic primality test for an extensively broad set of the integers.
 \end{abstract}
 
 \section{Introduction}
@@ -68,22 +68,61 @@ Primality testing has seen remarkable advancements over the past few decades. A 
 
 In the field of cryptography, the unique properties of prime numbers are widely exploited to create cryptographic primitives. It is often the case that many large primes must be generated in rapid succession \cite{lenstra1987}. To make these cryptographic operations practical, fast probabilistic primality tests such as the Baille-PSW primality test (BPSW) \cite{baillie1980} or Miller-Rabin (MR) \cite{rabin1980} \cite{miller1976} are used instead of AKS when searching for large primes. Probabilistic primality tests are by definition non-deterministic and may erroneously report a composite integer as being prime. Composite integers which pass a probabilistic primality test are relatively rare and are known as pseudoprimes (PSPs) for the respective test \cite{wagstaff1983}. When generating primes for cryptographic purposes, probabilistic primality tests are often combined or repeated with different parameters in order to achieve an acceptable error-bound that makes it almost certain that no composite integer will pass. However, reducing the error-bound requires additional compute and increases running-time, creating a trade-off.
 
-We present a new deterministic primality test that operates in polynomial time with a time complexity of $\tilde{O}(\log^3(n))$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}. 
+We present a primality test with polynomial time complexity $\softO{\log^3(n)}$, which is deterministic for all squarefree integers and for nonsquarefree integers not divisible by any square of a Wieferich prime. Given the extreme scarcity of Wieferich primes, with only two known to date, this test remains highly practical, covering a vast majority of integers. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}.
 
 Our test is based on a famous conjecture issued by Manindra Argawal while he was an undergraduate student \cite{aks2002}. Let $n$ and $r$ be two coprime positive integers. If the following polynomial congruence holds, then $n$ is prime or $n^2 = 1 \pmod{r}$:
 \begin{align}
     (x - 1)^n \equiv x^n - 1 \pmod{n, x^r - 1}
 \end{align}
 
-We alter the conditions slightly to use roots of $2$ instead of roots of unity. This substitution allows us to leverage specific number theoretic properties unique to Fermat pseudoprimes to base $2$, which are critical in establishing the determinism of our test. Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \mathbb{Z}[x]$, which is known to hold for only prime integers $n$ \cite{granville2004primes}.
+We alter the conditions slightly to use roots of $2$ instead of roots of unity. This substitution allows us to leverage specific number theoretic properties unique to Fermat pseudoprimes to base $2$ (See \cref{definition:fermatpsp}), which are critical in establishing the determinism of our test for nearly all integers.
+
+Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \mathbb{Z}[x]$ for most integers, which is known to hold for only prime integers $n$ \cite{granville2004primes}.
 
 \subsection{Structure of the Paper}
 This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. We follow up with supporting lemmas and theorems. Then, we present the proof of our main theorem, which demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with a link to an open source implementation of our test.
 
+\subsection{Notice Regarding Title and Content Revision}
+In the initial version of this paper, published as a preprint to the Electronic Colloquium on Computational Complexity (ECCC) in December 2023, the title ``An Efficient Deterministic Primality Test'' was used, and the scope of the proposed primality test was presented as universally applicable to all integers. However, upon further examination and insightful peer feedback, a critical limitation in the proof was identified. While the original claim suggested a universal application, the proof, as it stands, substantiates the test's determinism only for a more confined, yet significant, set of integers.
+
+We have revised both the title and the content of the paper to more accurately reflect these findings. The new title, ``An Efficient Deterministic Primality Test for Integers Not Divisible by Squares of Wieferich Primes'', focuses on the subset of integers for which we believe our test is provably deterministic: all squarefree integers and those nonsquarefree integers not divisible by any square of a Wieferich prime.
+
+It is important to note that while the revised scope may seem more limited compared to the initial assertion, it nevertheless encompasses a vast majority of integers. Given the current knowledge and extreme rarity of Wieferich primes (with only two such primes known as of this writing), the test's practical applicability remains substantial.
+
+We regret any confusion or inconvenience our initial publication may have caused and are dedicated to continuing our research in this area. Our goal is to either extend the proof to encompass a broader class of integers or to further refine our understanding of its current applicability.
+
+\section{Preliminaries and Definitions}
+
+\begin{definition}[Fermat pseudoprime to base $b$] \label{definition:fermatpsp}
+Let $n,b \in \mathbb{Z}$ be coprime with $n$ composite. We say that $n$ is a Fermat pseudoprime to base $b$ iff $b^{n-1} \equiv 1 \pmod{n}$.
+
+\textbf{Remark.}
+When $n$ is a prime integer, by Fermat's Little Theorem, the congruence holds trivially. Conversely, when $n$ is composite, the congruence holds only rarely. For this reason, checking if $n$ is a Fermat pseudoprime to a handful of small prime bases up to a limit that is logarithmic in $n$ (e.g. $b = \{ 2, 3, 5, \ldots \log_2(n) \}$) makes for a decent primality test. The vast majority of composite $n$ are quickly (and efficiently) ruled out. However, a problem presents: somewhat surprisingly, there exist composite $n$ which pass the test to all bases $b$ coprime to $n$. We call such composite $n$ ``Carmichael numbers'' \cite{crandallpomerance2005carmichaelnumbers} and unfortunately, they are infinitely many \cite{alfordgranvillepomerance1994carmichaelnumbers}. A rigorous treatment of Carmichael numbers is outside the scope of this paper, but it is important to be aware that such composite integers exist.
+\end{definition}
+
+\begin{definition}[Wieferich primes] \label{definition:wieferichprimes}
+The Wieferich primes, sequence A001220 \cite{oeiswieferichprimes} in the Online Encyclopedia of Integer Sequences (OEIS), is the sequence of prime integers $p$ such that:
+\begin{align}
+    2^{p-1} \equiv 1 \pmod{p^2}
+\end{align}
+
+\textbf{Remark.}
+Denote by $W$ the sequence of Wieferich primes. As of the year 2024, only two Wieferich primes are known:
+\begin{align}
+    W = \{ 1093, 3511 \}
+\end{align}
+Computational searches up to $10^{15}$ have not found any additional Wieferich primes \cite{carella2018results}, and it is an open question whether the sequence is finite or infinite. However, Carella (2018) \cite{carella2018results} established that the subset of non-Wieferich primes has asymptotic density $1$ within the set of all primes, implying that Wieferich primes must be exceedingly rare.
+
+Carella (2018) \cite{carella2018results} also gave an upper bound on the number of Wieferich primes less than $n$. Let $W_{\#}(n)$ denote the count of Wieferich primes up to $n$, then we have:
+\begin{align}
+    W_{\#}(n) \leq 2 \cdot \log \log (n),
+\end{align}
+This upper bound suggests that if it happens to be true that there are infinitely many Wieferich primes, then they constitute only a vanishingly small fraction of all primes.
+\end{definition}
+
 \section{Statement of Main Theorem}
-\begin{theorem}[Main theorem]
-\label{theorem:main}
-Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:
+\begin{theorem}[Main theorem] \label{theorem:main}
+Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $n$ is not divisible by any square of a Wieferich prime and the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:
 \begin{align}
 (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}
 \end{align}
@@ -152,8 +191,27 @@ Applying this to our current context with \( a = n-1 \) and \( b = d \): The lea
 By the properties of the order of an integer modulo composite $n$, the smallest $k \in \mathbb{Z}$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \ordn{2}$, must be a divisor of $n-1$. Hence, $\ordn{2} \mid n-1$. Since $\left\lfloor\frac{n-1}{d}\right\rfloor$ is strictly less than $n-1$ and $d$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$.
 \end{proof}
 
+\subsection{Characterizing Nonsquarefree Fermat Pseudoprimes}
+By necessity, any composite integer $n$ which purports to pass our primality test (as defined in \cref{theorem:main}) must be a Fermat pseudoprime to base $2$ (See \cref{definition:fermatpsp}). That is, we must have $2^{n-1} \equiv 1 \pmod{n}$.
+
+An intriguing observation is that Fermat pseudoprimes to base $2$ are rarely nonsquarefree. This presents us with the following lemma.
+
+\begin{lemma}
+Let $n$ be an odd composite nonsquarefree integer and a Fermat pseudoprime to base $2$. That is, $2^{n-1} \equiv 1 \pmod{n}$. Then, $n$ is the product of a Wieferich prime (See \cref{definition:wieferichprimes}).
+\end{lemma}
+\begin{proof}
+Given that $n$ is nonsquarefree, it can factorized as $n = p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}$ where $e_i > 1$ for at least one $i$ and each $p_i$ is prime. Since $n$ is a Fermat pseudoprime to base $2$, we have $2^{n-1} \equiv 1 \pmod{n}$. By the properties of modular arithmetic, the congruence $2^{n-1} \equiv 1 \pmod{n}$ implies $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for each $p_i^{e_i}$ dividing $n$.
+
+To reconcile $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ with the properties of Wieferich primes, we note that a Wieferich prime $p$ satisfies $2^{p-1} \equiv 1 \pmod{p^2}$. For a prime $p_i$ that is not Wieferich, the congruence $2^{p_i-1} \not\equiv 1 \pmod{p_i^2}$ holds. This implies that if $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for some $e_i > 1$, then $p_i$ must be a Wieferich prime.
+
+The Fermat pseudoprime condition $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for $e_i > 1$ requires $p_i$ to have the Wieferich property, as this is the only way to satisfy the congruence for higher powers of $p_i$. This follows from the fact that the order of $2$ modulo $p_i^{e_i}$ must divide both $n-1$ and $p_i-1$. Since $n-1$ is a multiple of $p_i-1$ for a nonsquarefree $n$ and $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$, it follows that $p_i$ must be Wieferich.
+
+Therefore, for $n$ to be a Fermat pseudoprime to base $2$ and nonsquarefree, at least one of the $p_i$ in its prime power decomposition must be a Wieferich prime. Hence, $n$ is the product of a Wieferich prime.
+\end{proof}
+
+\subsection{Squarefree Fermat Pseudoprimes}
 \begin{lemma} \label{lemma:nonresidue}
-Let $n>3$ be an odd composite integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.
+Let $n>3$ be an odd composite squarefree integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.
 \end{lemma}
 \begin{proof}
 Let $p \in \mathbb{Z}$ be prime and $\beta = \gcd(p-1, d)$. Euler's criterion \cite{euler1914powerresidues} states that $a \not\equiv 0 \pmod p$ is a $d$th power residue modulo $p$ if and only if:
@@ -163,7 +221,7 @@ a^{\frac{p-1}{\beta}} \equiv 1 \pmod p
 
 Applying to Euler's criterion to our situation, since $p$ and $d$ are both odd primes and $p \not= d$, we have that $a=2$ is a $d$th power residue modulo $p$ if and only if $d \mid p-1$ and $2^{\frac{p-1}{d}} \equiv 1 \pmod p$.
 
-For the sake of contradiction, let's assume that for all prime divisors $p_j$ of $n$, $d \mid p_j-1$ and $2^{\frac{p_j-1}{d}} \equiv 1 \pmod p_j$. Then by the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$.
+For the sake of contradiction, let's assume that for all prime divisors $p_j$ of $n$, $d \mid p_j-1$ and $2^{\frac{p_j-1}{d}} \equiv 1 \pmod p_j$. Since $n$ is squarefree, by the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$.
 
 Furthermore, by the properties of the multiplicative order modulo composite $n$, we must also have $2^{\floor{\frac{n-1}{d}}} \equiv 1 \pmod p$. However, this also conflicts with our definition of $n$ which has $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod n$.
 
@@ -207,10 +265,10 @@ Hence, we have shown that the left-hand side of the congruence is equal to the r
 
 A fundamental theorem in polynomial ring theory states that an integer $n$ is prime if and only if $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \Z[x]$ \cite{granville2004primes}. This congruence was used as the basis for the AKS test \cite{aks2002}. A short proof of the theorem, given by Granville (2004) \cite{granville2004primes}, is that since $(x + 1)^n - (x^n + 1) = \sum_{k=1}^{n-1} \binom{n}{k} x^k$, we may have $(1 + x)^n \equiv 1 + x^n \pmod{n}$ if and only if $n$ divides $\binom{n}{k}$ for all $k$ in the range $1 \leq k \leq n-1$. It is important to note that for the polynomial congruence to be valid, $x^n$ and $(1+x)^n$ must be irreducible in $\Z_n[x]$.
 
-Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take significant inspiration from their approach to show that composite integers will always fail our test.
+Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take inspiration from their approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Composites case] \label{theorem:composites}
-Let $n = pq$ be an odd composite integer greater than $3$ such that $2^{n-1} \equiv 1 \pmod{n}$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose $n$ does not have a prime divisor $\leq d$ and $x^n \not\equiv 1 \pmod{n, x^d-2}$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
+Let $n = pq$ be an odd composite integer greater than $3$ such that $2^{n-1} \equiv 1 \pmod{n}$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose $n$ is not divisible by any square of a Wieferich prime and does not have a prime divisor $\leq d$. If $x^n \not\equiv 1 \pmod{n, x^d-2}$, then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
 \end{theorem}
 \begin{proof}
 First, consider the polynomial $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}_n[x]$. Notice that taking $f(x)$ modulo $x^d - 2$ and asserting that the result is nonzero is equivalent to showing $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
@@ -345,6 +403,9 @@ The overall complexity is polynomial in the size of \( n \) when expressed in te
 
 \section{Implementation Details}
 Sample open source .NET and Python implementations, along with test data, are available on the author's Github page \cite{githubrepo}.
+
+\section{Discussion}
+TODO
 
 \section{Acknowledgements}
 I am indebted to Professor Seth Pettie for his invaluable insights and advice on both the content and presentation of this paper. His expertise in academic writing and research methodologies has been incredibly helpful, and I am particularly thankful for his mentorship and constructive criticism that significantly shaped this work. To Professor Pettie: I am forever grateful for your open mindedness and willingness to engage with me. I also extend my gratitude to the graduate students in his department, for the engaging session we shared and their input and earnest interest in my research.
