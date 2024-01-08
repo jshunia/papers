@@ -109,7 +109,7 @@ Denote by $W$ the sequence of Wieferich primes. As of the year 2024, only two Wi
 \begin{align}
     W = \{ 1093, 3511 \}
 \end{align}
-Computational searches up to $10^{15}$ have not found any additional Wieferich primes \cite{carella2018results}, and it is an open question whether the sequence is finite or infinite. However, Carella (2018) \cite{carella2018results} established that the subset of non-Wieferich primes has asymptotic density $1$ within the set of all primes, implying that Wieferich primes must be exceedingly rare.
+Computational searches up to $2^{64}$ have not found any additional Wieferich primes \cite{primegridww}, and it is an open question whether the sequence is finite or infinite. However, Carella (2018) \cite{carella2018results} established that the subset of non-Wieferich primes has asymptotic density $1$ within the set of all primes, implying that Wieferich primes must be exceedingly rare.
 
 Carella (2018) \cite{carella2018results} also gave an upper bound on the number of Wieferich primes less than $n$. Let $W_{\#}(n)$ denote the count of Wieferich primes up to $n$, then we have:
 \begin{align}
@@ -209,21 +209,21 @@ Therefore, for $n$ to be a Fermat pseudoprime to base $2$ and nonsquarefree, at 
 
 \subsection{Squarefree Fermat Pseudoprimes}
 \begin{lemma} \label{lemma:nonresidue}
-Let $n>3$ be an odd composite squarefree integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.
+Let $n>3$ be an odd composite squarefree integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$-th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.
 \end{lemma}
 \begin{proof}
-Let $p \in \mathbb{Z}$ be prime and $\beta = \gcd(p-1, d)$. Euler's criterion \cite{euler1914powerresidues} states that $a \not\equiv 0 \pmod p$ is a $d$th power residue modulo $p$ if and only if:
+Let $p \in \mathbb{Z}$ be prime and $\beta = \gcd(p-1, d)$. Euler's criterion \cite{euler1914powerresidues} states that $a \not\equiv 0 \pmod p$ is a $d$-th power residue modulo $p$ if and only if:
 \begin{align}
 a^{\frac{p-1}{\beta}} \equiv 1 \pmod p
 \end{align}
 
-Applying to Euler's criterion to our situation, since $p$ and $d$ are both odd primes and $p \not= d$, we have that $a=2$ is a $d$th power residue modulo $p$ if and only if $d \mid p-1$ and $2^{\frac{p-1}{d}} \equiv 1 \pmod p$.
+Applying to Euler's criterion to our situation, since $p$ and $d$ are both odd primes and $p \not= d$, we have that $a=2$ is a $d$-th power residue modulo $p$ if and only if $d \mid p-1$ and $2^{\frac{p-1}{d}} \equiv 1 \pmod p$.
 
 For the sake of contradiction, let's assume that for all prime divisors $p_j$ of $n$, $d \mid p_j-1$ and $2^{\frac{p_j-1}{d}} \equiv 1 \pmod p_j$. Since $n$ is squarefree, by the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$.
 
 Furthermore, by the properties of the multiplicative order modulo composite $n$, we must also have $2^{\floor{\frac{n-1}{d}}} \equiv 1 \pmod p$. However, this also conflicts with our definition of $n$ which has $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod n$.
 
-Therefore, we conclude that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p-1}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion fails to hold, and thus it follows that $2$ is not a $d$th power residue modulo $p$.
+Therefore, we conclude that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p-1}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion fails to hold, and thus it follows that $2$ is not a $d$-th power residue modulo $p$.
 \end{proof}
 
 \subsection{Supporting Theorems}
@@ -266,12 +266,12 @@ A fundamental theorem in polynomial ring theory states that an integer $n$ is pr
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take inspiration from their approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Composites case] \label{theorem:composites}
-Let $n = pq$ be an odd composite integer greater than $3$ such that $2^{n-1} \equiv 1 \pmod{n}$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose $n$ is not divisible by any square of a Wieferich prime and does not have a prime divisor $\leq d$. If $2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$, then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
+Let $n = pq$ be an odd composite integer greater than $3$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose that $2$ is not a $d$-th power residue modulo $p$ and that $n$ is not divisible by any prime $\leq d$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
 \end{theorem}
 \begin{proof}
 \textbf{Preliminaries:}
 \begin{itemize}
-    \item Definition of $p$: Under the given conditions, by \cref{lemma:nonresidue}, there must exist at least one prime divisor $p$ of $n$ such that $2$ is not a $d$th power residue modulo $p$. For the steps included in this proof, $p$ always refers to this specific prime divisor of $n$.
+    \item Definition of $p$: Under the given conditions, there must exist at least one prime divisor $p$ of $n$ such that $2$ is not a $d$-th power residue modulo $p$. For the steps included in this proof, $p$ always refers to this specific prime divisor of $n$.
     \item Definition of $f(x)$: We define the polynomial $f(x) := (1 + x)^n - (1 + x^n)$.
     \item Definition of $g(x)$: We define the polynomial $g(x) := f(x) \pmod{x^d - 2}$.
 \end{itemize}
@@ -296,7 +296,7 @@ We reference a classical theorem from field theory (Irreducibility Theorem) \cit
 
 In our case, $F = \mathbb{Z}_p$, $c = 2$, and $k = d$, where $d$ is prime.
 
-Regarding the first criterion, given $d$ is prime, $d$ does not have any divisors $q$, and hence it suffices to check only $d$ itself. We have chosen $p$ such that $2$ is not a $d$th power residue modulo $p$, which informs that there is no element $b \in F$ such that $b^d \equiv 2 \pmod{p}$. The first criterion is satisfied. Since $d$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
+Regarding the first criterion, given $d$ is prime, $d$ does not have any divisors $q$, and hence it suffices to check only $d$ itself. We have chosen $p$ such that $2$ is not a $d$-th power residue modulo $p$, which informs that there is no element $b \in F$ such that $b^d \equiv 2 \pmod{p}$. The first criterion is satisfied. Since $d$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
 
 By the Irreducibility Theorem, $x^d - 2$ is irreducible in $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$ forms a finite field.
 
@@ -326,7 +326,7 @@ We look to the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$, which forms a finite f
 
 In Step 2, we showed that $g(x) = f(x) \pmod{x^d-2}$ is nonzero in $\mathbb{Z}[x]$ with $\deg(g(x)) = d-1$.
 
-To prove our hypothesis, we must also show that $g(x)$ is nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$, as this is equivalent to the statement we intend to prove: $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^d-2}$.
+To prove our hypothesis, we must also show that $g(x)$ is nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$, as this is equivalent to the statement in our hypothesis, which says: $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^d-2}$ for at least one prime $p$ dividing $n$.
 
 Now, assume for contradiction that $g(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/(x^d - 2)$. This would necessarily imply that all coefficients $c_i$ of $g(x) = \sum_{i=0}^{d-1} c_i x^i$ are zero when taken modulo $p$, where the $c_i$ are aerated sums of binomial coefficients.
 
@@ -334,7 +334,7 @@ In a finite field, a polynomial of degree $r$ can have at most $r$ roots \cite{d
 
 In our case, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a finite field and $\deg(g(x)) = d-1$, then $g(x)$ can have at most $d-1$ roots in this field. The assumption that $g(x)$ is the zero polynomial is a direct contradiction unless $p \leq d-1$, as it would necessarily imply that $g(x)$ has infinitely many roots (or more precisely, that every element of $\mathbb{Z}_p$ is a root) \cite{koppartywang2014roots}. However, this is clearly not the case, as we are given $n$ which does not have a prime divisor $\leq d$.
 
-Therefore, $f(x)$ must be nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$.
+Therefore, $f(x)$ cannot be identically zero in $\mathbb{Z}_p[x]/(x^d - 2)$.
 
 \textbf{Conclusion:}
 
@@ -353,7 +353,7 @@ If $n$ is prime, then by \cref{theorem:primes}, the polynomial congruence holds 
 
 If $n$ composite, suppose $n$ has a prime divisor $\leq d$. Clearly, it fails the test as expected.
 
-If $n$ does not have a prime divisor $\leq d$, then by \cref{lemma:incongruencemodn} we infer $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$. By \cref{lemma:nonresidue}, it follows that $n$ must have a prime divisor $p$ such that $2$ is not a $d$th power residue modulo $p$. Hence, all of the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. By \cref{theorem:composites}, the polynomial congruence cannot hold, and therefore $n$ fails the test as expected.
+If $n$ does not have a prime divisor $\leq d$, then by \cref{lemma:incongruencemodn} we infer $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$. By \cref{lemma:nonresidue}, it follows that $n$ must have a prime divisor $p$ such that $2$ is not a $d$-th power residue modulo $p$. Hence, all of the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. By \cref{theorem:composites}, the polynomial congruence cannot hold, and therefore $n$ fails the test as expected.
 
 \textbf{Conclusion}:
 
@@ -434,7 +434,7 @@ The overall complexity is polynomial in the size of \( n \) when expressed in te
 Sample open source .NET and Python implementations, along with test data, are available on the author's Github page \cite{githubrepo}.
 
 \section{Discussion}
-While at present, it appears at least theoretically possible for an integer $n$ which is the product of the square of a Wieferich prime to pass our test. However, we were unable to find any such $n$. Through computational experiments, we have verified that our test is deterministic for all integers up to at least $2^{64}$. If our theoretical results are valid, then extrapolating our computational results using the presently known bounds for Wieferich primes \cite{carella2018results} suggests that testing for divisibility by the two known Wieferich primes ($1093, 3511$) would further ensure that there are no counter examples to our test up to at least $2^{99}$.
+While at present, it appears at least theoretically possible for an integer $n$ which is the product of the square of a Wieferich prime to pass our test. However, we were unable to find any such $n$. Through computational experiments, we have verified that our test is deterministic for all integers up to at least $2^{64}$. If our theoretical results are valid, then extrapolating our computational results using the presently known bounds for Wieferich primes \cite{primegridww} suggests that testing for divisibility by the two known Wieferich primes ($1093, 3511$) would further ensure that there are no counter examples to our test up to at least $2^{128}$.
 
 \section{Acknowledgements}
 I would like to thank Professor Seth Pettie for his invaluable insights and advice on both the content and presentation of this paper. His expertise in academic writing and research methodologies has been incredibly helpful, and I am particularly grateful for his mentorship and constructive criticism that helped shape this work. I extend my gratitude to the graduate students and researchers within his department, for the engaging session we shared and for their feedback and earnest interest in my research.
