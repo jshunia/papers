@@ -51,7 +51,7 @@
 
 \maketitle
 
-\begin{theorem}[Squarefree case] \label{theorem:composites}
+\begin{theorem}[Composites case] \label{theorem:composites}
 \textit{Let $n = pq$ be an odd composite integer greater than $3$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose that $2$ is not a $d$-th power residue modulo $p$ and that $n$ is not divisible by any prime $\leq d$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.}
 \end{theorem}
 \begin{proof}
@@ -100,7 +100,7 @@ To justify this: We first look to the expansion of  $f(x) = (1 + x)^n - (1 + x^n
 
 Notice that subtracting $1+x^n$ from $(1+x)^n$ cancels out the terms $\binom{n}{0} x^0 = 1$ and $\binom{n}{n} x^n = x^n$ that would typically be present in the binomial expansion of $(1+x)^n$. Thus, we have $\deg(f(x))=n-1$.
 
-Reducing $f(x)$ modulo $x^d - 2$ means replacing every term of the form $\binom{n}{k} x^k$ for $k \geq d$ with a lower-degree term, using the relation $x^d = 2$. During this reduction, terms in $f(x)$ with degree $1 \leq k < d$ will retain their degrees, as they are unaffected by the modulo operation. Since $d < n$, these terms are always present in the binomial expansion. This suggests $f(x)$ has $d-1$ fixed points when taken $x^d - 2$,  with the highest-degree term among them being $\binom{n}{d-1} x^{d-1}$. Since the highest possible degree of any reduced terms is also $d-1$, the degree of $g(x)$ remains $d-1$ after the reduction of any additional terms.
+Reducing $f(x)$ modulo $x^d - 2$ means replacing every term of the form $\binom{n}{k} x^k$ for $k \geq d$ with a lower-degree term, using the relation $x^d = 2$. During this reduction, terms in $f(x)$ with degree $1 \leq k < d$ will retain their degrees, as they are unaffected by the modulo operation. Since $d < n$, these terms are always present in the binomial expansion. Further, since the highest possible degree of any reduced terms is also $d-1$, the degree of $g(x)$ remains $d-1$ after the reduction of any additional terms.
 
 To ensure $g(x)$ is nonzero, we must also consider the coefficients of the remainder terms. Since the coefficients of the terms in $f(x)$ are the binomial coefficients in the $n$-th row of Pascal's Triangle from $\binom{n}{1}$ to $\binom{n}{n-1}$, it is not possible for all coefficients to be zero after the reduction modulo $x^d - 2$. Instead, the coefficients of these terms will be ``wrapped'' around $x^d - 2$ and added to the fixed term which corresponds to the value of their degree $k$, which is the term with the variable $x^{k \pmod{d}}$. Therefore, after the reduction of $f(x)$ modulo $x^d - 2$, the resultant polynomial $g(x)$ will have $d$ polynomial terms with nonzero coefficients and is not the zero polynomial.
 
