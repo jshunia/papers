@@ -120,7 +120,7 @@ This upper bound suggests that if it happens to be true that there are infinitel
 
 \section{Statement of Main Theorem}
 \begin{theorem}[Main theorem] \label{theorem:main}
-Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $n$ is not divisible by any square of a Wieferich prime and the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:
+\textit{Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $n$ is not divisible by any square of a Wieferich prime and the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:}
 \begin{align}
 (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}
 \end{align}
@@ -130,7 +130,7 @@ Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$
 
 \subsection{Supporting Lemmas}
 \begin{lemma} \label{lemma:floornondivisor}
-Given $a,b \in \Z^{+}$ with \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor \) cannot divide \(a\).
+\textit{Given $a,b \in \Z^{+}$ with \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor \) cannot divide \(a\).}
 \end{lemma}
 \begin{proof}
 Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer that is less than \(\frac{a}{b}\). Thus, \(q \cdot b < a < b \cdot (q + 1)\).
@@ -142,14 +142,14 @@ Since \(k\) is an integer, and \(b \nmid a\) implies \(k \neq b\), the next poss
 
 \begin{lemma}[Upper bound on floor function and indivisibility]
 \label{lemma:floornondivisorupperbound}
-Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(b \leq \left\lfloor \sqrt{a} \right\rfloor\).
+\textit{Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(b \leq \left\lfloor \sqrt{a} \right\rfloor\).}
 \end{lemma}
 \begin{proof}
 Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
 \end{proof}
 
 \begin{lemma}[Least prime $p$ coprime to $n$] \label{lemma:leastcoprime}
-Let $n > 6$ be an integer. Then there exists a prime $p$ coprime to $n$ such that:
+\textit{Let $n > 6$ be an integer. Then there exists a prime $p$ coprime to $n$ such that:}
 \begin{align}
     p < \log(n) \left( \log\log(n) + \log\log\log(n) \right)
 \end{align}
@@ -177,7 +177,7 @@ This expression gives an upper bound for the smallest prime $p$ that is coprime 
 \end{proof}
 
 \begin{lemma}[Incongruence modulo $n$] \label{lemma:incongruencemodn}
-Let \( n > 3 \) be an odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least prime integer \( > 2 \) which does not divide \( n-1 \). Then, \( 2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n} \).
+\textit{Let \( n > 3 \) be an odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least prime integer \( > 2 \) which does not divide \( n-1 \). Then, \( 2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n} \).}
 \end{lemma}
 \begin{proof}
 Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \ordn{2} \), that is, \( k = \ordn{2} \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \ordn{2} \), must divide \( n-1 \).
@@ -195,7 +195,7 @@ By necessity, any composite integer $n$ which purports to pass our primality tes
 An intriguing observation is that Fermat pseudoprimes to base $2$ are rarely nonsquarefree. This presents us with the following lemma.
 
 \begin{lemma}
-Let $n$ be an odd composite nonsquarefree integer and a Fermat pseudoprime to base $2$. That is, $2^{n-1} \equiv 1 \pmod{n}$. Then, $n$ is the product of the square of a Wieferich prime (See \cref{definition:wieferichprimes}).
+\textit{Let $n$ be an odd composite nonsquarefree integer and a Fermat pseudoprime to base $2$. That is, $2^{n-1} \equiv 1 \pmod{n}$. Then, $n$ is the product of the square of a Wieferich prime (See \cref{definition:wieferichprimes}).}
 \end{lemma}
 \begin{proof}
 Given that $n$ is nonsquarefree, it can factorized as $n = p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}$ where $e_i > 1$ for at least one $i$ and each $p_i$ is prime. Since $n$ is a Fermat pseudoprime to base $2$, we have $2^{n-1} \equiv 1 \pmod{n}$. By the properties of modular arithmetic, the congruence $2^{n-1} \equiv 1 \pmod{n}$ implies $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for each $p_i^{e_i}$ dividing $n$.
@@ -209,7 +209,7 @@ Therefore, for $n$ to be a Fermat pseudoprime to base $2$ and nonsquarefree, at 
 
 \subsection{Squarefree Fermat Pseudoprimes}
 \begin{lemma} \label{lemma:nonresidue}
-Let $n>3$ be an odd composite squarefree integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$-th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.
+\textit{Let $n>3$ be an odd composite squarefree integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$-th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.}
 \end{lemma}
 \begin{proof}
 Let $p \in \mathbb{Z}$ be prime and $\beta = \gcd(p-1, d)$. Euler's criterion \cite{euler1914powerresidues} states that $a \not\equiv 0 \pmod p$ is a $d$-th power residue modulo $p$ if and only if:
@@ -230,7 +230,7 @@ Therefore, we conclude that there must exist at least one prime divisor $p$ of $
 
 \subsection{Primes Case}
 \begin{theorem}[Primes pass] \label{theorem:primes}
-Let $n$ be an odd prime integer such that $n > 3$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.
+\textit{Let $n$ be an odd prime integer such that $n > 3$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.}
 \end{theorem}
 \begin{proof}
 We aim to show that the following polynomial congruence holds for all odd prime integers $n > 3$:
@@ -266,7 +266,7 @@ A fundamental theorem in polynomial ring theory states that an integer $n$ is pr
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take inspiration from their approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Composites case] \label{theorem:composites}
-Let $n = pq$ be an odd composite integer greater than $3$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose that $2$ is not a $d$-th power residue modulo $p$ and that $n$ is not divisible by any prime $\leq d$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.
+\textit{Let $n = pq$ be an odd composite integer greater than $3$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose that $2$ is not a $d$-th power residue modulo $p$ and that $n$ is not divisible by any prime $\leq d$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.}
 \end{theorem}
 \begin{proof}
 \textbf{Preliminaries:}
@@ -439,11 +439,11 @@ Sample open source .NET and Python implementations, along with test data, are av
 While at present, it appears at least theoretically possible for an integer $n$ which is the product of the square of a Wieferich prime to pass our test, we were unable to find any such $n$. Through computational experiments, we have verified that our test is deterministic for all integers up to at least $2^{64}$. If our theoretical results are valid, then extrapolating our computational results using the presently known bounds for Wieferich primes \cite{primegridww} suggests that testing for divisibility by the two known Wieferich primes ($1093, 3511$) would ensure that there are no counter examples to our test up to at least $2^{128}$.
 
 \section{Acknowledgements}
-I would like to thank Professor Seth Pettie for his invaluable insights and advice on both the content and presentation of this paper. His expertise in academic writing and research methodologies has been incredibly helpful, and I am particularly grateful for his mentorship and constructive criticism that helped shape this work. I extend my gratitude to the graduate students and researchers within his department, for the engaging session we shared and for their feedback and earnest interest in my research.
+I would like to thank Professor Seth Pettie for his invaluable insights and advice on both the content and presentation of this paper. I extend my gratitude to the graduate students and researchers within his department, for the engaging session we shared and for their feedback and earnest interest in my research.
 
-I owe a great deal of inspiration to the proofs by Kopparty and Wang in their paper on polynomial roots and coefficients over finite fields \cite{koppartywang2014roots}. Their ingenious approach was instrumental in the development of the key proof in my paper (See \cref{theorem:composites}). I also express my sincere gratitude to Professor Kopparty, for his encouraging and constructive feedback, which came at a challenging time in my research journey.
+I owe a great deal of inspiration to the proofs by Kopparty and Wang in their paper on polynomial roots and coefficients over finite fields \cite{koppartywang2014roots}. I also express my sincere gratitude to Professor Kopparty, for his encouraging and constructive feedback, which came at a challenging time in my research journey.
 
-I thank Professor Oded Goldreich for his assistance and support throughout the publication process at the ECCC. His patience and motivational guidance, particularly during moments of uncertainty, were invaluable. His expertise in navigating the complex landscape of academic publishing has truly been indispensable.
+I thank Professor Oded Goldreich for his assistance and support throughout the publication process at the ECCC. His patience and motivational guidance, particularly during moments of uncertainty, were invaluable.
 
 A special thank you to the community at \url{mersenneforum.org}, particularly to users Charybdis, R. D. Silverman, and Dr. Sardonicus, for their insightful feedback and scrutiny of my earliest proof attempts. Their contributions were fundamental in refining my approach.
 
