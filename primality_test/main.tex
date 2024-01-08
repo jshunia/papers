@@ -434,7 +434,9 @@ The overall complexity is polynomial in the size of \( n \) when expressed in te
 Sample open source .NET and Python implementations, along with test data, are available on the author's Github page \cite{githubrepo}.
 
 \section{Discussion}
-While at present, it appears at least theoretically possible for an integer $n$ which is the product of the square of a Wieferich prime to pass our test. However, we were unable to find any such $n$. Through computational experiments, we have verified that our test is deterministic for all integers up to at least $2^{64}$. If our theoretical results are valid, then extrapolating our computational results using the presently known bounds for Wieferich primes \cite{primegridww} suggests that testing for divisibility by the two known Wieferich primes ($1093, 3511$) would further ensure that there are no counter examples to our test up to at least $2^{128}$.
+
+\subsection{On Pseudoprimes}
+While at present, it appears at least theoretically possible for an integer $n$ which is the product of the square of a Wieferich prime to pass our test, we were unable to find any such $n$. Through computational experiments, we have verified that our test is deterministic for all integers up to at least $2^{64}$. If our theoretical results are valid, then extrapolating our computational results using the presently known bounds for Wieferich primes \cite{primegridww} suggests that testing for divisibility by the two known Wieferich primes ($1093, 3511$) would ensure that there are no counter examples to our test up to at least $2^{128}$.
 
 \section{Acknowledgements}
 I would like to thank Professor Seth Pettie for his invaluable insights and advice on both the content and presentation of this paper. His expertise in academic writing and research methodologies has been incredibly helpful, and I am particularly grateful for his mentorship and constructive criticism that helped shape this work. I extend my gratitude to the graduate students and researchers within his department, for the engaging session we shared and for their feedback and earnest interest in my research.
