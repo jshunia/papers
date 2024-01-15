@@ -68,16 +68,16 @@ While the specific sequences explored provide an example, the broader contributi
 \begin{definition}[Recursive quotient ring] \label{definition:recursivering}
 Let \( R \) be a commutative ring with unity (e.g., \(\Z\), \(\mathbb{R}\), \(\mathbb{C}\), etc.).
 
-Consider the ring \( K = R[x_1, x_2, \ldots, x_{n} ] \) consisting of polynomials in variables \( x_1, x_2, \ldots, x_n \) with coefficients in \( R \).
+Consider the ring \( S = R[x_1, x_2, \ldots, x_{n} ] \) consisting of polynomials in variables \( x_1, x_2, \ldots, x_n \) with coefficients in \( R \).
 
-Define \( I = \langle x_1^d - P_1, x_2^d - P_2, \ldots, x_n^d - P_n \rangle \) as an ideal of \( K \), where each \( P_i \) is a polynomial in \( K \) and takes the form:
+Define \( I = \langle x_1^d - P_1, x_2^d - P_2, \ldots, x_n^d - P_n \rangle \) as an ideal of \( S \), where each \( P_i \) is a polynomial in \( S \) and takes the form:
 \begin{align}
     P_i = a_0 + a_1 x_{i \cdot c_1 + j_1}^{k_1} + a_2 x_{i \cdot c_2 + j_2}^{k_2} + \cdots
 \end{align}
 
-In this expression, the \( a_m \) are coefficients in \( R \) and/or polynomials in \( K \) (defined by recurrence or otherwise). The \( c_m \) and \( j_m \) are integers where \( c_m \) acts as a scalar and \( j_m \) as a shift, and \( k_m \) represent the exponents of the corresponding variables. The coefficients \( a_m \), scalars \( c_m \), shifts \( j_m \), and exponents \( k_m \) are fixed and do not depend on \( i \). The constant \( d \) and the exponents \( k_m \) can be in \(\Z\), \(\mathbb{R}\), \(\mathbb{C}\), etc., and do not necessarily match the nature of the coefficients in \( R \).
+In this expression, the \( a_m \) are coefficients in \( R \) and/or polynomials in \( S \) (defined by recurrence or otherwise). The \( c_m \) and \( j_m \) are integers where \( c_m \) acts as a scalar and \( j_m \) as a shift, and \( k_m \) represent the exponents of the corresponding variables. The scalars \( c_m \), shifts \( j_m \), and exponents \( k_m \) are fixed and do not depend on \( i \). The constant \( d \) and the exponents \( k_m \) can be in \(\Z\), \(\mathbb{R}\), \(\mathbb{C}\), etc., and do not necessarily match the domain of the coefficients in \( S \).
 
-The quotient ring \( K = R[x_1, x_2, \ldots, x_{n}]/I \) is defined as a \textbf{recursive quotient ring} if and only if for all \( x_i \) in \( K \), the relation \( x_i^d = P_i \) is satisfied, and the polynomials \( P_i \) are generated recursively for all \( i \) in the range \( \alpha \leq i \leq \omega \), where \( \alpha \) and \( \omega \) are specified start and end indices. For all indices \( i \) not in this range, \( x_i^d \) is assumed to be zero within the ring \( K \) unless it is explicitly stated otherwise.
+The quotient ring \( S = R[x_1, x_2, \ldots, x_{n}]/I \) is defined as a \textbf{recursive quotient ring} if and only if for all \( x_i \) in \( K \), the relation \( x_i^d = P_i \) is satisfied, and the polynomials \( P_i \) are generated recursively for all \( i \) in the range \( \alpha \leq i \leq \omega \), where \( \alpha \) and \( \omega \) are specified start and end indices. For all indices \( i \) not in this range, \( x_i^d \) is assumed to be zero within the ring \( S \) unless it is explicitly stated otherwise.
 \end{definition}
 
 \begin{definition}[Binomial transform function] \label{definition:binomialtransforms}
@@ -135,7 +135,9 @@ In this ring, the variables $x_i$ satisfy the recursive relation $x_i^2 = -2x_i 
 
 \section[Connection to Central Binomial Coefficients]{Connection to $\binom{2n}{n}$} \label{section:cbc}
 \begin{theorem} \label{theorem:cbc}
+\textit{
 Let $n \in \Z^+$. Let $b={\floor{\log_2(n)}+2}$. Define the ring $\K_b$ as in \cref{definition:ring}. Evaluating the expansion of $(1+x_1)^n \in \K_b$ at $x_1=x_2=\cdots=x_n=1$ yields $\binom{2n}{n}$.
+}
 \end{theorem}
 \begin{proof}
 First, observe that by the process of exponentiation by squaring \cite{knuth1997art}, expanding $(1+x_1)^n \in \K_b$ requires at most $\log_2(n)$ squarings. Hence, $b={\floor{\log_2(n)}+2}$ is sufficient to cover all of the necessary variables when expanding $(1+x_1)^n \in \K_b$.
@@ -167,7 +169,9 @@ Starting from $n=0$, Gould's sequence begins:
 
 \begin{theorem}
 \label{theorem:goulds}
+\textit{
 Let $n \in \Z^+$. Let $b={\floor{\log_2(n)}+2}$. Define the ring $(\K_b/m)$ as in \cref{definition:modring} with $m=2$. Expanding $(1+x_1)^n \in (\K_b/2)$ and then evaluating in $\Z$ at $x_1=x_2=\cdots=x_n=1$ yields the $n$-th term of Gould's sequence $G_n$. Where $G_n = 2^{\wt{n}}$ and $\wt{n}$ is the Hamming weight of $n$.
+}
 \end{theorem}
 \begin{proof}
 First, observe that by the process of exponentiation by squaring \cite{knuth1997art}, expanding $(1+x_1)^n \in (\K_b/2)$ requires at most $\log_2(n)$ squarings. Hence, $b={\floor{\log_2(n)}+2}$ is sufficient to cover all of the necessary variables when expanding $(1+x_1)^n \in (\K_b/2)$.
@@ -231,7 +235,9 @@ A useful feature of recursive quotient rings we've defined (See \cref{definition
 
 \subsection{Transforming the Central Binomial Coefficients}
 \begin{proposition} \label{proposition:binomialtransforms}
+\textit{
 Let $n \in \Z^+$. Let $b={\floor{\log_2(n)}+2}$. Define the ring $\K_b$ as in \cref{definition:ring}. Let $\BT_t$ be the binomial transform function defined in \cref{definition:binomialtransforms}. Let $a$ be the integer sequence $a_n=\binom{2n}{n}$. Evaluating the expansion of $(t + 1 + x_1)^n \in \K_b$ at $x_1=x_2=\cdots=x_n=1$ equals $\BT_t(a_n)$, the $t$-th binomial transform of the central binomial coefficients from $0$ to $n$.
+}
 \end{proposition}
 \begin{proof}
 Let $P$ be a polynomial in $\K_b$. $P := 1 + x_1$. By the binomial theorem:
@@ -245,7 +251,9 @@ Evaluating this at $x_1=x_2=\cdots=x_n=1$ yields the binomial transform of the s
 Using a similar approach to \cref{proposition:binomialtransforms} given above, we can compute the $t$-th binomial transform of Gould's sequence. However, calculating the binomial transforms of Gould's sequence requires a different approach to calculating $G_n$ than the approach used in our quotient ring $(K_m/2)$ (See \cref{definition:modring}). Specifically, we must define an ideal which mimics the behavior of taking the coefficients modulo $2$, but without restricting the polynomial coefficients to $(\Z/2)$. Otherwise, the binomial transform will be taken modulo $2$.
 
 \begin{theorem} \label{theorem:goulds2}
+\textit{
 Let $n \in \Z^+$. Let $b={\floor{\log_2(n)}+2}$. Define the ring $\K'_b$ as in \cref{definition:ring2}. Expanding $(1+x_1)^n \in \K'_b$ and then evaluating at $x_1=x_2=\cdots=x_n=1$ yields the $n$-th term of Gould's sequence $G_n$. Where $G_n = 2^{\wt{n}}$ and $\wt{n}$ is the Hamming weight of $n$.
+}
 \end{theorem}
 \begin{proof}
 In \cref{theorem:goulds}, we showed how expanding $(1+x_1)^n \in (\K_b/2)$ and then evaluating in $\Z$ at $x_1=x_2=\cdots=x_n=1$ yields $G_n$.
@@ -258,7 +266,9 @@ When expanding $(1+x_1)^n \in \K'_b$, the $-2x_i$ terms will cause the terms wit
 Finally, we will conclude by showing how the ring $K'_n$ can be used to calculate binomial transforms of Gould's sequence.
 
 \begin{proposition} \label{proposition:gouldbinomialtransforms}
+\textit{
 Let $n \in \Z^+$. Let $b={\floor{\log_2(n)}+2}$. Define the ring $\K'_b$ as in \cref{definition:ring2}. Let $\BT_t$ be the binomial transform function defined in \cref{definition:binomialtransforms}. Let $G_n$ represent the $n$-th term of Gould's sequence. Evaluating the expansion of $(t + 1 + x_1)^n \in \K'_b$ at $x_1=x_2=\cdots=x_n=1$ equals $\BT_t(G_n)$, the $t$-th binomial transform of Gould's sequence $G$ from $0$ to $n$.
+}
 \end{proposition}
 \begin{proof}
 Let $P$ be a polynomial in $\K'_b$. $P := 1 + x_1$. By the binomial theorem:
