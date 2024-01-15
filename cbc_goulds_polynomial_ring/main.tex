@@ -81,15 +81,15 @@ The quotient ring \( S = R[x_1, x_2, \ldots, x_{n}]/I \) is defined as a \textbf
 \end{definition}
 
 \begin{definition}[Binomial transform function] \label{definition:binomialtransforms}
-We define the operator $\BT^t$, which takes in an integer sequence $a = \{ a_0, a_1, a_2, \ldots \}$, to be defined as the $t$-th binomial transform of the $a$ sequence terms, such that:
+We define the operator $\BT_t$, which takes in an integer sequence $a = \{ a_0, a_1, a_2, \ldots \}$, to be defined as the $t$-th binomial transform of the $a$ sequence terms, such that:
 \begin{align*}
-    \BT^{t}(a_n) =
+    \BT_{t}(a_n) =
     \begin{cases}
         a_n &\text{if } t = 0 \\
         \sum_{k=0}^{n} \binom{n}{k} \cdot a_k &\text{if } t = 1 \\
-        \sum_{k=0}^{n} \binom{n}{k} \cdot \BT^{t-1}(a_k) &\text{if } t > 1 \\
+        \sum_{k=0}^{n} \binom{n}{k} \cdot \BT_{t-1}(a_k) &\text{if } t > 1 \\
         \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^{n-k} \cdot a_k  &\text{if } t = -1 \\
-        \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^{n-k} \cdot \BT^{t+1}(a_k) &\text{if } t < -1 \\
+        \sum_{k=0}^{n} \binom{n}{k} \cdot (-1)^{n-k} \cdot \BT_{t+1}(a_k) &\text{if } t < -1 \\
     \end{cases}
 \end{align*}
 \end{definition}
@@ -281,7 +281,7 @@ Evaluating this at $x_1=x_2=\cdots=x_n=1$ yields the binomial transform of the s
 \subsection{Terms in the Binomial Transform of Gould's Sequence}
 The binomial transform of Gould's sequence is entry A368655 in the OEIS \cite{A368655}. Starting from $n=0$, Gould's sequence begins:
 
-$\BT^{1}(G_n) = \{ 1, 3, 7, 17, 39, 85, 181, 387, 839, 1829, 3953, 8391, 17461, 35759, 72559, 146921, 298631, 611733, \ldots \}$
+$\BT_{1}(G_n) = \{ 1, 3, 7, 17, 39, 85, 181, 387, 839, 1829, 3953, 8391, 17461, 35759, 72559, 146921, 298631, 611733, \ldots \}$
 
 \textbf{Remark.}
 The straightforward computation of the binomial transforms of Gould's sequence within our polynomial ring structure is quite intriguing. Gould's sequence does not follow a simple increasing trend; rather, its terms oscillate in a sawtooth-like fashion and are tied to the binary representation of integers (See \S\ref{section:goulds}). The sequence's terms, while being powers of $2$, are distributed throughout in a seemingly random order. In the binomial transform process, we multiply each of these irregularly spaced elements by binomial coefficients. The fact that this can be done smoothly in our polynomial ring setup, without individually calculating each term, is somewhat baffling. It appears that the binary essence of integers is subtly embedded in the exponentiation of polynomials within our ring. This finding, while not earth-shattering, is nonetheless unexpected given the inherent complexity of Gould's sequence. Further investigation may offer deeper insights into the behavior of Gould's sequence and similar seemingly chaotic integer sequences.
