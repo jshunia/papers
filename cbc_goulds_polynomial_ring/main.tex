@@ -50,7 +50,7 @@
 
 \title{A Polynomial Ring Connecting Central Binomial Coefficients and Gould's Sequence}
 \author{Joseph M. Shunia}
-\date{October 2023 \\ \small Revised: December 2023 \normalsize}
+\date{October 2023 \\ \small Revised: January 2024 \normalsize}
 \maketitle
 
 \begin{abstract}
@@ -176,19 +176,19 @@ Let $n \in \Z^+$. Let $b={\floor{\log_2(n)}+2}$. Define the ring $(\K_b/m)$ as i
 \begin{proof}
 First, observe that by the process of exponentiation by squaring \cite{knuth1997art}, expanding $(1+x_1)^n \in (\K_b/2)$ requires at most $\log_2(n)$ squarings. Hence, $b={\floor{\log_2(n)}+2}$ is sufficient to cover all of the necessary variables when expanding $(1+x_1)^n \in (\K_b/2)$.
 
-Next, we proceed by induction on $n$ to show that the expanded polynomial yields $G_n = 2^{\wt{n}}$ upon evaluation in $\Z$ at $x_1 = x_2 = x_3 = \cdots = 1$.
+Next, we proceed by induction on $n$ to show that the expanded polynomial yields $G_n = 2^{\wt{n}}$ upon evaluation in $\Z$ at $x_1=x_2=\cdots=1$.
 
-Consider $n = 1$. In this case, $(1 + x_1)^1 = 1 + x_1 \in (\K_b/2)$. Evaluating in $\Z$ at $x_1 = x_2 = x_3 = \cdots = 1$ yields $2$, which is $2^{\wt{1}} = 2^1$. Thus, the statement holds for $n = 1$.
+Consider $n = 1$. In this case, $(1 + x_1)^1 = 1 + x_1 \in (\K_b/2)$. Evaluating in $\Z$ at $x_1=x_2=\cdots=1$ yields $2$, which is $2^{\wt{1}} = 2^1$. Thus, the statement holds for $n = 1$.
 
-Assume the statement holds for some $k \geq 1$, that is, expanding $(1 + x_1)^k \in (\K_b/2)$ and then evaluating in $\Z$ at $x_1 = x_2 = x_3 = \cdots = 1$ yields $2^{\wt{k}}$. We need to show it holds for $k+1$.
+Assume the statement holds for some $k \geq 1$, that is, expanding $(1 + x_1)^k \in (\K_b/2)$ and then evaluating in $\Z$ at $x_1=x_2=\cdots=1$ yields $2^{\wt{k}}$. We need to show it holds for $k+1$.
 
 Consider $(1 + x_1)^{k+1}$ in $(\K_b/2)$. This can be written as $(1 + x_1)^k (1 + x_1)$. Using the inductive hypothesis, we know that $(1 + x_1)^k$ yields $2^{\wt{k}}$ when evaluated in $\Z$. Now, we need to consider the additional factor $(1 + x_1)$.
 
 In the ring $(\K_b/2)$, the expansion of $(1 + x_1)^{k+1}$ will result in various terms involving $x_1, x_2, \ldots$, with each term corresponding to a particular combination of bits in the binary representation of $k+1$. The modulo $2$ operation ensures that only terms corresponding to odd counts of $x_1$ will contribute to the final sum. That is, positions with $1$ in the binary representation of $k+1$.
 
-When we evaluate this expression in $\Z$ at $x_1 = x_2 = x_3 = \cdots = 1$, the result will be a power of $2$, specifically $2^{\wt{k+1}}$, where $\wt{k+1}$ is the Hamming weight of $k+1$. This is because the terms that survive in the expansion and modulo $2$ reduction directly correspond to the count of $1$s in the binary representation of $k+1$.
+When we evaluate this expression in $\Z$ at $x_1=x_2=\cdots=1$, the result will be a power of $2$, specifically $2^{\wt{k+1}}$, where $\wt{k+1}$ is the Hamming weight of $k+1$. This is because the terms that survive in the expansion and modulo $2$ reduction directly correspond to the count of $1$s in the binary representation of $k+1$.
 
-Therefore, by induction, expanding $(1 + x_1)^n \in (\K_b/2)$ and then evaluating in $\Z$ at $ x_1 = x_2 = x_3 = \cdots = 1$ yields $2^{\wt{n}}$ for all $n \in \Z^+$.
+Therefore, by induction, expanding $(1 + x_1)^n \in (\K_b/2)$ and then evaluating in $\Z$ at $x_1=x_2=\cdots=1$ yields $2^{\wt{n}}$ for all $n \in \Z^+$.
 \end{proof}
 
 \section{Demonstrations}
