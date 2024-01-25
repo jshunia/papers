@@ -201,10 +201,10 @@ Let $p$ be a prime divisor of $n$. By \cref{lemma:leastcoprime}, there exists a 
 \end{proof}
 
 \begin{corollary} \label{corollary:findingprimepnonresidue}
-\textit{Let $n>3$ be an odd composite integer. There exists a prime integer $\D$, such that for some prime divisor $p$ of $n$, there are no solutions $a^\D \equiv 1 \pmod{p}$ for $a \in \mathbb{Z}$. Furthermore, an algorithm can determine such a prime $\D$ in $\tilde{O}(\log(n))$ time.}
+\textit{Let $n>3$ be an odd composite integer. There exists a prime integer $\D$, such that for some prime divisor $p$ of $n$, $1$ is not a non-trivial $\D$-th power residue modulo $p$. That is, there are no solutions $a^\D \equiv 1 \pmod{p}$ for $a \in \mathbb{Z}_p$ such that $a \not= 1$. Furthermore, an algorithm can determine such a prime $\D$ in $\tilde{O}(\log(n))$ time.}
 \end{corollary}
 \begin{proof}
-By \cref{corollary:findingprimep}, we can find a $\D$ such that $(p-1) \not\equiv 0 \pmod{\D}$ for some prime $p$ dividing $n$ in $\tilde{O}(\log(n))$ time. By Fermat's Little Theorem, $a^\D \equiv 1 \pmod{p}$ has a solution in the integers iff $\D \mid (p-1)$. Hence, the result we wish to prove follows trivially.
+By \cref{corollary:findingprimep}, we can find a $\D$ such that $(p-1) \not\equiv 0 \pmod{\D}$ for some prime $p$ dividing $n$ in $\tilde{O}(\log(n))$ time. By Fermat's Little Theorem, $a^\D \equiv 1 \pmod{p}$ has a solution in the integers iff $\D \mid (p-1)$. Hence, the proof follows trivially.
 \end{proof}
 
 \begin{lemma} \label{lemma:dthpowerincongruencemodprimepower}
@@ -271,7 +271,7 @@ A fundamental theorem in polynomial ring theory states that an integer $n$ is pr
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take inspiration from their approach to show that composite integers will always fail our test.
 
 \begin{theorem}[Primality test] \label{theorem:composites}
-\textit{Let $n = p \cdot q$ be a composite integer greater than $3$, with $p$ a prime divisor. Let $\D \in \mathbb{Z}$ be prime. Suppose $1$ is not a $\D$-th power modulo $p$ and $n$ does not have a prime factor less than or equal to $\D$. Then, $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^{\D} - 1}$.}
+\textit{Let $n = p \cdot q$ be a composite integer greater than $3$, with $p$ a prime divisor. Let $\D \in \mathbb{Z}$ be prime. Suppose $1$ is not a non-trivial $\D$-th power modulo $p$ and $n$ does not have a prime factor less than or equal to $\D$. Then, $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^{\D} - 1}$.}
 \end{theorem}
 \begin{proof}
 \textbf{Preliminaries:}
