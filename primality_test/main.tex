@@ -12,6 +12,9 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{multicol}
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 \theoremstyle{plain}
@@ -21,6 +24,7 @@
 \newtheorem{conjecture}{Conjecture}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
 \newtheorem{proposition}{Proposition}
 \newtheorem{example}{Example}
 \crefname{definition}{Definition}{Definitions}
@@ -28,10 +32,9 @@
 \crefname{conjecture}{Conjecture}{Conjectures}
 \crefname{theorem}{Theorem}{Theorems}
 \crefname{lemma}{Lemma}{Lemmas}
+\crefname{corollary}{Corollary}{Corollary}
 \crefname{proposition}{Proposition}{Propositions}
 \crefname{example}{Example}{Examples}
-\usepackage{graphicx}
-\usepackage{multicol}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\totient}[1]{\phi\left({#1}\right)}
 \newcommand{\bigO}[1]{O(#1)}
@@ -42,15 +45,20 @@
 \newcommand{\Zx}{\Z[x]}
 \newcommand{\Znx}{\Z_n[x]}
 \newcommand{\Rx}{R}
-\newcommand{\Mx}{\Z_n[x]/(x^d-2)}
-\newcommand{\ord}[2]{\text{ord}_\text{#1}\left((#2)\right)}
+\newcommand{\Mx}{\Z_n[x]/(x^\D - 1)}
+\newcommand{\ord}{\text{ord}}
 \newcommand{\dtotient}[3]{\sigma_{#1}( #2^{\floor{\frac{1}{#3}}} )}
-\newcommand{\ordn}[1]{\text{ord}_n\left({#1}\right)}
+\newcommand{\ordn}[1]{\ord_n\left({#1}\right)}
 \newcommand{\indicator}[2]{\substack{#1 \\ #2}}
 \newcommand{\glaisher}[2]{\left[ \begin{array}{c} #1 \\ #2 \end{array} \right]}
 \newcommand{\kronecker}[2]{\left(#1\mid#2\right)}
+\newcommand{\eval}[2]{\left . #1 \right|_{#2}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Pcal}{\mathcal{P}}
+\newcommand{\Vcal}{\mathcal{V}}
+\newcommand{\primep}{p}
 
-\title{A Primality Test for Integers Not Divisible by Squares of Wieferich Primes}
+\title{An Efficient Deterministic Primality Test \\ \small [Working Draft] \normalsize}
 \author{Joseph M. Shunia}
 \date{December 2023 \\ \small Revised: January 2024 \normalsize}
 
@@ -59,7 +67,7 @@
 \maketitle
 
 \begin{abstract}
-We present a primality test with polynomial time complexity $\softO{\log^3(n)}$, which is deterministic for all squarefree integers and for nonsquarefree integers not divisible by any square of a Wieferich prime. Given the extreme scarcity of Wieferich primes, with only two known to date, this test remains highly practical, covering a vast majority of integers. We base our test on a variation of Agrawal's conjecture, a prominent yet unresolved conjecture in primality testing. Agrawal's conjecture states that an integer $n$ is prime if and only if the polynomial congruence $(x - 1)^n \equiv x^n - 1 \pmod{n}$ holds in the quotient ring $\mathbb{Z}[x]/(x^r - 1)$, for some $r$ satisfying $n^2 \not\equiv 1 \pmod{r}$. Our approach deviates from the conventional use of roots of unity in $\mathbb{Z}[x]/(x^r - 1)$, instead utilizing the ring $\mathbb{Z}[x]/(x^d - 2)$, where $d > 2$ is the smallest prime such that $n \not\equiv 1 \pmod{d}$. This shift to roots of $2$ allows us to exploit the number-theoretic properties of Fermat pseudoprimes to base $2$. In doing so, we establish an efficient deterministic primality test for an extensively broad set of the integers.
+We present a deterministic primality test with polynomial time complexity $\tilde{O}(\log^4(n))$. The basis for our test is a variant of Agrawal's conjecture, a prominent yet unresolved conjecture in primality testing. Agrawal's conjecture states that an integer $n$ is prime if and only if the polynomial congruence $(x - 1)^n \equiv x^n - 1 \pmod{n}$ holds in the quotient ring $\mathbb{Z}[x]/(x^r - 1)$, for some $r$ satisfying $n^2 \not\equiv 1 \pmod{r}$. We modify the conjecture, and exploit the number-theoretic properties of Fermat pseudoprimes and $\mathcal{D}$-th power residues to establish an efficient deterministic primality test.
 \end{abstract}
 
 \section{Introduction}
@@ -68,26 +76,19 @@ Primality testing has seen remarkable advancements over the past few decades. A 
 
 In the field of cryptography, the unique properties of prime numbers are widely exploited to create cryptographic primitives. It is often the case that many large primes must be generated in rapid succession \cite{lenstra1987}. To make these cryptographic operations practical, fast probabilistic primality tests such as the Baille-PSW primality test (BPSW) \cite{baillie1980} or Miller-Rabin (MR) \cite{rabin1980} \cite{miller1976} are used instead of AKS when searching for large primes. Probabilistic primality tests are by definition non-deterministic and may erroneously report a composite integer as being prime. Composite integers which pass a probabilistic primality test are relatively rare and are known as pseudoprimes (PSPs) for the respective test \cite{wagstaff1983}. When generating primes for cryptographic purposes, probabilistic primality tests are often combined or repeated with different parameters in order to achieve an acceptable error-bound that makes it almost certain that no composite integer will pass. However, reducing the error-bound requires additional compute and increases running-time, creating a trade-off.
 
-We present a primality test with polynomial time complexity $\softO{\log^3(n)}$, which is deterministic for all squarefree integers and for nonsquarefree integers not divisible by any square of a Wieferich prime. Given the extreme scarcity of Wieferich primes, with only two known to date, this test remains highly practical, covering a vast majority of integers. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}.
+We present a deterministic primality test with polynomial time complexity $\softO{\log^4(n)}$. This efficiency gain opens new avenues for practical applications, particularly in cryptography, where fast and reliable primality testing is desirable \cite{pomerance1984}.
 
 Our test is based on a famous conjecture issued by Manindra Argawal while he was an undergraduate student \cite{aks2002}. Let $n$ and $r$ be two coprime positive integers. If the following polynomial congruence holds, then $n$ is prime or $n^2 = 1 \pmod{r}$:
 \begin{align}
     (x - 1)^n \equiv x^n - 1 \pmod{n, x^r - 1}
 \end{align}
 
-We alter the conditions slightly to use roots of $2$ instead of roots of unity. This substitution allows us to leverage specific number theoretic properties unique to Fermat pseudoprimes to base $2$ (See \cref{definition:fermatpsp}), which are critical in establishing the determinism of our test for nearly all integers.
+We alter the conditions slightly to leverage specific number theoretic properties unique to Fermat pseudoprimes to base $2$ (See \cref{definition:fermatpsp}) to construct a deterministic primality test.
 
-Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \mathbb{Z}[x]$ for most integers, which is known to hold for only prime integers $n$ \cite{granville2004primes}.
+Through the proof of our main theorem, we demonstrate that our modified test is equivalent to checking the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n} \in \mathbb{Z}[x]$, which is known to hold for only prime integers $n$ \cite{granville2004primes}.
 
 \subsection{Structure of the Paper}
 This paper is structured as follows: We begin by presenting the main theorem which defines our primality test. We follow up with supporting lemmas and theorems. Then, we present the proof of our main theorem, which demonstrates the test's validity for odd prime numbers and its failure for odd composite numbers. Through this, we establish the deterministic nature of our test. We then describe the algorithm used to compute our test and analyze its computational complexity. We conclude with a link to an open source implementation of our test.
-
-\subsection{Note Regarding Title and Content Revision}
-In the initial version of this paper, published as a preprint to the Electronic Colloquium on Computational Complexity (ECCC) in December 2023, the title ``An Efficient Deterministic Primality Test'' was used, and the scope of the proposed primality test was presented as universally applicable to all integers. However, upon further examination and insightful peer feedback, a critical limitation in the proof was identified. While the original claim suggested a universal application, the proof, as it stands, substantiates the test's determinism for a substantial, but not comprehensive, subset of the integers: all squarefree integers and those nonsquarefree integers which are not divisible by any square of a Wieferich prime (See \cref{definition:wieferichprimes}).
-
-We have revised both the title and the content of the paper to more accurately reflect these findings. The new title, ``A Primality Test for Integers Not Divisible by Squares of Wieferich Primes'', focuses on the subset of integers for which we believe our test is provably deterministic. We have also adjusted the content to use notation and conventions better aligned with the standards in the field of abstract algebra (such as the use of quotient rings). While the revised scope may seem more limited compared to the initial assertion, it nevertheless encompasses a vast majority of integers. Given the current knowledge and extreme rarity of Wieferich primes (with only two such primes known as of this writing), the test's practical applicability remains significant.
-
-We regret any confusion or inconvenience our initial publication may have caused and are dedicated to continuing our research in this area. Our goal is to either extend the proof to encompass a broader class of integers or to further refine our understanding of its current applicability.
 
 \section{Preliminaries and Definitions}
 
@@ -120,140 +121,144 @@ This upper bound suggests that if it happens to be true that there are infinitel
 
 \section{Statement of Main Theorem}
 \begin{theorem}[Main theorem] \label{theorem:main}
-\textit{Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $n$ is not divisible by any square of a Wieferich prime and the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq d$:}
+\textit{Let $n > 3$ be an odd integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $\D > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{\D}$. If the following polynomial congruence holds, then either $n$ is prime or $n$ has a prime divisor $p \leq \D$:}
 \begin{align}
-(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}
+(1 + x)^n \equiv 1 + x^n \pmod{n, x^\D - 1}
 \end{align}
 \end{theorem}
 
 \section{Supporting Lemmas and Theorems}
 
 \subsection{Supporting Lemmas}
-\begin{lemma} \label{lemma:floornondivisor}
-\textit{Given $a,b \in \Z^{+}$ with \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(\left\lfloor \frac{a}{b} \right\rfloor \) cannot divide \(a\).}
+
+\begin{lemma}[Upper bound on floor function and indivisibility]
+\label{lemma:floornondivisorupperbound}
+\textit{Let $a,b \in \Z^{+}$. Suppose \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). Then \(b \leq \left\lfloor \sqrt{a} \right\rfloor\).}
 \end{lemma}
 \begin{proof}
-Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer that is less than \(\frac{a}{b}\). Thus, \(q \cdot b < a < b \cdot (q + 1)\).
+We are given \( a, b \in \Z^{+} \) such that \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
+\end{proof}
 
-Suppose, for contradiction, that \(q\) divides \(a\). Then there exists an integer \(k\) such that \(a = k \cdot q\). Substituting \(a = k \cdot q\) into the inequality \(q \cdot b < a < b \cdot (q + 1) \), we get \(q \cdot b < k \cdot q < b \cdot (q + 1) \). Dividing this inequality by \(q\), we obtain \(b < k < b + \frac{b}{q}\).
+\begin{lemma} \label{lemma:floornondivisor}
+\textit{Let $a,b \in \Z^{+}$. Suppose \(b \nmid a\) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). Then \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).}
+\end{lemma}
+\begin{proof}
+Let \(q = \left\lfloor \frac{a}{b} \right\rfloor\). By definition, \(q\) is the greatest integer which is less than \(\frac{a}{b}\). Thus, \(q \cdot b < a < b \cdot (q + 1)\).
+
+Suppose, for contradiction, that \(q \mid a\). Then there exists an integer \(k\) such that \(a = k \cdot q\). Substituting \(a = k \cdot q\) into the inequality \(q \cdot b < a < b \cdot (q + 1) \), we get \(q \cdot b < k \cdot q < b \cdot (q + 1) \). Dividing this inequality by \(q\), we obtain \(b < k < (b + \frac{b}{q})\).
 
 Since \(k\) is an integer, and \(b \nmid a\) implies \(k \neq b\), the next possible integer value for \(k\) is \(b + 1\). Therefore, \(k = b + 1\), which gives \(a = k \cdot q = q \cdot (b + 1)\). However, this leads to a contradiction: \(a = q \cdot (b + 1) \) implies \(a \geq b \cdot (q + 1) \), contradicting the established fact that \(a < b \cdot (q + 1) \). Hence, our assumption that \(q\) divides \(a\) is false. Therefore, \(\left\lfloor \frac{a}{b} \right\rfloor \nmid a\).
 \end{proof}
 
-\begin{lemma}[Upper bound on floor function and indivisibility]
-\label{lemma:floornondivisorupperbound}
-\textit{Given $a,b \in \Z^{+}$ with \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \(b \leq \left\lfloor \sqrt{a} \right\rfloor\).}
-\end{lemma}
-\begin{proof}
-Assume \( a, b \in \Z^{+} \) and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \). By definition, \( \left\lfloor \frac{a}{b} \right\rfloor \) is the greatest integer less than or equal to \( \frac{a}{b} \). Hence, \( \left\lfloor \frac{a}{b} \right\rfloor \leq \frac{a}{b} \). Since \( b < \left\lfloor \frac{a}{b} \right\rfloor \), we have \( b^2 < b \cdot \left\lfloor \frac{a}{b} \right\rfloor \leq a \). Taking square roots on both sides of the inequality \( b^2 < a \) and considering that \( b \) and \( \sqrt{a} \) are both positive, we get \( b < \sqrt{a} \). Since \( b \) and \( \sqrt{a} \) are positive integers, and \( b < \sqrt{a} \), it follows that \( b \leq \left\lfloor \sqrt{a} \right\rfloor \).
-\end{proof}
-
-\begin{lemma}[Least prime $p$ coprime to $n$] \label{lemma:leastcoprime}
-\textit{Let $n > 6$ be an integer. Then there exists a prime $p$ coprime to $n$ such that:}
-\begin{align}
-    p < \log(n) \left( \log\log(n) + \log\log\log(n) \right)
-\end{align}
+\begin{lemma}[Least prime $\primep$ coprime to $n$] \label{lemma:leastcoprime}
+\textit{Let $n \in \mathbb{Z}^+$ such that $n > 6$. There exists a prime $\primep$ coprime to $n$, such that:}
+\begin{align*}
+    \primep < \log(n) \left( \log\log(n) + \log\log\log(n) \right)
+\end{align*}
 \end{lemma}
 \begin{proof}
 We are given $n > 6$. By the Prime Number Theorem, $n$ must have fewer than $\log(n)$ distinct prime factors. Hence, we need to establish an upper bound on the $\log(n)$-th prime number.
 
 Let $p_n$ denote the $n$-th prime number. Then for $n \geq 6$, we have the inequality \cite{rosser1941primebounds}:
 \begin{align}
-    \frac{p_n}{n} < \log(n) + \log\log(n)
+    \frac{\primep_n}{n} < \log(n) + \log\log(n)
 \end{align}
 
 Re-arranging terms:
 \begin{align}
-    p_n < n \log(n) + n \log\log(n)
+    \primep_n < n \log(n) + n \log\log(n)
 \end{align}
 
-We want to find an upper bound for $p_{\log(n)}$, the $\log(n)$-th prime number. Substituting $\log(n)$ for $n$ in the inequality, we get:
+We want to find an upper bound for $\primep_{\log(n)}$, the $\log(n)$-th prime number. Substituting $\log(n)$ for $n$ in the inequality, we get:
 
 \begin{align}
-p_{\log(n)} < \log(n) \left( \log\log (n) + \log\log\log(n) \right)
+\primep_{\log(n)} < \log(n) \left( \log\log (n) + \log\log\log(n) \right)
 \end{align}
 
-This expression gives an upper bound for the smallest prime $p$ that is coprime to $n$.
+This expression gives an upper bound for the smallest prime $\primep$ that is coprime to $n$.
 \end{proof}
 
-\begin{lemma}[Incongruence modulo $n$] \label{lemma:incongruencemodn}
-\textit{Let \( n > 3 \) be an odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \). Denote by \( d \) the least prime integer \( > 2 \) which does not divide \( n-1 \). Then, \( 2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n} \).}
+\begin{corollary} \label{corollary:leastcoprimebounds}
+Let $n > 6$ be an integer. Then there exists a prime integer $\D \leq \tilde{O}(log(n))$ such that $\D \nmid (n-1)$. 
+\end{corollary}
+\begin{proof}
+By \cref{lemma:leastcoprime}, there exists a prime integer $\D$ coprime to $n-1$, satisfying:
+\begin{align*}
+    \D < \log(n-1) \left( \log\log(n-1) + \log\log\log(n-1) \right)
+\end{align*}
+Considering the soft-O notation, which simplifies the time complexity by ignoring sublogarithmic factors, we have:
+\begin{align*}
+    \tilde{O}(\log(n-1)) \geq \log(n-1) \left( \log\log(n-1) + \log\log\log(n-1) \right)
+\end{align*}
+It follows that this bound can be expressed as $\tilde{O}(\log(n))$, indicating the existence of an algorithm capable of finding $\D$ within this time complexity.
+\end{proof}
+
+\begin{corollary} \label{corollary:findingprimep}
+\textit{Let $n>3$ be an odd composite integer. There exists a prime integer $\D$, such that for some prime divisor $p$ of $n$, $(p-1) \not\equiv 0 \pmod{\D}$. Furthermore, an algorithm can determine such a prime $\D$ in $\tilde{O}(\log(n))$ time.}
+\end{corollary}
+\begin{proof}
+Let $p$ be a prime divisor of $n$. By \cref{lemma:leastcoprime}, there exists a prime integer $\D$ coprime to $p-1$, satisfying $\D < \log(p-1) \left( \log\log(p-1) + \log\log\log(p-1) \right)$. Considering the soft-O notation, which simplifies the time complexity by ignoring sublogarithmic factors, the upper bound for finding such a $\D$ is $\tilde{O}(\log(p-1))$. Since $p \leq \floor{\frac{n}{3}}$, it follows that this bound can be expressed as $\tilde{O}(\log(n))$, indicating the existence of an algorithm capable of finding $\D$ within this time complexity.
+\end{proof}
+
+\begin{corollary} \label{corollary:findingprimepnonresidue}
+\textit{Let $n>3$ be an odd composite integer. There exists a prime integer $\D$, such that for some prime divisor $p$ of $n$, there are no solutions $a^\D \equiv 1 \pmod{p}$ for $a \in \mathbb{Z}$. Furthermore, an algorithm can determine such a prime $\D$ in $\tilde{O}(\log(n))$ time.}
+\end{corollary}
+\begin{proof}
+By \cref{corollary:findingprimep}, we can find a $\D$ such that $(p-1) \not\equiv 0 \pmod{\D}$ for some prime $p$ dividing $n$ in $\tilde{O}(\log(n))$ time. By Fermat's Little Theorem, $a^\D \equiv 1 \pmod{p}$ has a solution in the integers iff $\D \mid (p-1)$. Hence, the result we wish to prove follows trivially.
+\end{proof}
+
+\begin{lemma} \label{lemma:dthpowerincongruencemodprimepower}
+\textit{Let $n$ be an odd composite integer such that $n > 3$ and $2^{n-1} \equiv 1 \pmod{n}$. Then, there exists a prime integer $\D$ such that $2^{\floor{\frac{\primep^e-1}{\D}}} \not\equiv 1 \pmod{\primep^e}$ for some prime power divisor $\primep^e$ of $n$. Furthermore, an algorithm can determine such a prime $\D$ in $\tilde{O}(\log(n))$ time.}
 \end{lemma}
 \begin{proof}
-Consider an odd composite integer \( n > 3 \) for which \( 2^{n-1} \equiv 1 \pmod{n} \). According to the properties of the multiplicative order modulo $n$, the smallest positive integer \( k \) such that \( 2^k \equiv 1 \pmod{n} \) defines \( \ordn{2} \), that is, \( k = \ordn{2} \). Since $n$ is composite and \( 2^{n-1} \equiv 1 \pmod{n} \), this order, \( \ordn{2} \), must divide \( n-1 \).
+Consider an odd composite integer $n > 3$ such that $2^{n-1} \equiv 1 \pmod{n}$. According to the properties of the multiplicative order modulo $n$, the least $k \in \mathbb{Z}^+$ such that $2^k \equiv 1 \pmod{n}$ defines $\ord_n(2)$. That is, $\ord_n(2) = k$. In this case, $2^{n-1} \equiv 1 \pmod{n} \Rightarrow \ord_n(2) \mid (n-1)$.
 
-Given \( d \) is the least prime integer greater than $2$ and less than \( n \) that does not divide \( n-1 \), and \( \ordn{2} \) divides \( n-1 \), it follows that $d$ cannot equal \( \ordn{2} \). Furthermore, by Lemma \ref{lemma:floornondivisor}, we know that if an integer \( b \) does not divide an integer \( a \), and \( 1 < b < \left\lfloor \frac{a}{b} \right\rfloor \), then \( \left\lfloor \frac{a}{b} \right\rfloor \) does not divide \( a \).
+Let $\D$ be the least prime integer such that $2 < \D < n$ and $\D \nmid (n-1)$. By \cref{corollary:leastcoprimebounds}, we can find such $\D$ in $\tilde{O}(log(n))$ time.
 
-Applying this to our current context with \( a = n-1 \) and \( b = d \): The least odd composite integer such that \( 2^{n-1} \equiv 1 \pmod{n} \) is $341$ \cite{oeisfermatpspbase2}. By Lemma \ref{lemma:leastcoprime}, for $n > 6$ we have $d < \log (n) (\log \log (n) + \log \log \log (n))$, which is significantly less than $\left\lfloor\sqrt{n}\right\rfloor$ as $n$ grows large. For $n \geq 341$, clearly $d < \left\lfloor\sqrt{n}\right\rfloor$ which satisfies Lemma \ref{lemma:floornondivisorupperbound}. Thus we have \( 1 < d < \left\lfloor \frac{n-1}{d} \right\rfloor \) and hence, \( \left\lfloor \frac{n-1}{d} \right\rfloor \) cannot divide \( n-1 \).
+We have $\D \nmid (n-1)$. Conversely, we also have $\ord_n(2) \mid (n-1)$. Hence, we deduce $\D \not= \ord_n(2)$. 
 
-By the properties of the order of an integer modulo composite $n$, the smallest $k \in \mathbb{Z}$ such that $2^k \equiv 1 \pmod{n}$, that is $k = \ordn{2}$, must be a divisor of $n-1$. Hence, $\ordn{2} \mid n-1$. Since $\left\lfloor\frac{n-1}{d}\right\rfloor$ is strictly less than $n-1$ and $d$ does not divide $n-1$, it follows that $2^{\left\lfloor\frac{n-1}{d}\right\rfloor} \not\equiv 1 \pmod{n}$.
+Since $\D < \left\lfloor\sqrt{n}\right\rfloor$, we have $\D < \left\lfloor \frac{n-1}{\D} \right\rfloor$ (By \cref{lemma:floornondivisorupperbound}). We also have $\D \nmid (n-1)$ and $1 < \D < \left\lfloor \frac{n-1}{\D} \right\rfloor$, which collectively imply $\left\lfloor \frac{n-1}{\D} \right\rfloor \nmid (n-1)$ (By \cref{lemma:floornondivisor}).
+
+Finally, since $\left\lfloor\frac{n-1}{\D}\right\rfloor < (n-1)$ and $\D \nmid (n-1)$, we deduce $2^{\left\lfloor\frac{n-1}{\D}\right\rfloor} \not\equiv 1 \pmod{n}$. By the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, there must exist a prime power $\primep^e \mid n$ such that $2^{\left\lfloor\frac{\primep^e-1}{\D}\right\rfloor} \not\equiv 1 \pmod{\primep^e}$.
 \end{proof}
 
-\subsection{Characterizing Nonsquarefree Fermat Pseudoprimes}
-By necessity, any composite integer $n$ which purports to pass our primality test (as defined in \cref{theorem:main}) must be a Fermat pseudoprime to base $2$ (See \cref{definition:fermatpsp}). That is, we must have $2^{n-1} \equiv 1 \pmod{n}$.
-
-An intriguing observation is that Fermat pseudoprimes to base $2$ are rarely nonsquarefree. This presents us with the following lemma.
-
-\begin{lemma}
-\textit{Let $n$ be an odd composite nonsquarefree integer and a Fermat pseudoprime to base $2$. That is, $2^{n-1} \equiv 1 \pmod{n}$. Then, $n$ is the product of the square of a Wieferich prime (See \cref{definition:wieferichprimes}).}
+\begin{lemma}\label{lemma:dthpowerincongruencemodprime}
+\textit{Let $n$ be an odd composite integer such that $n > 3$ and $2^{n-1} \equiv 1 \pmod{n}$. Then, there exists a prime integer $\D$ such that $2^{\floor{\frac{\primep-1}{\D}}} \not\equiv 1 \pmod{\primep}$ for some prime divisor $\primep$ of $n$. Furthermore, an algorithm can enumerate such a prime $\D$ in $\tilde{O}(\log(n))$ time.}
 \end{lemma}
 \begin{proof}
-Given that $n$ is nonsquarefree, it can factorized as $n = p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}$ where $e_i > 1$ for at least one $i$ and each $p_i$ is prime. Since $n$ is a Fermat pseudoprime to base $2$, we have $2^{n-1} \equiv 1 \pmod{n}$. By the properties of modular arithmetic, the congruence $2^{n-1} \equiv 1 \pmod{n}$ implies $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for each $p_i^{e_i}$ dividing $n$.
+Consider an odd composite integer $n > 3$ such that $2^{n-1} \equiv 1 \pmod{n}$. By \cref{lemma:dthpowerincongruencemodprimepower}, there must exist a prime integer $\D$, can be determined in $\tilde{O}(\log(n))$ time, such that $2^{\left\lfloor\frac{\primep^e-1}{\D}\right\rfloor} \not\equiv 1 \pmod{\primep^e}$, where $\primep^e$ is a prime power dividing $n$.
 
-To reconcile $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ with the properties of Wieferich primes, we note that a Wieferich prime $p$ satisfies $2^{p-1} \equiv 1 \pmod{p^2}$. For a prime $p_i$ that is not Wieferich, the congruence $2^{p_i-1} \not\equiv 1 \pmod{p_i^2}$ holds. This implies that if $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for some $e_i > 1$, then $p_i$ must be a Wieferich prime.
+For each prime divisor $\primep$ of $n$, we have $\totient{\primep} = \primep-1$. By the Prime Number Theorem (PNT), $\primep-1$ itself can have at most $\log(\primep)$ distinct prime divisors. Hence, for a given $\primep$, it is impossible to have $2^{\left\lfloor\frac{\primep-1}{\D_i}\right\rfloor} \equiv 1 \pmod{\primep}$ for more than $\log(n)$ distinct primes $\D_i$.
 
-The Fermat pseudoprime condition $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$ for $e_i > 1$ requires $p_i$ to have the Wieferich property, as this is the only way to satisfy the congruence for higher powers of $p_i$. This follows from the fact that the order of $2$ modulo $p_i^{e_i}$ must divide both $n-1$ and $p_i-1$. Since $n-1$ is a multiple of $p_i-1$ for a nonsquarefree $n$ and $2^{n-1} \equiv 1 \pmod{p_i^{e_i}}$, it follows that $p_i$ must be Wieferich.
-
-Therefore, for $n$ to be a Fermat pseudoprime to base $2$ and nonsquarefree, at least one of the $p_i^{e_i}$ in its prime power decomposition must be divisible the square of a Wieferich prime. Hence, $n$ is the product of the square of a Wieferich prime.
+While we cannot find the specific $\D_i$ explicitly, it is clear that there must exist such a $D_i$ within the first $\log(n)+1$ primes (since otherwise $\primep-1$ would violate the PNT). Thus, it follows that there must exist a prime $\primep \mid n$ such that $2^{\left\lfloor\frac{\primep-1}{\D}\right\rfloor} \not\equiv 1 \pmod{\primep}$ which can be enumerated in $\tilde{O}(\log(n))$ time.
 \end{proof}
-
-\subsection{Squarefree Fermat Pseudoprimes}
-\begin{lemma} \label{lemma:nonresidue}
-\textit{Let $n>3$ be an odd composite squarefree integer such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. If $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$, then $n$ has at least one prime divisor $p$ such that $2$ is not a $d$-th power residue modulo $p$. That is, there are no solutions $b \in \mathbb{Z_p}$ such that $b^d \equiv 2 \pmod{p}$.}
-\end{lemma}
-\begin{proof}
-Let $p \in \mathbb{Z}$ be prime and $\beta = \gcd(p-1, d)$. Euler's criterion \cite{euler1914powerresidues} states that $a \not\equiv 0 \pmod p$ is a $d$-th power residue modulo $p$ if and only if:
-\begin{align}
-a^{\frac{p-1}{\beta}} \equiv 1 \pmod p
-\end{align}
-
-Applying to Euler's criterion to our situation, since $p$ and $d$ are both odd primes and $p \not= d$, we have that $a=2$ is a $d$-th power residue modulo $p$ if and only if $d \mid p-1$ and $2^{\frac{p-1}{d}} \equiv 1 \pmod p$.
-
-For the sake of contradiction, let's assume that for all prime divisors $p_j$ of $n$, $d \mid p_j-1$ and $2^{\frac{p_j-1}{d}} \equiv 1 \pmod p_j$. Since $n$ is squarefree, by the Chinese Remainder Theorem (CRT) \cite{cormen2009algorithms}, we must have $d \mid n-1$. However, this is a contradiction, as we have defined $d$ such that $n \not\equiv 1 \pmod{d}$.
-
-Furthermore, by the properties of the multiplicative order modulo composite $n$, we must also have $2^{\floor{\frac{n-1}{d}}} \equiv 1 \pmod p$. However, this also conflicts with our definition of $n$ which has $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod n$.
-
-Therefore, we conclude that there must exist at least one prime divisor $p$ of $n$ such that $2^{\floor{\frac{p-1}{d}}} \not\equiv 1 \pmod{p}$. For this $p$, Euler's criterion fails to hold, and thus it follows that $2$ is not a $d$-th power residue modulo $p$.
-\end{proof}
-
-\subsection{Supporting Theorems}
 
 \subsection{Primes Case}
 \begin{theorem}[Primes pass] \label{theorem:primes}
-\textit{Let $n$ be an odd prime integer such that $n > 3$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2}$.}
+\textit{Let $n$ be an odd prime integer such that $n > 3$. Let $\D > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{\D}$. Then $(1 + x)^n \equiv 1 + x^n \pmod{n, x^\D - 1}$.}
 \end{theorem}
 \begin{proof}
 We aim to show that the following polynomial congruence holds for all odd prime integers $n > 3$:
 \begin{align}
-    (1 + x)^n \equiv 1 + x^n \pmod{n, x^d - 2},
+    (1 + x)^n \equiv 1 + x^n \pmod{n, x^\D - 1},
 \end{align}
-where $d$ is the least prime integer greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
+where $\D$ is the least prime integer greater than $2$ such that $n \not\equiv 1 \pmod{\D}$.
 
 We begin by taking the binomial expansion of the left-hand side:
 \begin{align}
-    \sum_{k=0}^{n} \binom{n}{k} x^k \equiv 1 + x^n \pmod{n, x^d - 2}
+    \sum_{k=0}^{n} \binom{n}{k} x^k \equiv 1 + x^n \pmod{n, x^\D - 1}
 \end{align}
 
-When $n$ is prime, $\binom{n}{k} \equiv 0 \pmod{n}$ for all integers $k$ in the range $1 \leq k \leq n-1$. Thus, we have $\sum_{k=1}^{n-1} \binom{n}{k} x^k \equiv 0 \pmod{n, x^d - 2}$. With this in mind, we isolate the inner terms in our original congruence and simplify:
+When $n$ is prime, $\binom{n}{k} \equiv 0 \pmod{n}$ for all integers $k$ in the range $1 \leq k \leq n-1$. Thus, we have $\sum_{k=1}^{n-1} \binom{n}{k} x^k \equiv 0 \pmod{n, x^\D - 1}$. With this in mind, we isolate the inner terms in our original congruence and simplify:
 \begin{align}
-    & \binom{n}{0} x^0 + \binom{n}{n} x^n + \sum_{k=1}^{n-1} \binom{n}{k} x^k \equiv 1 + x^n \pmod{n, x^d - 2} \\
-    & \binom{n}{0} x^0 + \binom{n}{n} x^n \equiv 1 + x^n \pmod{n, x^d - 2}
+    & \binom{n}{0} x^0 + \binom{n}{n} x^n + \sum_{k=1}^{n-1} \binom{n}{k} x^k \equiv 1 + x^n \pmod{n, x^\D - 1} \\
+    & \binom{n}{0} x^0 + \binom{n}{n} x^n \equiv 1 + x^n \pmod{n, x^\D - 1}
 \end{align}
 
 By the binomial theorem, we have $\binom{n}{0} = \binom{n}{n} = 1$ for all $n \in \mathbb{Z}$. Substituting values and simplifying further reveals:
 \begin{align}
-    & 1 \cdot x^0 + 1 \cdot x^n \equiv 1 + x^n \pmod{n, x^d - 2} \\
-    & 1 + x^n \equiv 1 + x^n \pmod{n, x^d - 2}
+    & 1 \cdot x^0 + 1 \cdot x^n \equiv 1 + x^n \pmod{n, x^\D - 1} \\
+    & 1 + x^n \equiv 1 + x^n \pmod{n, x^\D - 1}
 \end{align}
 
 Hence, we have shown that the left-hand side of the congruence is equal to the right-hand side when $n$ is prime. Therefore, we conclude that the polynomial congruence holds under the given conditions.
@@ -265,46 +270,35 @@ A fundamental theorem in polynomial ring theory states that an integer $n$ is pr
 
 Kopparty and Wang (2014) \cite{koppartywang2014roots} proved several interesting theorems related to limits on the counts of consecutive zero coefficients in polynomials over finite fields. We take inspiration from their approach to show that composite integers will always fail our test.
 
-\begin{theorem}[Composites case] \label{theorem:composites}
-\textit{Let $n = pq$ be an odd composite integer greater than $3$, with $p$ a prime divisor. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$. Suppose that $2$ is not a $d$-th power residue modulo $p$ and that $n$ is not divisible by any prime $\leq d$. Then $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$.}
+\begin{theorem}[Primality test] \label{theorem:composites}
+\textit{Let $n = p \cdot q$ be a composite integer greater than $3$, with $p$ a prime divisor. Let $\D \in \mathbb{Z}$ be prime. Suppose $1$ is not a $\D$-th power modulo $p$ and $n$ does not have a prime factor less than or equal to $\D$. Then, $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^{\D} - 1}$.}
 \end{theorem}
 \begin{proof}
 \textbf{Preliminaries:}
 \begin{itemize}
-    \item Definition of $p$: Under the given conditions, there must exist at least one prime divisor $p$ of $n$ such that $2$ is not a $d$-th power residue modulo $p$. For the steps included in this proof, $p$ always refers to this specific prime divisor of $n$.
-    \item Definition of $f(x)$: We define the polynomial $f(x) := (1 + x)^n - (1 + x^n)$.
-    \item Definition of $g(x)$: We define the polynomial $g(x) := f(x) \pmod{x^d - 2}$.
+    \item Define the polynomial $f(x) := (1 + x)^n - (1 + x^n)$.
+    \item Define the polynomial $g(x) := f(x) \pmod{x^{\D} - 1}$.
 \end{itemize}
-
-\textbf{Introduction}:
-If the polynomial congruence $(1 + x)^n \equiv 1 + x^n \pmod{n, x^d-2}$ holds, it implies $f(x) \equiv 0 \pmod{n, x^d-2}$. For this to be true, $f(x)$ must also be zero modulo all of the individual prime factors of $n$ up to at least the prime power that appears in the prime factorization of $n$. This is because if any of the polynomial's coefficients are indivisible by any prime power $p^k$ dividing $n$ (and thus any $p^j$ in $\{ p^j \text{ } | \text{ } 1 < j \leq k \}$), then those coefficients cannot be divisible by $n$ (since $n$ is the unique product of its prime factorization).
-
-Hence, to prove the theorem, it suffices to show that under the given conditions, there must exist a prime divisor $p$ of $n$ such that $f(x) \not\equiv 0 \pmod{p, x^d-2}$. Or equivalently, that $f(x)$ is not the zero polynomial in the ring $\mathbb{Z}_p[x]$ when reduced modulo $x^d-2$. This forms the basis for our hypothesis.
-
-\textbf{Hypothesis}: Under the given conditions, there must exist at least one prime divisor $p$ of $n$ such that $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^d-2}$.
-
-\textbf{Implications:}
-If our hypothesis is true, it implies $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$. Which is the result we intend to prove.
 
 \textbf{Step 1. Establishing irreducibility and field structure}:
 
-Since $p$ is prime, $\mathbb{Z}_p$ is a finite field and $\mathbb{Z}_p[x]$ is a polynomial ring over this field. We aim to establish that $\mathbb{Z}_p[x]/(x^d - 2)$ forms a field. To do so, we must show that $x^d - 2$ is irreducible in $\mathbb{Z}_p[x]$.
+Given $p$ is prime, $\mathbb{Z}_p$ is a finite field and $\mathbb{Z}_p[x]$ is a polynomial ring over this field. We aim to establish that $\mathbb{Z}_p[x]/(x^{\D}-1)$ forms a field. To do so, we must show that $x^{\D}-1$ is irreducible in $\mathbb{Z}_p[x]$.
 
 We reference a classical theorem from field theory (Irreducibility Theorem) \cite{karpilovsky1989fields}:
 
-\textit{Suppose $c \in F$ where $F$ is a field, and $0 < d \in \mathbb{Z}$. The polynomial $x^k - c$ is irreducible over $F$ if and only if $c$ is not a $q$th power in $F$ for any prime $q$ dividing $k$, and $c$ is not in $-4F^4$ when $4$ divides $k$.}
+\textit{Suppose $c \in F$ where $F$ is a field, and $0 < k \in \mathbb{Z}$. The polynomial $x^k - c$ is irreducible over $F$ if and only if $c$ is not a $j$th power in $F$ for any prime $j$ dividing $k$, and $c$ is not in $-4F^4$ when $4$ divides $k$.}
 
-In our case, $F = \mathbb{Z}_p$, $c = 2$, and $k = d$, where $d$ is prime.
+In our case, $F = \mathbb{Z}_p$, $c = 1$, and $k = \D$, where $\D$ is prime.
 
-Regarding the first criterion, given $d$ is prime, $d$ does not have any divisors $q$, and hence it suffices to check only $d$ itself. We have chosen $p$ such that $2$ is not a $d$-th power residue modulo $p$, which informs that there is no element $b \in F$ such that $b^d \equiv 2 \pmod{p}$. The first criterion is satisfied. Since $d$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
+Regarding the first criterion, given $\D$ is prime, $\D$ is divisible by only itself. We have chosen $p$ such that $1$ is not a $\D$-th power residue modulo $p$, which informs that there is no element $e(x) \in F$ such that $e(x)^{\D} \equiv 1 \pmod{p}$. The first criterion is satisfied. Since $\D$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
 
-By the Irreducibility Theorem, $x^d - 2$ is irreducible in $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$ forms a finite field.
+By the Irreducibility Theorem, $x^{\D}-1$ is irreducible in $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^{\D}-1)$ forms a finite field.
 
-\textbf{Step 2. Analyzing the reduction of $f(x)$ modulo $x^d - 2$}:
+\textbf{Step 2. Analyzing the reduction of $f(x)$ modulo $x^\D - 1$}:
 
-We examine the reduction of $g(x) = f(x) \pmod{x^d - 2} \in \mathbb{Z}[x]$. After reduction modulo $x^d - 2$, the polynomial $g(x)$ has $\deg(g(x)) = d-1$, and can be written as:
+We examine the reduction of $g(x) = f(x) \pmod{x^{\D}-1} \in \mathbb{Z}[x]$. After reduction modulo $x^\D - 1$, the polynomial $g(x)$ has $\deg(g(x)) = \D-1$, and can be written as:
 \begin{align}
-    g(x) = \sum_{i=0}^{d-1} c_i x^i
+    g(x) = \sum_{i=0}^{\D-1} c_i x^i
 \end{align}
 
 To justify this: We first look to the expansion of  $f(x) = (1 + x)^n - (1 + x^n) \in \mathbb{Z}[x]$:
@@ -314,36 +308,32 @@ To justify this: We first look to the expansion of  $f(x) = (1 + x)^n - (1 + x^n
 
 Notice that subtracting $1+x^n$ from $(1+x)^n$ cancels out the terms $\binom{n}{0} x^0 = 1$ and $\binom{n}{n} x^n = x^n$ that would typically be present in the binomial expansion of $(1+x)^n$. Thus, we have $\deg(f(x))=n-1$.
 
-Reducing $f(x)$ modulo $x^d - 2$ means replacing every term of the form $\binom{n}{k} x^k$ for $k \geq d$ with a lower-degree term, using the relation $x^d = 2$. During this reduction, terms in $f(x)$ with degree $1 \leq k < d$ will retain their degrees, as they are unaffected by the modulo operation. Since $d < n$, these terms are always present in the binomial expansion. This suggests $f(x)$ has $d-1$ fixed points when taken $x^d - 2$,  with the highest-degree term among them being $\binom{n}{d-1} x^{d-1}$. Since the highest possible degree of any reduced terms is also $d-1$, the degree of $g(x)$ remains $d-1$ after the reduction of any additional terms.
+Reducing $f(x)$ modulo $x^{\D} - 1$ means replacing every term of the form $\binom{n}{k} x^k$ for $k \geq \D$ with a lower-degree term, using the relation $x^\D = 1$. During this reduction, terms in $f(x)$ with degree $1 \leq k < \D$ will retain their degrees, as they are unaffected by the modulo operation. Since $\D < n$, these terms are always present in the binomial expansion. This suggests $f(x)$ has $\D-1$ fixed terms when taken $x^\D - 1$,  with the highest-degree term among them being $\binom{n}{\D-1} x^{\D-1}$. Since the highest possible degree of any reduced terms is also $\D-1$, the degree of $g(x)$ remains $\D-1$ after the reduction of any additional terms.
 
-To ensure $g(x)$ is nonzero, we must also consider the coefficients of the remainder terms. Since the coefficients of the terms in $f(x)$ are the binomial coefficients in the $n$-th row of Pascal's Triangle from $\binom{n}{1}$ to $\binom{n}{n-1}$, it is not possible for all coefficients to be zero after the reduction modulo $x^d - 2$. Instead, the coefficients of these terms will be ``wrapped'' around $x^d - 2$ and added to the fixed term which corresponds to the value of their degree $k$, which is the term with the variable $x^{k \pmod{d}}$. Therefore, after the reduction of $f(x)$ modulo $x^d - 2$, the resultant polynomial $g(x)$ will have $d$ polynomial terms with nonzero coefficients and is not the zero polynomial.
+The coefficients of these terms will be ``wrapped'' around $x^\D - 1$ and added to the fixed term which corresponds to the value of their degree $k$, which is the term with the variable $x^{k \pmod{\D}}$. Therefore, after the reduction of $f(x)$ modulo $x^\D - 1$, the resultant polynomial $g(x)$ will have $\D$ polynomial terms. And since $f(x) \not\equiv 0 \pmod{x^\D - 1}$, $g(x)$ is not the zero polynomial.
 
-In summary, $x^d-2$ does not divide $f(x)$ in $\mathbb{Z}[x]$ and thus, $g(x)$ is nonzero and has a degree of $d-1$.
+In summary, since $x^\D $ does not divide $f(x)$ in $\mathbb{Z}[x]$, $g(x)$ is nonzero and has a degree of $\D-1$.
 
 \textbf{Step 3. Confirming nonzero polynomial in quotient ring}:
 
-We look to the quotient ring $\mathbb{Z}_p[x]/(x^d - 2)$, which forms a finite field (See Step 1).
+We look to the quotient ring $\mathbb{Z}_p[x]/(x^{\D} - 1)$, which forms a finite field (See Step 1).
 
-In Step 2, we showed that $g(x) = f(x) \pmod{x^d-2}$ is nonzero in $\mathbb{Z}[x]$ with $\deg(g(x)) = d-1$.
+In Step 2, we showed that $g(x) = f(x) \pmod{x^{\D} - 1}$ is nonzero in $\mathbb{Z}[x]$ with $\deg(g(x)) = \D-1$.
 
-To prove our hypothesis, we must also show that $g(x)$ is nonzero in $\mathbb{Z}_p[x]/(x^d - 2)$, as this is equivalent to the statement in our hypothesis, which says: $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^d-2}$ for at least one prime $p$ dividing $n$.
+We aim to show that $g(x)$ is nonzero in $\mathbb{Z}_p[x]/(x^{\D} - 1)$.
 
-Now, assume for contradiction that $g(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/(x^d - 2)$. This would necessarily imply that all coefficients $c_i$ of $g(x) = \sum_{i=0}^{d-1} c_i x^i$ are zero when taken modulo $p$, where the $c_i$ are aerated sums of binomial coefficients.
+Now, assume for contradiction that $g(x)$ is the zero polynomial in $\mathbb{Z}_p[x]/(x^{\D} - 1)$. This would necessarily imply that all coefficients $c_i$ of $g(x) = \sum_{i=0}^{\D-1} c_i x^i$ are zero when taken modulo $p$, where the $c_i$ are aerated sums of binomial coefficients.
 
-In a finite field, a polynomial of degree $r$ can have at most $r$ roots \cite{dummit2004abstractalgebra}. This is because a polynomial of degree $r$ in a finite field can be factored into at most $r$ linear factors (each corresponding to a root), within an algebraic closure of that field. However, within the field itself, the number of roots can be fewer than $r$, but never more.
+In a finite field, a polynomial of degree $r$ can have at most $r$ roots \cite{dummit2004abstractalgebra}. This is because a polynomial of degree $r$ in a finite field can be factored into at most $r$ linear factors (each corresponding to a root), within an algebraic closure of that field.
 
-In our case, if $\mathbb{Z}_p[x]/(x^d - 2)$ is a finite field and $\deg(g(x)) = d-1$, then $g(x)$ can have at most $d-1$ roots in this field. The assumption that $g(x)$ is the zero polynomial is a direct contradiction unless $p \leq d-1$, as it would necessarily imply that $g(x)$ has infinitely many roots (or more precisely, that every element of $\mathbb{Z}_p$ is a root) \cite{koppartywang2014roots}. However, this is clearly not the case, as we are given $n$ which does not have a prime divisor $\leq d$.
+In our case, since $\mathbb{Z}_p[x]/(x^{\D} - 1)$ is a finite field and $\deg(g(x)) = \D-1$, then $g(x)$ can have at most $\D-1$ roots in this field. The assumption that $g(x)$ is the zero polynomial is a direct contradiction unless $p \leq \D-1$, as it would necessarily imply that $g(x)$ has $p$ roots. Clearly, this is not the case, as we are given $n$ which does not have a prime divisor $\leq \D$.
 
-Therefore, $f(x)$ cannot be identically zero in $\mathbb{Z}_p[x]/(x^d - 2)$.
-
-\textbf{Conclusion:}
-
-We have proven our hypothesis under the given conditions by demonstrating $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^d-2}$ for at least one prime divisor $p$ of $n$. Hence, we deduce $(1 + x)^n \not\equiv 1 + x^n \pmod{n, x^d-2}$. This completes the proof.
+Therefore, $f(x)$ cannot be identically zero in $\mathbb{Z}_p[x]/(x^\D - 1)$ and we conclude $(1 + x)^n \not\equiv 1 + x^n \pmod{p, x^\D - 1}$.
 \end{proof}
 
 \section{Proof of the Main Theorem}
 \begin{proof}[Proof of Theorem \ref{theorem:main}]
-Let $n$ be an odd integer $>3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Let $d > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{d}$.
+Let $n$ be an odd integer $>3$ such that $2^{n-1} \equiv 1 \pmod{n}$. Let $\D > 2$ be the least prime integer such that $n \not\equiv 1 \pmod{\D}$.
 
 \textbf{Case 1}: $n$ is prime
 
@@ -351,9 +341,9 @@ If $n$ is prime, then by \cref{theorem:primes}, the polynomial congruence holds 
 
 \textbf{Case 2}: $n$ is composite
 
-If $n$ composite, suppose $n$ has a prime divisor $\leq d$. Clearly, it fails the test as expected.
+If $n$ composite, suppose $n$ has a prime divisor $\leq \D$. Clearly, it fails the test as expected.
 
-If $n$ does not have a prime divisor $\leq d$, then by \cref{lemma:incongruencemodn} we infer $2^{\floor{\frac{n-1}{d}}} \not\equiv 1 \pmod{n}$. By \cref{lemma:nonresidue}, it follows that $n$ must have a prime divisor $p$ such that $2$ is not a $d$-th power residue modulo $p$. Hence, all of the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. By \cref{theorem:composites}, the polynomial congruence cannot hold, and therefore $n$ fails the test as expected.
+By \cref{corollary:findingprimepnonresidue} we infer $1$ is not a $\D$-th power residue modulo $n$ for at least $1$ prime $p$ dividing $n$. Hence, all of the necessary preconditions for \cref{theorem:composites} are satisfied and it applies. By \cref{theorem:composites}, the polynomial congruence cannot hold, and therefore $n$ fails the test as expected.
 
 \textbf{Conclusion}:
 
@@ -363,19 +353,25 @@ Under the given conditions, when $n$ is prime, the polynomial congruence holds a
 \section{Algorithm} \label{section:algorithm}
 \textbf{INPUT}: An integer $n > 1$.
 \begin{center}
-    \begin{enumerate}
+    \begin{enumerate}[label*=\arabic*.]
         \item If $n \equiv 0 \mod{2}$:
-            \begin{enumerate}
+            \begin{enumerate}[label*=\arabic*.]
                 \item If $n$ equals $2$, output PRIME.
                 \item Otherwise, output COMPOSITE.
             \end{enumerate}
         \item If $n$ equals $3$, output PRIME.
         \item If $2^{n-1} \bmod{n}$ does not equal $1$, output COMPOSITE.
-        \item Find the least prime integer $d$ that is greater than $2$ such that $n \not\equiv 1 \pmod{d}$.
-        \item If $n$ has a prime divisor less than $d$, output COMPOSITE.
-        \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $\Z_n[x]/(x^d-2)$ with degree $d$, and store the result.
-        \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $\Z_n[x]/(x^d-2)$ with degree $d$, and store the result.
-        \item If $(1 + x)^n \not= 1 + x^n$, output COMPOSITE.
+        \item Set $\D=1$.
+        \item Set $\Vcal=1$.
+        \item While $\Vcal \leq n$:
+        \begin{enumerate}[label*=\arabic*.]
+            \item Starting from $\D$, find the next prime integer $p > \D$ and set $\D=p$.
+            \item If $n \bmod{\D}$ equals $0$, output COMPOSITE.
+            \item Compute the polynomial expansion of $x^n \bmod{n}$ in the ring $\Z_n[x]/(x^\D-1)$ with degree $\D$, and store the result.
+            \item Compute the polynomial expansion of $(1 + x)^n \bmod{n}$ in the ring $\Z_n[x]/(x^\D-1)$ with degree $\D$, and store the result.
+            \item If $(1 + x)^n \not= 1 + x^n$, output COMPOSITE.
+            \item Set $\Vcal = \Vcal \ast \D$.
+        \end{enumerate}
         \item Output PRIME;
     \end{enumerate}
 \end{center}
@@ -384,70 +380,103 @@ Under the given conditions, when $n$ is prime, the polynomial congruence holds a
 The given algorithm is a primality test that involves several computational steps, including modular arithmetic and polynomial exponentiation in the ring $\Mx$. In this subsection, we use $M(n)$ to denote the worst-case time complexity of integer multiplication in terms of $n$.
 
 \subsubsection{Analysis of Individual Operations}
-\begin{enumerate}
-    \item \textbf{Check for Even \( n \)}:
+\begin{enumerate}[label*=\arabic*.]
+    \item \textbf{Check preconditions for $n$}:
     
-        This step involves calculating $n \bmod{2}$ and has a time complexity of \( T_1(n) = O(1) \).
+    This step involves calculating $n \bmod{2}$, $n \bmod{3}$, and some miscellaneous conditional checks such as $n > 3$. The time complexity for each of these operations is $O(1)$.
+    \begin{align}
+        T_2(n) = O(1)
+    \end{align}
+    
+    \item \textbf{Finding the first $\log(n)$ primes ($\D$ values)}:
+    
+    Finding the first $\log(n)$ prime integers, which will be used as the $\D$ values in our test, can be done in $O(\log^2(n))$ time using the Sieve of Eratosthenes \cite{cormen2009algorithms}. Ideally, the list of primes should be precomputed once in advance up to a reasonably large number of primes and cached for reuse in future computations. However, for the sake of completeness, we do not assume any precalculations.
+    \begin{align}
+        T_2(n) = O(\log^2(n))
+    \end{align}
+        
+    \item \textbf{Main loop}:
+    
+    The purpose of the main loop is to guarantee that our test is performed with at least one prime integer $\D$ that does not divide $p-1$, where $p$ is some prime divisor of $n$. This guarantees that our test is performed with at least one $\D$ value such that $1$ is not a nontrivial $\D$-th power residue modulo said $p$, which is critical for ruling out all composites in our test.
+    
+    Since $p$ is a prime divisor of $n$, $p$ itself may have at most $\log(n)$ distinct prime divisors. Therefore, to ensure the validity of our result, we must perform our test with $\log(n)$ distinct prime integers $\D_i$ from $i=0\ldots\log(n)$. Along the way, we must also test the divisibility of $n$ by each $\D_i$, as it is a necessary for the validity of our test that $n$ not have prime factor $\leq \D_i$ for any $\D_i$ tested.
 
-    \item \textbf{Finding \( d \)}:
-    
-        Finding the least prime integer \( d > 2 \) such that $n \not\equiv 1 \pmod{d}$ takes at most \( O(\log (n) (\log \log (n) + \log \log \log (n))) \) steps (See \cref{lemma:leastcoprime}), with each step requiring \( O(1) \) time for the mod operation. Hence, the overall complexity of this step is \(  T_2(n) = O(\log (n) (\log \log (n) + \log \log \log (n))) \).
+    If $n$ is squarefree, we need only test a single $\D_i \not\equiv 1 \mod{n}$. However, due to additional complexities in the nonsquarefree case, we must try up to $\log(n)$ distinct primes $\D_i$.
 
-    \item \textbf{Computing \( x^n \bmod{n, x^d-2} \)}:
-    
-        Computing the polynomial expansion of $x^n \pmod{n}$ in the ring \( \Mx \) with degree $d$ is equivalent to calculating $2^{\floor{\frac{n}{d}}} \pmod{n}$. This step requires modular exponentiation with a \( \log(n) \)-digit base and a \( \log(n) \)-digit exponent. The time complexity of modular exponentiation is \(  T_3(n) = O(\log(n) M(n)) \).
+    We denote the time complexity for each step in the loop by $T_{3.j}$, where $j$ is the position of the substep in the loop.
 
-    \item \textbf{Computing \( (1+x)^n \bmod{n, x^d-2} \)}:
+    \textbf{Loop subroutine:}
     
-        Computing the polynomial expansion of \( (1+x)^n \pmod{n} \) in the ring \( \Z_n[x]/(x^d-2) \)  with degree $d$ involves exponentiating a polynomial in $\Z_n[x]/(x^d-2)$ with \( d = T_2(n) \) terms. Exponentiation using repeated squaring takes \( O(\log(n)) \) steps, and each step requires \( O(M(n) T_2(n)) \) time due to the multiplication of polynomials of size \( T_2(n) \). Therefore, the overall complexity of this step is \(  T_4(n) = O(\log(n) M(n) T_2(n)) \).
-         
-    \item \textbf{Checking the equality \( (1+x)^n = 1 + x^n \pmod{n} \in \Z_n[x]/(x^d-2) \)}:
-        The final steps involve comparing the equality of coefficients in the polynomials $(1+x)^n$ and $1 + x^n$. This requires $O(\log(n))$ comparisons, which are themselves \( O(1) \) operations. The overall time complexity of this step is $T_5(n) = O(\log(n))$.
+    For $i=0$, $i \leq \log(n)$, $i++$:
+    \begin{enumerate}[label*=\arabic*.]
+        \item \textbf{Initializing $\D_i$}:
+        
+        Initializing $\D_i$ involves setting $\D_i$ to the next term in the list of primes we prepoluated earlier via sieving, which is trivially $O(1)$.
+        \begin{align}
+            T_{3.1} = O(1)
+        \end{align}
+        
+        \item \textbf{Checking the divisibility of $n$ by $\D_i$}:
+        
+        This step involves calculating $n \bmod{\D_i}$ and a conditional check. The time complexity of the modulo operation is $O(\log(\D_i))$. Since $\D_i$ is roughly of size $O(\log(n))$, the time complexity simplifies to:
+        \begin{align}
+            T_{3.2} = O(\log\log(n))
+        \end{align}
+        
+        \item \textbf{Computing $2^{\floor{\frac{n-1}{\D}}}$}:
+        
+        Calculating $2^{\floor{\frac{n-1}{\D}}} \pmod{n}$ requires modular exponentiation with a $\log(n)$-digit base and a $\log(n)$-digit exponent. The time complexity of modular exponentiation is $O(\log(n) M(n))$.
+        \begin{align}
+            T_{3.3} = O(\log(n) M(n))
+        \end{align}
+        
+        \item \textbf{Computing polynomial consequences}:
+        
+        Computing the polynomial expansions of $x^n \pmod{n}$ and $(1+x)^n \pmod{n}$ in the ring $\Z_n[x]/(x^\D-1)$ with degree $\D$ each involve exponentiating a polynomial in $\Z_n[x]/(x^{\D_i}-1)$ with $\D_i$ terms. Exponentiation using repeated squaring takes $O(\log(n))$ steps, and each step requires $O(M(n) \D_i)$ time due to the multiplication of polynomials of size $\D_i$. Since $\D_i$ is bounded above by $\log(n)$, we say that $\D_i = O(\log(n))$.
+        \begin{align}
+            T_{3.4} = O(\log^2(n) M(n)
+        \end{align}
+             
+        \item \textbf{Checking the equality $(1+x)^n = 1 + x^n \pmod{n} \in \Z_n[x]/(x^{\D}-1)$}:
+        The final steps involve comparing the equality of coefficients in the polynomials $(1+x)^n$ and $1 + x^n$. This requires $O(\log(n))$ comparisons, which are themselves $O(1)$ operations.
+        \begin{align}
+            T_{3.5} = O(\log(n))
+        \end{align}
+        
+    \end{enumerate}
+    In the loop subroutine, the $T_{3.4}$ step dominates. Since the subroutine's steps are repeated maximally $\log(n)$ times, the overall time complexity of this step is:
+    \begin{align}
+        T_{3} = O(\log(n) T_{3.4}) = O(\log(n) (\log^2(n) M(n))) = O(\log^3(n) M(n))
+    \end{align}
+    
 \end{enumerate}
 
 \subsubsection{Overall Time Complexity}
-The dominant time complexity in the algorithm comes from computing \( (1+x)^n \pmod{n} \in \Z_n[x]/(x^d-2) \), which is $T_4(n)$. Therefore, the overall time complexity of the algorithm is \( T(n) = O(\log(n) M(n) T_2(n)) \).
+The time complexity of the main loop ($T_3(n)$) dominates. Therefore, the overall time complexity of the algorithm is:
+\begin{align}
+    T(n) = O(T_3(n)) = O(\log^3(n) M(n)))
+\end{align}
 
+\subsubsection{Overall Time Complexity Analysis}
 Harvey and van Der Heoven (2021) \cite{harveyvanderhoeven2021} have given an algorithm for integer multiplication which has a time complexity $M(n) = O(\log(n) \log\log(n))$. This would give our algorithm an overall time complexity of:
 \begin{align}
-    T(n) &= O(\log(n) M(n) T_2(n))
-    \\ &= O(\log(n) \log(n) \log\log(n) T_2(n))
-    \\ &= O(\log^2(n) \log\log(n) T_2(n))
+    T(n) &= O(\log^3(n) M(n))
+    \\ &= O(\log^3(n) (\log(n) \log\log(n)))
+    \\ &= O(\log^4(n) \log\log(n))
 \end{align}
 
 In soft-O notation \cite{gathengerhard2013softo}, typically denoted as $\tilde{O}$, simplicity is achieved by omitting slower-growing logarithmic and lower-order factors that do not significantly contribute to the overall growth rate of the function.
 
-In the context of our overall time complexity $T(n) = O(\log^2(n) \log\log(n) T_2(n))$, where the dominant term is \(O(\log^2(n))\), the linear factors \(\log\log(n)\) are omitted, and the time complexity simplifies to:
+In the context of our overall time complexity $T(n) = O(\log^4(n) \log\log(n))$, where the dominant term is \(O(\log^4(n))\), the factor \(\log\log(n)\) is omitted. Hence, our overall time complexity simplifies to:
 \begin{align}
-    \tilde{T}(n) = \tilde{O}(\log^2(n) \tilde{T}_2(n))
-\end{align}
-
-We have $T_2(n) = O(\log n (\log \log n + \log \log \log n))$, which in soft-O simplifies to $\tilde{T}_2(n) = \tilde{O}(\log(n))$. By substitution, we have our final time complexity:
-\begin{align}
-    \tilde{T}(n) = \tilde{O}(\log^2(n) \log(n)) = \tilde{O}(\log^3(n))
+    \tilde{T}(n) = \tilde{O}(\log^4(n))
 \end{align}
 
 \subsubsection{Conclusion}
-The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm efficient for large values of \( n \).
+The overall complexity is polynomial in the size of \( n \) when expressed in terms of bit operations, making the algorithm theoretically efficient in the worst case for large values of $n$. In practice, it is incredibly unlikely for the running time to exceed $\tilde{O}(log^3(n))$.
 
 \section{Implementation Details}
 Sample open source .NET and Python implementations, along with test data, are available on the author's Github page \cite{githubrepo}.
-
-\section{Discussion}
-
-\subsection{On Pseudoprimes}
-While at present, it appears at least theoretically possible for an integer $n$ which is the product of the square of a Wieferich prime to pass our test, we were unable to find any such $n$. Through computational experiments, we have verified that our test is deterministic for all integers up to at least $2^{64}$. If our theoretical results are valid, then extrapolating our computational results using the presently known bounds for Wieferich primes \cite{primegridww} suggests that testing for divisibility by the two known Wieferich primes ($1093, 3511$) would ensure that there are no counter examples to our test up to at least $2^{128}$.
-
-\section{Acknowledgements}
-I would like to thank Professor Seth Pettie for his invaluable insights and advice on both the content and presentation of this paper. I extend my gratitude to the graduate students and researchers within his department, for the engaging session we shared and for their feedback and earnest interest in my research.
-
-I owe a great deal of inspiration to the proofs by Kopparty and Wang in their paper on polynomial roots and coefficients over finite fields \cite{koppartywang2014roots}. I also express my sincere gratitude to Professor Kopparty, for his encouraging and constructive feedback, which came at a challenging time in my research journey.
-
-I thank Professor Oded Goldreich for his assistance and support throughout the publication process at the ECCC. His patience and motivational guidance, particularly during moments of uncertainty, were invaluable.
-
-A special thank you to the community at \url{mersenneforum.org}, particularly to users Charybdis, R. D. Silverman, and Dr. Sardonicus, for their insightful feedback and scrutiny of my earliest proof attempts. Their contributions were fundamental in refining my approach.
-
-\textbf{Disclaimer}: The views and any errors in this paper are solely my own and do not necessarily reflect those of the individuals acknowledged herein.
 
 \begingroup
 \raggedright
