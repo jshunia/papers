@@ -53,7 +53,7 @@
 \newcommand{\glaisher}[2]{\left[ \begin{array}{c} #1 \\ #2 \end{array} \right]}
 \newcommand{\kronecker}[2]{\left(#1\mid#2\right)}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
-\newcommand{\D}{\mathcal{D}}
+\newcommand{\D}{r}
 \newcommand{\Pcal}{\mathcal{P}}
 \newcommand{\Vcal}{\mathcal{V}}
 \newcommand{\primep}{p}
@@ -290,7 +290,7 @@ We reference a classical theorem from field theory (Irreducibility Theorem) \cit
 
 In our case, $F = \mathbb{Z}_p$, $c = 1$, and $k = \D$, where $\D$ is prime.
 
-Regarding the first criterion, given $\D$ is prime, $\D$ is divisible by only itself. We have chosen $p$ such that $1$ is not a $\D$-th power residue modulo $p$, which informs that there is no element $e(x) \in F$ such that $e(x)^{\D} \equiv 1 \pmod{p}$. The first criterion is satisfied. Since $\D$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
+Regarding the first criterion, given $\D$ is prime, $\D$ is divisible by only itself. We have chosen $p$ such that $1$ is not a non-trivial $\D$-th power residue modulo $p$, which informs that there is no element $e(x) \in F$ such that $e(x)^{\D} \equiv 1 \pmod{p}$ and $e(x) \not= 1$. The first criterion is satisfied. Since $\D$ is prime, it is not divisible by $4$, and thus second criterion is also satisfied.
 
 By the Irreducibility Theorem, $x^{\D}-1$ is irreducible in $\mathbb{Z}_p[x]$ and hence, the quotient ring $\mathbb{Z}_p[x]/(x^{\D}-1)$ forms a finite field.
 
