@@ -1,0 +1,264 @@
+\pdfoutput=1
+\documentclass[12pt,reqno]{article}
+\usepackage{fullpage}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage[usenames]{color}
+\usepackage{url}
+\usepackage{color}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+\usepackage{cleveref}
+\usepackage{tabularx}
+\theoremstyle{plain}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\crefname{conjecture}{Conjecture}{Conjectures}
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{remark}{Remark}{Remarks}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\crefname{definition}{Definition}{Definitions}
+\crefname{notation}{Notation}{Notations}
+\crefname{section}{\S}{Sections}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\wt}[1]{\#(#1)}
+\newcommand{\eval}[2]{\left . #1 \right|_{#2}}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\title{Polynomial Quotient Rings and Kronecker Substitution for Deriving Combinatorial Identities}
+\author{Joseph M. Shunia}
+\date{March 2024}
+
+\maketitle
+
+\begin{abstract}
+We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution to polynomial expansions within quotient rings. Our main theorem provides a general framework for generating new combinatorial identities. We demonstrate the theorem's utility by deriving an explicit formula for the Fibonacci sequence: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$ for $n > 1$, where $F_n$ is the $n$-th Fibonacci number. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms. The approach presented here opens up new possibilities for discovering and proving combinatorial identities using tools from polynomial ring theory.
+\end{abstract}
+
+\section{Introduction}
+Kronecker substitution, named after the mathematician Leopold Kronecker, is a technique that allows for the efficient multiplication of integers and polynomials by encoding them as integers in a larger base \cite{kronecker1882}. While this technique has been widely used in the design of fast multiplication algorithms \cite{harvey2009kronecker, harvey2014faster}, its potential applications in combinatorial number theory have remained largely unexplored.
+
+In our previous work \cite{shunia2023simple}, we took the first steps in this direction by applying Kronecker substitution to binomial expansions, yielding a new formula for binomial coefficients:
+\begin{align*}
+    \binom{n}{k} = \left\lfloor \frac{(2^n+1)^n}{2^{n k}} \right\rfloor \bmod{2^n}
+\end{align*}
+We then extended this result to multinomial coefficients, obtaining the following formula, which is valid for $n > 0$ and $0 \leq k \leq n (d-1)$:
+\begin{align*}
+    [x^k] \left(\frac{x^{d}-1}{x-1}\right)^n = [x^k] (x^d+\cdots+1)^n = \left\lfloor \left(\frac{d^{d n} - 1}{d^{n+k} - d^k}\right)^n\right\rfloor \bmod d^n, 
+\end{align*}
+
+In this work, we build upon these results by developing a general framework for applying Kronecker substitution to polynomial expansions within quotient rings. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences.
+
+To demonstrate the power of our approach, we apply our main theorem to derive new explicit formulas for two important combinatorial sequences. First, we obtain a formula for the Fibonacci sequence, one of the most well-known and widely studied combinatorial sequences. The Fibonacci sequence is \seqnum{A000045} in the OEIS \cite{A000045}. Valid for $n > 1$, our formula expresses the $n$-th Fibonacci number $F_n$ in terms of a double modular expression involving powers of $2$:
+\begin{align*}
+    F_n = (2^{n(n-1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}
+\end{align*}
+
+Second, we derive a new formula for the central binomial coefficients, which are the binomial coefficients of the form $\binom{2n}{n}$. These coefficients form sequence \seqnum{A000984} in the OEIS \cite{A000984} and have numerous applications in combinatorics and number theory. Our formula, which is valid for $n > 0$, expresses the $n$-th central binomial coefficient in terms of a double modular expression involving powers of $4$:
+\begin{align*}
+    \binom{2n}{n} &= ((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}) \bmod{(4^n-1)}
+\end{align*}
+
+\subsection{Structure of the Paper}
+The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the general theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our theorem to derive the new Fibonacci and central binomial coefficient formulas.
+\section{Notations} \label{section:notations}
+This section provides a brief overview of the notations used throughout this paper.
+
+\begin{notation}[Sequential moduli]
+Let $n \in \mathbb{Z}$ and let $(m_0, m_1, \ldots, m_k)$ be a sequence of moduli. We define the application of mod operations on $n$ by this sequence as follows:
+\begin{align*}
+    n \bmod{(m_0, m_1, \ldots, m_k)} \Longleftrightarrow  (((n \bmod{m_0}) \bmod{m_1}) \cdots ) \bmod{m_k},
+\end{align*}
+where the mod operations are performed sequentially from left to right, following the order of the moduli as listed.
+\end{notation}
+
+\begin{notation}[Polynomial normalized form]
+
+Given a polynomial of the form
+\begin{align*}
+f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_0
+\end{align*}
+We use the notation $\tilde{f}(x)$ to represent its normalized form, where the leading coefficient is scaled to $1$. Formally, we can write this as
+\begin{align*}
+    \tilde{f}(x) \Longleftrightarrow \frac{f(x)}{a_d} = x^d + \frac{a_{d-1}}{a_d} x^{d-1} + \cdots + \frac{a_0}{a_d}
+\end{align*}
+\end{notation}
+
+\section{A Brief Primer on Kronecker Substitution} \label{section:kronecker}
+
+Kronecker substitution, named after the mathematician Leopold Kronecker who first described it in 1882 \cite{kronecker1882}, is a technique for converting a polynomial to an integer representation. Given a polynomial $f(x) \in \mathbb{Z}[x]$ and a suitable integer $b \in \mathbb{Z}$, Kronecker substitution evaluates $f(x)$ at $x = b$. By choosing an appropriate base $b$, the resulting integer $f(b)$ encodes the coefficients of $f(x)$ in its digits.
+
+More formally, let $f(x) \in \mathbb{Z}[x]$ be a polynomial of degree $d$, represented as
+\begin{align*}
+f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0,
+\end{align*}
+where $a_i \in \mathbb{Z}$ for $0 \leq i \leq d$. Performing Kronecker substitution with $x = b$ yields the integer
+\begin{align*}
+f(b) = a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0.
+\end{align*}
+
+The key observation is that when $b$ is sufficiently large, the base-$b$ representation of $f(b)$ directly corresponds to the coefficients of $f(x)$. In other words, the digits of $f(b)$ in base $b$ are precisely the coefficients $a_d, a_{d-1}, \ldots, a_1, a_0$, in order from most significant to least significant.
+
+To ensure a one-to-one correspondence between the coefficients and the digits, the base $b$ must be chosen such that
+\begin{align*}
+    b > \max_{0 \leq i \leq d} |a_i|
+\end{align*}
+This guarantees that there is no ``carry over'' between digits when performing arithmetic operations on the integer representation.
+
+The process of Kronecker substitution can be reversed to recover the original polynomial $f(x)$ from its integer representation $f(b)$. Given $f(b)$ and the base $b$, one can extract the coefficients by successively dividing $f(b)$ by powers of $b$ and taking the remainders. This allows for the reconstruction of $f(x)$ from $f(b)$ \cite{grimaldi2004discrete}.
+
+Kronecker substitution has found numerous applications in computer algebra and symbolic computation, particularly in the design of efficient algorithms for polynomial multiplication \cite{harvey2009kronecker, harvey2014faster}. By reducing polynomial operations to integer arithmetic, Kronecker substitution enables the use of fast integer multiplication algorithms, resulting in improved performance for polynomial computations.
+
+\section{Main Results} \label{section:results}
+
+\begin{theorem} \label{theorem:kroneckerqrings}
+Let $k, d \in \mathbb{Z}^+$ such that $k \geq d$. Consider a polynomial
+\begin{align*}
+g(x) = a_d x^d - a_{d-1} x^{d-1} - \cdots - a_0 \in \mathbb{Z}[x]
+\end{align*}
+and the remainder
+\begin{align*}
+r(x) = f(x)^k  \bmod{\tilde{g}(x)} ,
+\end{align*}
+where $f(x)$ is any non-constant polynomial in $\mathbb{Z}[x]$. Let $\gamma \in \mathbb{Z}^+$ and suppose $\gamma^k \geq |r(r(1))|$. Then,
+\begin{align*}
+r(b) = f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)} \quad \textup{ or } \quad r(b) \equiv 0 \pmod{\gamma^k - b}, \quad \forall b \in \mathbb{Z}
+\end{align*}
+
+\end{theorem}
+\begin{proof}
+First, consider the evaluation 
+\begin{align*}
+    \eval{r(x)}{x=b} = r(b)
+\end{align*}
+In modular arithmetic, evaluating a polynomial $h(x) \in \mathbb{Z}[x]$ at $x=b$ is the same as taking $h(x)$ modulo $(x - b)$. In our case, since we are working modulo $\tilde{g}(x)$, we have the relation
+\begin{align*}
+    r(b) = f(x)^k \bmod{(\tilde{g}(x), x - b)}
+\end{align*}
+
+Applying Kronecker substitution to all polynomials in the above equation, using the substitution $x = \gamma^k$, yields
+\begin{align*}
+    r(b) = f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)}
+\end{align*}
+
+Which is the formula we aimed to prove. Furthermore, recall that we are given $\gamma$ such that
+\begin{align*}
+    \gamma^k \geq r(r(1))
+\end{align*}
+This implies that, when applying Kronecker substitution, the base $\gamma^k$ is sufficient to losslessly encode all of the coefficients of $r(x)$ \cite{shunia2023simple} (See: Shunia 2023, Theorem 1). Moreover, since $k \geq d$, the same is true of $f(x)$ and $g(x)$. Thus, the only way to have
+\begin{align}
+    r(b) \not= f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)} ,
+\end{align}
+is if
+\begin{align*}
+    & (\gamma^k - b) \mid (f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k)}) \\
+    & \Longleftrightarrow (\gamma^k - b) \mid r(b) \\
+    & \Longleftrightarrow r(b) \equiv 0 \pmod{\gamma^k - b}
+\end{align*}
+This completes the proof.
+\end{proof}
+
+\section{Applications} \label{section:applications}
+
+\subsection{Fibonacci Formula}
+To demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th Fibonacci number, which is sequence \seqnum{A000045} in the OEIS \cite{A000045}.
+
+\begin{theorem}
+Let $F_n$ denote the $n$-th term of the Fibonacci sequence, such that $F_0 = 0, F_1 = 1$
+\begin{align*}
+    F_n = F_{n-1} + F_{n-2}
+\end{align*}
+
+Then, for $n > 1$
+\begin{align*}
+F_n &= 2^{n (n - 1)} \bmod{(4^n-2^n-1, 2^n-1)}
+\end{align*}
+\end{theorem}
+\begin{proof}
+Fix a ring $R = \mathbb{Z}[x]/(x^2 - x - 1)$. In the ring $R$, the elements obey the relation $x^2 = x + 1$. Solving for $x$ using the quadratic equation gives the solutions
+\begin{align*}
+    x = \frac{1 + \sqrt{5}}{2}, \quad x = \frac{1 - \sqrt{5}}{2}
+\end{align*}
+
+Since $F_n$ is always non-negative for $n \geq 0$, we choose $x = \frac{1 + \sqrt{5}}{2} = \varphi$, where $\varphi$ denotes the so-called ``golden ratio''. We have the well-known formula \cite{A000045}
+\begin{align*}
+    \varphi^{n-1} = F_{n-1} \varphi + F_{n-2}
+\end{align*}
+
+Substituting $\varphi = x \in R$, we can see
+\begin{align*}
+    x^{n-1} \bmod{(x^2 - x - 1, x-1)} = (F_{n-1} x + F_{n-2}) \bmod{(x-1)}
+\end{align*}
+
+Applying \cref{theorem:kroneckerqrings} by substituting with $x = 2^n$ and simplifying, yields
+\begin{align*}
+    (2^n)^{n-1} \bmod{((2^n)^2 - 2^n - 1, 2^n-1)} &= (F_{n-1} x + F_{n-2}) \bmod{(x-1)} \\
+    2^{n (n - 1)} \bmod{(4^n - 2^n - 1, 2^n-1)} &= F_n
+\end{align*}
+
+Considering $n = 1$, since $2^1-1 = F_1 = 1$, we have $F_1 \equiv 0 \pmod{2^n - 1}$. Thus, the formula is valid for $n > 1$.
+\end{proof}
+
+\subsection{Central Binomial Coefficients Formula}
+To further demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th central binomial coefficient $\binom{2n}{n}$, which is sequence \seqnum{A000984} in the OEIS \cite{A000984}.
+
+\begin{theorem}
+Let $n \in \mathbb{Z}^+$ such that $n > 0$. Then
+\begin{align*}
+\binom{2n}{n} &= (4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1, 4^n - 1)}
+\end{align*}
+\end{theorem}
+\begin{proof}
+Fix a ring $R = \mathbb{Z}[x]/(x^{n+1} + 1)$. In the ring $R$, the elements obey the relation $x^{n+1} = -1$.
+
+Let $f(x) = (x + 1)^{2n} \in R$. Expanding $f(x)$ and taking the result modulo $(x-1)$ gives
+\begin{align*}
+& (x + 1)^{2n} \bmod{(x^{n+1} + 1, x - 1)} \\
+&= \sum_{k=0}^{2n} \binom{2n}{k} (-1)^{\floor{\frac{k}{n+1}}} \\
+&= \left( \sum_{k=0}^{n} \binom{2n}{k} (-1)^{\floor{\frac{k}{n+1}}} \right) + \left( \sum_{k=n+1}^{2n} \binom{2n}{k} (-1)^{\floor{\frac{k}{n+1}}} \right) \\
+&= \left( \sum_{k=0}^{n} \binom{2n}{k} (-1)^0 \right) + \left( \sum_{k=n+1}^{2n} \binom{2n}{k} (-1)^1 \right) \\
+&= \left( \sum_{k=0}^{n} \binom{2n}{k} \right) - \left( \sum_{k=n+1}^{2n} \binom{2n}{k} \right) \\
+&= \binom{2n}{n}
+\end{align*}
+
+Thus, we have
+\begin{align*}
+    (x + 1)^{2n} \bmod{(x^{n+1} + 1, x - 1)} &= \binom{2n}{n}
+\end{align*}
+
+Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simplifying, yields
+\begin{align*}
+    (4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1, 4^n-1)} &= \binom{2n}{n}
+\end{align*}
+
+Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ is undefined. Thus, the formula is valid for $n > 0$.
+\end{proof}
+
+\begingroup
+\raggedright
+\bibliographystyle{unsrtnat}
+\bibliography{main}
+\endgroup
+
+\end{document}
