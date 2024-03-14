@@ -146,8 +146,7 @@ By assumption, for all coefficients $a_k$ of $f(x)$, where $0 \leq k \leq d$, we
 
 To prove the validity of the formula, we proceed by examining its arithmetic operations step-by-step. Let's consider the expansion of $f(f(b))$, which is
 \begin{align*}
-f(f(b)) &= a_d f(b)^d + a_{d-1} f(b)^{d-1} + \cdots + a_1 f(b) + a_0 \\
-&= a_0 + a_1 f(b) + \cdots + a_{d-1} f(b)^{d-1} + a_d f(b)^d
+f(f(b)) &= a_d f(b)^d + a_{d-1} f(b)^{d-1} + \cdots + a_1 f(b) + a_0
 \end{align*}
 
 The first step in the formula is to take $f(f(b)) \bmod{f(b)^{k + 1}}$. In doing so, we effectively isolate the terms up to $x^k$. The result is
