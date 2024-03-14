@@ -55,7 +55,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution and demonstrate the theorem's utility by deriving an explicit formula for famous integer sequences, such as the Fibonacci sequence. Our formula, valid for $n > 1$, is given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$, where $F_n$ is the $n$-th Fibonacci number. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms. We also give a new result which extends Kronecker substitution beyond integer bases, to work with any non-zero base $b \in F[x]$ where and $F$ is a field like $\mathbb{Q}, \mathbb{C}$, etc.
+We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution and demonstrate the theorem's utility by deriving an explicit formula for famous integer sequences, such as the Fibonacci sequence. Our formula, valid for $n > 1$, is given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$, where $F_n$ is the $n$-th Fibonacci number. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms. We also give a new result which extends Kronecker substitution beyond integer bases, to work with any non-zero base $b \in F[x]$ where $F$ is a field like $\mathbb{Q}, \mathbb{C}$, etc.
 \end{abstract}
 
 \section{Introduction}
@@ -116,7 +116,7 @@ where $a_i \in \mathbb{Z}$ for $0 \leq i \leq d$. Performing Kronecker substitut
 f(b) = a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0.
 \end{align*}
 
-The key observation is that when $b$ is sufficiently large, the base-$b$ representation of $f(b)$ directly corresponds to the coefficients of $f(x)$. In other words, the digits of $f(b)$ in base $b$ are precisely the coefficients $a_d, a_{d-1}, \ldots, a_1, a_0$, in order from most significant to least significant.
+When $b$ is sufficiently large, the base-$b$ representation of $f(b)$ directly corresponds to the coefficients of $f(x)$. In other words, the digits of $f(b)$ in base $b$ are precisely the coefficients $a_d, a_{d-1}, \ldots, a_1, a_0$, in order from most significant to least significant.
 
 To ensure a one-to-one correspondence between the coefficients and the digits, the base $b$ must be chosen such that
 \begin{align*}
