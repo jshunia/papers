@@ -9,6 +9,7 @@
 \usepackage{url}
 \usepackage{color}
 \usepackage[usenames]{color}
+\usepackage[usenames]{color}
 \usepackage[colorlinks=true,
 linkcolor=webgreen,
 filecolor=webbrown,
@@ -38,6 +39,7 @@ citecolor=webgreen]{hyperref}
 \crefname{section}{\S}{Sections}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\K}{\mathcal{K}}
 \newcommand{\wt}[1]{\#(#1)}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
 \newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
@@ -53,7 +55,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution to polynomial expansions within quotient rings. Our main theorem provides a general framework for generating new combinatorial identities. We demonstrate the theorem's utility by deriving an explicit formula for the Fibonacci sequence: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$ for $n > 1$, where $F_n$ is the $n$-th Fibonacci number. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms. The approach presented here opens up new possibilities for discovering and proving combinatorial identities using tools from polynomial ring theory.
+We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution and demonstrate the theorem's utility by deriving an explicit formula for famous integer sequences, such as the Fibonacci sequence. Our formula, valid for $n > 1$, is given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$, where $F_n$ is the $n$-th Fibonacci number. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms. We also give a new result which extends Kronecker substitution beyond integer bases, to work with any non-zero base $b \in F[x]$ where and $F$ is a field like $\mathbb{Q}, \mathbb{C}$, etc.
 \end{abstract}
 
 \section{Introduction}
@@ -63,12 +65,8 @@ In our previous work \cite{shunia2023simple}, we took the first steps in this di
 \begin{align*}
     \binom{n}{k} = \left\lfloor \frac{(2^n+1)^n}{2^{n k}} \right\rfloor \bmod{2^n}
 \end{align*}
-We then extended this result to multinomial coefficients, obtaining the following formula, which is valid for $n > 0$ and $0 \leq k \leq n (d-1)$:
-\begin{align*}
-    [x^k] \left(\frac{x^{d}-1}{x-1}\right)^n = [x^k] (x^d+\cdots+1)^n = \left\lfloor \left(\frac{d^{d n} - 1}{d^{n+k} - d^k}\right)^n\right\rfloor \bmod d^n, 
-\end{align*}
 
-In this work, we build upon these results by developing a general framework for applying Kronecker substitution to polynomial expansions within quotient rings. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences.
+In this work, we build upon these results by extending Kronecker substitution and polynomial encoding to non-integer bases. We also develop a general framework for applying Kronecker substitution to polynomial expansions within quotient rings, which is useful for generating combinatorial identities. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences.
 
 To demonstrate the power of our approach, we apply our main theorem to derive new explicit formulas for two important combinatorial sequences. First, we obtain a formula for the Fibonacci sequence, one of the most well-known and widely studied combinatorial sequences. The Fibonacci sequence is \seqnum{A000045} in the OEIS \cite{A000045}. Valid for $n > 1$, our formula expresses the $n$-th Fibonacci number $F_n$ in terms of a double modular expression involving powers of $2$:
 \begin{align*}
@@ -81,7 +79,8 @@ Second, we derive a new formula for the central binomial coefficients, which are
 \end{align*}
 
 \subsection{Structure of the Paper}
-The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the general theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our theorem to derive the new Fibonacci and central binomial coefficient formulas.
+The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive the new Fibonacci and central binomial coefficient formulas.
+
 \section{Notations} \label{section:notations}
 This section provides a brief overview of the notations used throughout this paper.
 
@@ -101,12 +100,11 @@ f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_0
 \end{align*}
 We use the notation $\tilde{f}(x)$ to represent its normalized form, where the leading coefficient is scaled to $1$. Formally, we can write this as
 \begin{align*}
-    \tilde{f}(x) \Longleftrightarrow \frac{f(x)}{a_d} = x^d + \frac{a_{d-1}}{a_d} x^{d-1} + \cdots + \frac{a_0}{a_d}
+    \tilde{f}(x) = \frac{f(x)}{a_d} = x^d + \frac{a_{d-1}}{a_d} x^{d-1} + \cdots + \frac{a_0}{a_d}
 \end{align*}
 \end{notation}
 
 \section{A Brief Primer on Kronecker Substitution} \label{section:kronecker}
-
 Kronecker substitution, named after the mathematician Leopold Kronecker who first described it in 1882 \cite{kronecker1882}, is a technique for converting a polynomial to an integer representation. Given a polynomial $f(x) \in \mathbb{Z}[x]$ and a suitable integer $b \in \mathbb{Z}$, Kronecker substitution evaluates $f(x)$ at $x = b$. By choosing an appropriate base $b$, the resulting integer $f(b)$ encodes the coefficients of $f(x)$ in its digits.
 
 More formally, let $f(x) \in \mathbb{Z}[x]$ be a polynomial of degree $d$, represented as
@@ -130,7 +128,57 @@ The process of Kronecker substitution can be reversed to recover the original po
 
 Kronecker substitution has found numerous applications in computer algebra and symbolic computation, particularly in the design of efficient algorithms for polynomial multiplication \cite{harvey2009kronecker, harvey2014faster}. By reducing polynomial operations to integer arithmetic, Kronecker substitution enables the use of fast integer multiplication algorithms, resulting in improved performance for polynomial computations.
 
+\section{Polynomial Encoding Theorem}
+For completeness, we restate a theorem we first shared in our previous work on a formula for binomial coefficients \cite{shunia2023simple}.
+
+\begin{theorem} \label{theorem:encoding}
+Let $b, d \in \mathbb{Z}$ such that $b > 0$, $d \geq 0$. Consider a polynomial $f(x) \in \mathbb{Z}[x]$ of degree $d$, which has the form
+\begin{align*}
+    f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0
+\end{align*}
+Suppose $f(b) \not= 0$ and that all coefficients of $f(x)$ are non-negative. Then, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$. Furthermore, the coefficient $a_k$, where $0 \leq k \leq d$, can be recovered explicitly using the formula:
+\begin{align*}
+a_k = \floor{\frac{f(f(b)) \bmod{f(b)^{k + 1}}}{f(b)^{k}}}
+\end{align*}
+\end{theorem}
+\begin{proof}
+By assumption, for all coefficients $a_k$ of $f(x)$, where $0 \leq k \leq d$, we can recover $a_k$ using the given formula.
+
+To prove the validity of the formula, we proceed by examining its arithmetic operations step-by-step. Let's consider the expansion of $f(f(b))$, which is
+\begin{align*}
+f(f(b)) &= a_d f(b)^d + a_{d-1} f(b)^{d-1} + \cdots + a_1 f(b) + a_0 \\
+&= a_0 + a_1 f(b) + \cdots + a_{d-1} f(b)^{d-1} + a_d f(b)^d
+\end{align*}
+
+The first step in the formula is to take $f(f(b)) \bmod{f(b)^{k + 1}}$. In doing so, we effectively isolate the terms up to $x^k$. The result is
+\begin{align*}
+f(f(b)) \bmod{f(b)^{k + 1}} &= (a_d f(b)^d + a_{d-1} f(b)^{d-1} + \cdots + a_1 f(b) + a_0) \bmod{f(b)^{k + 1}} \\
+&= a_k f(b)^k + \cdots + a_1 f(b) + a_0 
+\end{align*}
+
+The next step is to divide by $f(b)^k$, which gives
+\begin{align*}
+\frac{f(f(b))  \bmod{f(b)^{k + 1}}}{f(b)^{k}} &= f(b)^{-k} (a_k f(b)^k + \cdots + a_1 f(b) + a_0) \\
+&= a_k f(b)^{k-k} + a_k f(b)^{k-(k-1)} + \cdots + a_1 f(b)^{1-k} + a_0 b^{-k} \\
+&= a_k + \cdots + a_1 f(b)^{1-k} + a_0 b^{-k}
+\end{align*}
+
+Finally, since $b > |a_j|$ for all $j$ in $0 \leq j \leq (k-1)$, the floor operation isolates the coefficient we want
+\begin{align*}
+\floor{\frac{f(f(b)) \bmod{f(b)^{k + 1}}}{f(b)^{k}}}
+&= \floor{a_k + \cdots + a_1 f(b)^{1-k} + a_0 b^{-k}} \\
+&= a_k
+\end{align*}
+
+The floor operation ensures that the result is in $\mathbb{Z}$, and since the coefficients are non-negative, the floor operation does not affect the result.
+
+Thus, we can recover all the coefficients $a_0, a_1, \ldots, a_d$ using only the values $f(b)$ and $f(f(b))$. Furthermore, since we can recover $a_k$ given $k$, we can determine the degree of the term corresponding to the coefficient recovered.
+
+In conclusion, under the given conditions, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$ using the provided formula.
+\end{proof}
+
 \section{Main Results} \label{section:results}
+For our first result, we apply $\cref{theorem:encoding}$ to polynomial quotient rings to devise a theorem which serves a framework for translating polynomial quotient rings to combinatorial identities.
 
 \begin{theorem} \label{theorem:kroneckerqrings}
 Let $k, d \in \mathbb{Z}^+$ such that $k \geq d$. Consider a polynomial
@@ -166,7 +214,7 @@ Which is the formula we aimed to prove. Furthermore, recall that we are given $\
 \begin{align*}
     \gamma^k \geq r(r(1))
 \end{align*}
-This implies that, when applying Kronecker substitution, the base $\gamma^k$ is sufficient to losslessly encode all of the coefficients of $r(x)$ \cite{shunia2023simple} (See: Shunia 2023, Theorem 1). Moreover, since $k \geq d$, the same is true of $f(x)$ and $g(x)$. Thus, the only way to have
+This implies that, when applying Kronecker substitution, the base $\gamma^k$ is sufficient to losslessly encode all of the coefficients of $r(x)$ (\cref{theorem:encoding}). Moreover, since $k \geq d$, the same is true of $f(x)$ and $g(x)$. Thus, the only way to have
 \begin{align}
     r(b) \not= f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)} ,
 \end{align}
@@ -177,6 +225,67 @@ is if
     & \Longleftrightarrow r(b) \equiv 0 \pmod{\gamma^k - b}
 \end{align*}
 This completes the proof.
+\end{proof}
+
+\subsection[Beyond Integers: Kronecker Substitution with Polynomial Bases]{Beyond $\mathbb{Z}$: Kronecker Substitution with Polynomial Bases}
+We take our previous result (\cref{theorem:encoding}) one step further, by generalizing it to a base $b \in F[x]$, where where $F$ is a field like $\mathbb{Q}$, $\mathbb{C}$, etc., and $b$ is any non-zero element in $F[x]$, which can be a polynomial or otherwise. In stating and proving this result, we essentially extend Kronecker substitution to deal in non-integer bases. This is a new and intriguing result, which offers much potential for further exploration.
+
+\begin{theorem} \label{theorem:encoding_fields}
+Let $F$ be a field, and let $b \in F[x]$ be a non-zero element. Consider a polynomial $f(x) \in F[x]$ of degree $d \geq 0$, which has the form
+\begin{align*}
+f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0
+\end{align*}
+Suppose $f(b) \neq 0$. Then, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$.
+\end{theorem}
+\begin{proof}
+First, we examine the values $f(b)$ and $f(f(b))$, which are given by
+\begin{align*}
+f(b) &= a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0 \\
+f(f(b)) &= a_d f(b)^d + a_{d-1} f(b)^{d-1} + \cdots + a_1 f(b) + a_0 
+\end{align*}
+
+Applying Horner's rule \cite{press2007numerical} to $f(b)$ and $f(f(b))$, we get
+\begin{align*}
+f(b) &= a_0 + b (a_1 + b ( \cdots + b (a_{d-1} + b a_d))) \\
+f(f(b)) &= a_0 + f(b) (a_1 + f(b) ( \cdots + f(b) (a_{d-1} + f(b) a_d)))
+\end{align*}
+
+Now, consider the quotient $q$, which is given by
+\begin{align*}
+q = \frac{f(f(b))}{f(b)}
+\end{align*}
+
+Expanding the numerator of $q$ using Horner's rule (as shown above), followed by simplifying, yields
+\begin{align*}
+q &= \frac{a_0 + f(b) (a_1 + f(b) ( \cdots + f(b) (a_{d-1} + f(b) a_d)))}{f(b)} \\
+q &= \frac{a_0}{f(b)} + a_1 + f(b) ( \cdots + f(b) (a_{d-1} + f(b) a_d))
+\end{align*}
+
+Notice that the quotient $q$ contains all the coefficients of $f(x)$ except for $a_0$, which can be obtained by rearranging the equation as follows:
+\begin{align*}
+a_0 = f(b) \left(q - a_1 - f(b) ( \cdots + f(b) (a_{d-1} + f(b) a_d))\right)
+\end{align*}
+
+The remaining coefficients $a_1, a_2, \ldots, a_d$ can be recovered recursively from $q$. Define a sequence of quotients $q_0, q_1, \ldots, q_d$ as follows:
+\begin{align*}
+q_0 &= q \\
+q_1 &= f(b) (q_0 - a_1) \\
+q_2 &= f(b) (q_1 - a_2) \\
+&\vdots \\
+q_d &= f(b) (q_{d-1} - a_d)
+\end{align*}
+
+From the above equations, we can express the coefficients of $f(x)$ in terms of the quotients $q_0, q_1, \ldots, q_d$:
+\begin{align*}
+a_1 &= q_0 - \frac{q_1}{f(b)} \\
+a_2 &= q_1 - \frac{q_2}{f(b)} \\
+&\vdots \\
+a_d &= q_{d-1} - \frac{q_d}{f(b)}
+\end{align*}
+
+Since $f(b) \neq 0$ and $f(b) \in F[x]$, which is a field, the divisions above are well-defined. The above suggests that a unique solution exists for each coefficient of $f(x)$. Thus, we can recover all the coefficients $a_0, a_1, \ldots, a_d$ using only the values $f(b)$ and $f(f(b))$. Furthermore, since we can recover the coefficients sequentially using a recurrence relation, we can determine the degree of the term corresponding to the coefficient recovered.
+
+In conclusion, under the given conditions, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$.
 \end{proof}
 
 \section{Applications} \label{section:applications}
