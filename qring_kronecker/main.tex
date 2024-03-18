@@ -55,25 +55,40 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution. We demonstrate the theorem's utility by deriving an explicit formula for famous integer sequences, such as the Fibonacci sequence. Our formula, valid for $n > 1$, is given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$, where $F_n$ is the $n$-th Fibonacci number. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms.
+We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution. We demonstrate the theorem's utility by deriving an explicit formula for famous integer sequences, such as the Fibonacci sequence, Pell sequence, and the central binomial coefficients. To give an example, we present a formula for the $n$-th Fibonacci number, valid for $n > 1$, given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$. Additionally, we find a new formula for square roots using our approach. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms.
 \end{abstract}
 
 \section{Introduction}
 Kronecker substitution, named after the mathematician Leopold Kronecker, is a technique that allows for the efficient multiplication of integers and polynomials by encoding them as integers in a larger base \cite{kronecker1882}. While this technique has been widely used in the design of fast multiplication algorithms \cite{harvey2009kronecker, harvey2014faster}, its potential applications in combinatorial number theory have remained largely unexplored.
 
-In our previous work \cite{shunia2023simple}, we took the first steps in this direction by applying Kronecker substitution to binomial expansions, yielding a new formula for binomial coefficients:
+In an unpublished preprint \cite{shunia2023simple}, we took the first steps in this direction by applying Kronecker substitution to binomial expansions, yielding a new formula for binomial coefficients:
 \begin{align*}
     \binom{n}{k} = \left\lfloor \frac{(2^n+1)^n}{2^{n k}} \right\rfloor \bmod{2^n}
 \end{align*}
 
 In this work, we develop a general framework for applying Kronecker substitution to polynomial expansions within quotient rings, which is useful for generating combinatorial identities. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences.
 
-To demonstrate the power of our approach, we apply our main theorem to derive new explicit formulas for two important combinatorial sequences. First, we obtain a formula for the Fibonacci sequence, one of the most well-known and widely studied combinatorial sequences. The Fibonacci sequence is \seqnum{A000045} in the OEIS \cite{A000045}. Valid for $n > 1$, our formula expresses the $n$-th Fibonacci number $F_n$ in terms of a double modular expression involving powers of $2$:
+\subsection{New Formulas}
+To demonstrate the power of our approach, we apply our main theorem to derive new explicit formulas for several important combinatorial sequences. We also find a result on square roots.
+
+First, we obtain a formula for the Fibonacci sequence, one of the most well-known and widely studied combinatorial sequences. The Fibonacci sequence is \seqnum{A000045} in the OEIS \cite{A000045}. Valid for $n > 1$, our formula expresses the $n$-th Fibonacci number $F_n$ in terms of a double modular expression involving powers of $2$:
 \begin{align*}
     F_n = (2^{n(n-1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}
 \end{align*}
 
-Second, we derive a new formula for the central binomial coefficients, which are the binomial coefficients of the form $\binom{2n}{n}$. These coefficients form sequence \seqnum{A000984} in the OEIS \cite{A000984} and have numerous applications in combinatorics and number theory. Our formula, which is valid for $n > 0$, expresses the $n$-th central binomial coefficient in terms of a double modular expression involving powers of $4$:
+Second, we derive a new formula for the Pell sequence, which is another fundamental integer sequence. The Pell sequence is \seqnum{A000129} in the OEIS \cite{A000129}. Valid for $n > 1$, our formula expresses the $n$-th Pell number $P_n$ in terms of a double modular expression involving powers of $2$:
+\begin{align*}
+    P_n = ((2^{n}+1)^{n-1} \bmod{(4^n-2)}) \bmod{(2^n-1)}
+\end{align*}
+
+In proving the above formula for the Pell sequence, we uncover a general formula for square roots. Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
+\begin{align*}
+\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
+    \frac{n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^k-n)}}
+\end{align*}
+
+Finally, we derive a new formula for the central binomial coefficients, which are the binomial coefficients of the form $\binom{2n}{n}$. These coefficients form sequence \seqnum{A000984} in the OEIS \cite{A000984} and have numerous applications in combinatorics and number theory. Our formula, which is valid for $n > 0$, expresses the $n$-th central binomial coefficient in terms of a double modular expression involving powers of $4$:
 \begin{align*}
     \binom{2n}{n} &= ((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}) \bmod{(4^n-1)}
 \end{align*}
@@ -229,10 +244,13 @@ This completes the proof.
 \section{Applications} \label{section:applications}
 
 \subsection{Fibonacci Formula}
-To demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th Fibonacci number, which is sequence \seqnum{A000045} in the OEIS \cite{A000045}.
+To demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th Fibonacci number, which is sequence \seqnum{A000045} in the OEIS \cite{A000045}.  Starting from $n=1$, the sequence $F_n$ begins as
+\begin{align*}
+    F_n = 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, \ldots
+\end{align*}
 
-\begin{theorem}
-Let $F_n$ denote the $n$-th term of the Fibonacci sequence, such that $F_0 = 0, F_1 = 1$
+\begin{theorem} \label{theorem:fibonacci}
+Let $F_n$ denote the $n$-th term of the Fibonacci sequence, such that $F_0 = 0, F_1 = 1$, and for $n > 1$:
 \begin{align*}
     F_n = F_{n-1} + F_{n-2}
 \end{align*}
@@ -248,7 +266,7 @@ Fix a ring $R = \mathbb{Z}[x]/(x^2 - x - 1)$. In the ring $R$, the elements obey
     x = \frac{1 + \sqrt{5}}{2}, \quad x = \frac{1 - \sqrt{5}}{2}
 \end{align*}
 
-Since $F_n$ is always non-negative for $n \geq 0$, we choose $x = \frac{1 + \sqrt{5}}{2} = \varphi$, where $\varphi$ denotes the so-called ``golden ratio''. We have the well-known formula \cite{A000045}
+Since $F_n$ is always non-negative for $n \geq 0$, we choose $x = \frac{1 + \sqrt{5}}{2} = \varphi$, where $\varphi$ denotes the so-called ``golden ratio''. From the OEIS \cite{A000045}, we have the following formula:
 \begin{align*}
     \varphi^{n-1} = F_{n-1} \varphi + F_{n-2}
 \end{align*}
@@ -267,10 +285,140 @@ Applying \cref{theorem:kroneckerqrings} by substituting with $x = 2^n$ and simpl
 Considering $n = 1$, since $2^1-1 = F_1 = 1$, we have $F_1 \equiv 0 \pmod{2^n - 1}$. Thus, the formula is valid for $n > 1$.
 \end{proof}
 
-\subsection{Central Binomial Coefficients Formula}
-To further demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th central binomial coefficient $\binom{2n}{n}$, which is sequence \seqnum{A000984} in the OEIS \cite{A000984}.
+\subsection{Pell Formula}
+We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$-th Pell number, which is sequence \seqnum{A000129} in the OEIS \cite{A000129}. Starting from $n=1$, the sequence $P$ begins as
+\begin{align*}
+    P_n = 0, 1, 2, 5, 12, 29, 70, 169, 408, 985, 2378, 5741, 13860, 33461, 80782, 195025, \ldots
+\end{align*}
 
-\begin{theorem}
+\begin{theorem} \label{theorem:pell}
+Let $P_n$ denote the $n$-th term of the Pell sequence, such that $P_0 = 0, P_1 = 1$, and for $n > 1$:
+\begin{align*}
+    P_n = 2 P_{n-1} + P_{n-2}
+\end{align*}
+
+Then, for $n > 1$
+\begin{align*}
+P_n &= (2^n + 1)^{n-1} \bmod{(4^n-2, 2^n-1)}
+\end{align*}
+\end{theorem}
+\begin{proof}
+Fix a ring $R = \mathbb{Z}[x]/(x^2 - 2)$. Consider $f(x) = x+1 \in R$. Expanding $f(x)^n$ using the binomial theorem gives
+\begin{align*}
+    f(x)^n = (x+1)^n = \sum_{k=0}^{n} \binom{n}{k} x^n
+\end{align*}
+
+In the ring $R$, the elements obey the relation $x^2 = 2$. This mean that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - 2)$. Factoring out $x^2$ from $x^k$ in our previous expansion (to apply the modular reduction), and then simplifying, yields
+\begin{align*}
+    f(x)^n \bmod{(x^2 - 2)} = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{1}{2} k}} x
+    = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{2}}} x
+\end{align*}
+
+Recall that evaluating at $x=1$ is the same as reducing modulo $(x-1)$. Thus, we have
+\begin{align*}
+    f(x)^n \bmod{(x^2-2, x-1)} = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{2}}}
+\end{align*}
+
+From the OEIS \cite{A000129}, we have the formula
+\begin{align*}
+    P_{n+1} = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{2}}}
+\end{align*}
+
+Hence
+\begin{align*}
+    P_{n+1} &= f(x)^n \bmod{(x^2-2, x-1)} \\
+    &= (x+1)^n \bmod{(x^2-2, x-1)}
+\end{align*}
+
+Replacing $n$ with $n-1$ yields
+\begin{align*}
+    P_n &= (x+1)^{n-1} \bmod{(x^2-2, x-1)}
+\end{align*}
+
+To arrive at our stated formula, we apply \cref{theorem:kroneckerqrings} by substituting with $x = 2^n$, followed by simplifying
+\begin{align*}
+     P_n &= (2^n+1)^{n-1} \bmod{((2^n)^2-2, 2^n-1)} \\
+     &= (2^n+1)^{n-1} \bmod{(4^n-2, 2^n-1)}
+\end{align*}
+
+Considering $n = 1$, we have $P_1 = 1$. However, in applying our derived formula, we arrive at a contradiction
+\begin{align*}
+     P_1 &= (2^1+1)^{1-1} \bmod{(4^1-2, 2^1-1)} & \\ 
+     P_1 &= 3^{0} \bmod{(2, 1)} & \\
+     P_1 &= 1 \bmod{(2, 1)} & \\
+     P_1 &= 0 & \\
+     \Rightarrow 1 &= 0 & \text{(contradiction)}
+\end{align*}
+Hence, the formula is invalid for $n=1$. On the other hand, considering $n > 1$, we see that
+\begin{align*}
+     & (x+1)^n \not\equiv 0 \pmod{x^2-2, x-1}, \quad \forall n > 1 ,
+\end{align*}
+leading to
+\begin{align*}
+    & (2^n+1)^n \not\equiv 0 \pmod{4^n-2, 2^n-1}, \quad \forall n > 1 .
+\end{align*}
+Thus, the given formula is valid for $n > 1$.
+\end{proof}
+
+\subsection{Square Roots}
+The previous result on Pell numbers (\cref{theorem:pell}) leads us to an interesting result on square roots.
+
+\begin{theorem} \label{theorem:squareroots}
+Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
+\begin{align*}
+\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
+    \frac{n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^k-n)}}
+\end{align*}
+\end{theorem}
+\begin{proof}
+Fix a ring $R = \mathbb{Z}[x]/(x^2 - n)$. In the ring $R$, the elements obey the relation $x^2 = n$. This mean that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - n)$.
+
+Consider $f(x) = x+1 \in R$. Let $a,b \in \mathbb{Z}$. Expanding $f(x)^n$ in $R$ yields a polynomial of the form
+\begin{align*}
+f(x)^n \equiv a + b x \pmod{x^2 - n}
+\end{align*}
+
+Let $g(x) = f(x) \bmod{(x^2-n)}$. To find $\sqrt{n}$, it suffices to solve for $x$. But first, we must solve for the two unknowns $a,b$.
+
+To solve for $a$, we simply need to find the constant term in $g(x)$. To do so, we can simply consider $g(x)$ modulo $x$, which gives
+\begin{align*}
+a = g(x) \bmod{x}
+\end{align*}
+
+Solving for $b$ is also simple. We need to find the coefficient $[x] g(x)$. To do so, we divide $g(x)$ by $x$ to get
+\begin{align*}
+b = x^{-1} g(x)
+\end{align*}
+
+Now, solving for $x$ in $a + b x$ yields
+\begin{align*}
+x = -a b^{-1}
+\end{align*}
+
+Here, $x$ is likely to be irrational. Hence, the solution to $x$ will not be exact, and will grow more precise as $n$ goes to infinity. Taking the limit, and substituting for all variables in $x = -a b^{-1}$, gives
+\begin{align*}
+x &= \lim_{k\rightarrow\infty} \quad
+    \frac{-n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^k-n)}}
+\end{align*}
+
+Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substituting with $x = \sqrt{n}$, gives
+\begin{align*}
+\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
+    \frac{n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^k-n)}}
+\end{align*}
+Which is the formula we wanted prove.
+\end{proof}
+
+\subsection{Central Binomial Coefficients Formula}
+We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$-th central binomial coefficient $\binom{2n}{n}$, which is sequence \seqnum{A000984} in the OEIS \cite{A000984}. Starting from $n=1$, the sequence of central binomial coefficients begins as
+\begin{align*}
+    \binom{2n}{n} = 1, 2, 6, 20, 70, 252, 924, 3432, 12870, 48620, 184756, 705432, 2704156, 10400600, \ldots
+\end{align*}
+
+\begin{theorem} \label{theorem:cbc}
 Let $n \in \mathbb{Z}^+$ such that $n > 0$. Then
 \begin{align*}
 \binom{2n}{n} &= (4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1, 4^n - 1)}
@@ -302,6 +450,7 @@ Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simpl
 Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ is undefined. Thus, the formula is valid for $n > 0$.
 \end{proof}
 
+\newpage
 \begingroup
 \raggedright
 \bibliographystyle{unsrtnat}
