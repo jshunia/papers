@@ -94,7 +94,7 @@ Finally, we derive a new formula for the central binomial coefficients, which ar
 \end{align*}
 
 \subsection{Structure of the Paper}
-The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive the new Fibonacci and central binomial coefficient formulas.
+The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas.
 
 \section{Notations} \label{section:notations}
 This section provides a brief overview of the notations used throughout this paper.
@@ -308,7 +308,7 @@ Fix a ring $R = \mathbb{Z}[x]/(x^2 - 2)$. Consider $f(x) = x+1 \in R$. Expanding
     f(x)^n = (x+1)^n = \sum_{k=0}^{n} \binom{n}{k} x^n
 \end{align*}
 
-In the ring $R$, the elements obey the relation $x^2 = 2$. This mean that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - 2)$. Factoring out $x^2$ from $x^k$ in our previous expansion (to apply the modular reduction), and then simplifying, yields
+In the ring $R$, the elements obey the relation $x^2 = 2$. This means that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - 2)$. Factoring out $x^2$ from $x^k$ in our previous expansion (to apply the modular reduction), and then simplifying, yields
 \begin{align*}
     f(x)^n \bmod{(x^2 - 2)} = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{1}{2} k}} x
     = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{2}}} x
@@ -372,7 +372,7 @@ Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
 \end{align*}
 \end{theorem}
 \begin{proof}
-Fix a ring $R = \mathbb{Z}[x]/(x^2 - n)$. In the ring $R$, the elements obey the relation $x^2 = n$. This mean that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - n)$.
+Fix a ring $R = \mathbb{Z}[x]/(x^2 - n)$. In the ring $R$, the elements obey the relation $x^2 = n$. This means that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - n)$.
 
 Consider $f(x) = x+1 \in R$. Let $a,b \in \mathbb{Z}$. Expanding $f(x)^n$ in $R$ yields a polynomial of the form
 \begin{align*}
