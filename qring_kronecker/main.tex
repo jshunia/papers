@@ -203,11 +203,11 @@ and the remainder
 \begin{align*}
 r(x) = f(x)^k  \bmod{\tilde{g}(x)} ,
 \end{align*}
-where $f(x)$ is any non-constant polynomial in $\mathbb{Z}[x]$. Let $\gamma \in \mathbb{Z}^+$ and suppose $\gamma^k \geq |r(1)|$. Then,
+where $f(x)$ is any non-constant polynomial in $\mathbb{Z}[x]$. Let $b, \gamma \in \mathbb{Z}^+$ and suppose $\gamma^k \geq |r(b)|$. Then,
 \begin{align*}
 r(b) = f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)}
 \quad \textup{ or }
-\quad r(b) \equiv 0 \pmod{\gamma^k - b}, \quad \forall b \in \mathbb{Z}
+\quad r(b) \equiv 0 \pmod{\gamma^k - b}
 \end{align*}
 
 \end{theorem}
@@ -275,13 +275,13 @@ Since $F_n$ is always non-negative for $n \geq 0$, we choose $x = \frac{1 + \sqr
 
 Substituting $\varphi = x \in R$, we can see
 \begin{align*}
-    x^{n-1} \bmod{(x^2 - x - 1, x-1)} = (F_{n-1} x + F_{n-2}) \bmod{(x-1)}
+    (F_{n-1} x + F_{n-2}) \bmod{(x-1)} = x^{n-1} \bmod{(x^2 - x - 1, x-1)}
 \end{align*}
 
 Applying \cref{theorem:kroneckerqrings} by substituting with $x = 2^n$ and simplifying, yields
 \begin{align*}
-    (2^n)^{n-1} \bmod{((2^n)^2 - 2^n - 1, 2^n-1)} &= (F_{n-1} x + F_{n-2}) \bmod{(x-1)} \\
-    2^{n (n - 1)} \bmod{(4^n - 2^n - 1, 2^n-1)} &= F_n
+    (F_{n-1} x + F_{n-2}) \bmod{(x-1)} &= (2^n)^{n-1} \bmod{((2^n)^2 - 2^n - 1, 2^n-1)} \\
+    F_n &= 2^{n (n - 1)} \bmod{(4^n - 2^n - 1, 2^n-1)}
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $2^n \geq F_n$.
 
@@ -391,12 +391,12 @@ Let $f(x) = (x + 1)^{2n} \in R$. Expanding $f(x)$ and taking the result modulo $
 
 Thus, we have
 \begin{align*}
-    (x + 1)^{2n} \bmod{(x^{n+1} + 1, x - 1)} &= \binom{2n}{n}
+    \binom{2n}{n} &= (x + 1)^{2n} \bmod{(x^{n+1} + 1, x - 1)}
 \end{align*}
 
 Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simplifying, yields
 \begin{align*}
-    (4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1, 4^n-1)} &= \binom{2n}{n}
+    \binom{2n}{n} &= (4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1, 4^n-1)}
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $4^n \geq \binom{2n}{n}$.
 
