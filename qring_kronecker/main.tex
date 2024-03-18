@@ -84,8 +84,8 @@ Second, we derive a new formula for the Pell sequence, which is another fundamen
 In proving the above formula for the Pell sequence, we uncover a general formula for square roots. Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
 \begin{align*}
 \sqrt{n} &= \lim_{k\rightarrow\infty} \quad
-    \frac{n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
-        {(n^k + 1)^k \bmod{(n^k-n)}}
+    \frac{n^k ((n^k + 1)^k \bmod{(n^{2k}-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^{2k}-n)}}
 \end{align*}
 
 Finally, we derive a new formula for the central binomial coefficients, which are the binomial coefficients of the form $\binom{2n}{n}$. These coefficients form sequence \seqnum{A000984} in the OEIS \cite{A000984} and have numerous applications in combinatorics and number theory. Our formula, which is valid for $n > 0$, expresses the $n$-th central binomial coefficient in terms of a double modular expression involving powers of $4$:
@@ -203,9 +203,11 @@ and the remainder
 \begin{align*}
 r(x) = f(x)^k  \bmod{\tilde{g}(x)} ,
 \end{align*}
-where $f(x)$ is any non-constant polynomial in $\mathbb{Z}[x]$. Let $\gamma \in \mathbb{Z}^+$ and suppose $\gamma^k \geq |r(r(1))|$. Then,
+where $f(x)$ is any non-constant polynomial in $\mathbb{Z}[x]$. Let $\gamma \in \mathbb{Z}^+$ and suppose $\gamma^k \geq |r(1)|$. Then,
 \begin{align*}
-r(b) = f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)} \quad \textup{ or } \quad r(b) \equiv 0 \pmod{\gamma^k - b}, \quad \forall b \in \mathbb{Z}
+r(b) = f(\gamma^k)^k \bmod{(\tilde{g}(\gamma^k), \gamma^k - b)}
+\quad \textup{ or }
+\quad r(b) \equiv 0 \pmod{\gamma^k - b}, \quad \forall b \in \mathbb{Z}
 \end{align*}
 
 \end{theorem}
@@ -226,7 +228,7 @@ Applying Kronecker substitution to all polynomials in the above equation, using 
 
 Which is the formula we aimed to prove. Furthermore, recall that we are given $\gamma$ such that
 \begin{align*}
-    \gamma^k \geq r(r(1))
+    \gamma^k \geq |r(1)|
 \end{align*}
 This implies that, when applying Kronecker substitution, the base $\gamma^k$ is sufficient to losslessly encode all of the coefficients of $r(x)$ (\cref{theorem:encoding}). Moreover, since $k \geq d$, the same is true of $f(x)$ and $g(x)$. Thus, the only way to have
 \begin{align}
@@ -281,6 +283,7 @@ Applying \cref{theorem:kroneckerqrings} by substituting with $x = 2^n$ and simpl
     (2^n)^{n-1} \bmod{((2^n)^2 - 2^n - 1, 2^n-1)} &= (F_{n-1} x + F_{n-2}) \bmod{(x-1)} \\
     2^{n (n - 1)} \bmod{(4^n - 2^n - 1, 2^n-1)} &= F_n
 \end{align*}
+By \cref{theorem:kroneckerqrings}, this substitution is valid since $2^n \geq F_n$.
 
 Considering $n = 1$, since $2^1-1 = F_1 = 1$, we have $F_1 \equiv 0 \pmod{2^n - 1}$. Thus, the formula is valid for $n > 1$.
 \end{proof}
@@ -340,6 +343,7 @@ To arrive at our stated formula, we apply \cref{theorem:kroneckerqrings} by subs
      P_n &= (2^n+1)^{n-1} \bmod{((2^n)^2-2, 2^n-1)} \\
      &= (2^n+1)^{n-1} \bmod{(4^n-2, 2^n-1)}
 \end{align*}
+By \cref{theorem:kroneckerqrings}, this substitution is valid since $2^n \geq P_n$.
 
 Considering $n = 1$, we have $P_1 = 1$. However, in applying our derived formula, we arrive at a contradiction
 \begin{align*}
@@ -358,58 +362,6 @@ leading to
     & (2^n+1)^n \not\equiv 0 \pmod{4^n-2, 2^n-1}, \quad \forall n > 1 .
 \end{align*}
 Thus, the given formula is valid for $n > 1$.
-\end{proof}
-
-\subsection{Square Roots}
-The previous result on Pell numbers (\cref{theorem:pell}) leads us to an interesting result on square roots.
-
-\begin{theorem} \label{theorem:squareroots}
-Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
-\begin{align*}
-\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
-    \frac{n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
-        {(n^k + 1)^k \bmod{(n^k-n)}}
-\end{align*}
-\end{theorem}
-\begin{proof}
-Fix a ring $R = \mathbb{Z}[x]/(x^2 - n)$. In the ring $R$, the elements obey the relation $x^2 = n$. This means that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - n)$.
-
-Consider $f(x) = x+1 \in R$. Let $a,b \in \mathbb{Z}$. Expanding $f(x)^n$ in $R$ yields a polynomial of the form
-\begin{align*}
-f(x)^n \equiv a + b x \pmod{x^2 - n}
-\end{align*}
-
-Let $g(x) = f(x) \bmod{(x^2-n)}$. To find $\sqrt{n}$, it suffices to solve for $x$. But first, we must solve for the two unknowns $a,b$.
-
-To solve for $a$, we simply need to find the constant term in $g(x)$. To do so, we can simply consider $g(x)$ modulo $x$, which gives
-\begin{align*}
-a = g(x) \bmod{x}
-\end{align*}
-
-Solving for $b$ is also simple. We need to find the coefficient $[x] g(x)$. To do so, we divide $g(x)$ by $x$ to get
-\begin{align*}
-b = x^{-1} g(x)
-\end{align*}
-
-Now, solving for $x$ in $a + b x$ yields
-\begin{align*}
-x = -a b^{-1}
-\end{align*}
-
-Here, $x$ is likely to be irrational. Hence, the solution to $x$ will not be exact, and will grow more precise as $n$ goes to infinity. Taking the limit, and substituting for all variables in $x = -a b^{-1}$, gives
-\begin{align*}
-x &= \lim_{k\rightarrow\infty} \quad
-    \frac{-n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
-        {(n^k + 1)^k \bmod{(n^k-n)}}
-\end{align*}
-
-Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substituting with $x = \sqrt{n}$, gives
-\begin{align*}
-\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
-    \frac{n^k ((n^k + 1)^k \bmod{(n^k-n, n^k)})}
-        {(n^k + 1)^k \bmod{(n^k-n)}}
-\end{align*}
-Which is the formula we wanted prove.
 \end{proof}
 
 \subsection{Central Binomial Coefficients Formula}
@@ -446,8 +398,69 @@ Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simpl
 \begin{align*}
     (4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1, 4^n-1)} &= \binom{2n}{n}
 \end{align*}
+By \cref{theorem:kroneckerqrings}, this substitution is valid since $4^n \geq \binom{2n}{n}$.
 
 Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ is undefined. Thus, the formula is valid for $n > 0$.
+\end{proof}
+
+\subsection{Square Roots}
+The previous result on Pell numbers (\cref{theorem:pell}) leads us to an interesting result on square roots.
+
+\begin{theorem} \label{theorem:squareroots}
+Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
+\begin{align*}
+\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
+    \frac{n^k ((n^k + 1)^k \bmod{(n^{2k}-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^{2k}-n)}}
+\end{align*}
+\end{theorem}
+\begin{proof}
+Fix a ring $R = \mathbb{Z}[x]/(x^2 - n)$. In the ring $R$, the elements obey the relation $x^2 = n$. This means that in the ring $R$, all elements are implicitly reduced modulo $(x^2 - n)$.
+
+Consider $f(x) = x+1 \in R$. Let $a,b \in \mathbb{Z}$. Expanding $f(x)^n$ in $R$ yields a polynomial of the form
+\begin{align*}
+f(x)^n \equiv a + b x \pmod{x^2 - n}
+\end{align*}
+
+Let $g(x) = f(x) \bmod{(x^2-n)}$. To find $\sqrt{n}$, it suffices to solve for $x$. But first, we must solve for the two unknowns $a,b$.
+
+To solve for $a$, we simply need to find the constant term in $g(x)$. To do so, we can simply consider $g(x)$ modulo $x$, which gives
+\begin{align*}
+a = g(x) \bmod{x}
+\end{align*}
+
+Solving for $b$ is also simple. We need to find the coefficient $[x] g(x)$. To do so, we divide $g(x)$ by $x$ to get
+\begin{align*}
+b = x^{-1} g(x)
+\end{align*}
+
+Now, solving for $x$ in $a + b x$ yields
+\begin{align*}
+x = -a b^{-1}
+\end{align*}
+
+Here, $x$ is likely to be irrational. Hence, the solution to $x$ will not be exact, and will grow more precise as $n$ goes to infinity. Taking the limit, and substituting for all variables in $x = -a b^{-1}$, gives
+\begin{align*}
+x &= \lim_{k\rightarrow\infty} \quad
+    \frac{-x ((x + 1)^k \bmod{(x^{2}-n, x)})}
+        {(x + 1)^k \bmod{(x^{2}-n)}}
+\end{align*}
+
+Next, we apply Kronecker substitution by substituting for $x = n^k$ on the right-hand side to get
+\begin{align*}
+x &= \lim_{k\rightarrow\infty} \quad
+    \frac{-n^k ((n^k + 1)^k \bmod{(n^{2k}-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^{2k}-n)}}
+\end{align*}
+By \cref{theorem:kroneckerqrings}, this substitution is valid since $n^k \geq f(x)^k \bmod{(x^2-n,x-1)}$.
+
+Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substituting with $x = \sqrt{n}$ on the left-hand side, gives
+\begin{align*}
+\sqrt{n} &= \lim_{k\rightarrow\infty} \quad
+    \frac{n^k ((n^k + 1)^k \bmod{(n^{2k}-n, n^k)})}
+        {(n^k + 1)^k \bmod{(n^{2k}-n)}}
+\end{align*}
+Which is the formula we wanted prove.
 \end{proof}
 
 \newpage
