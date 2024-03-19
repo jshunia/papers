@@ -25,7 +25,7 @@ citecolor=webgreen]{hyperref}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{remark}[theorem]{Remark}
+\newtheorem{remark}{Remark}
 \crefname{conjecture}{Conjecture}{Conjectures}
 \crefname{theorem}{Theorem}{Theorems}
 \crefname{lemma}{Lemma}{Lemmas}
@@ -34,8 +34,10 @@ citecolor=webgreen]{hyperref}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
+\newtheorem{example}{Example}
 \crefname{definition}{Definition}{Definitions}
 \crefname{notation}{Notation}{Notations}
+\crefname{example}{Example}{Examples}
 \crefname{section}{\S}{Sections}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\Z}{\mathbb{Z}}
@@ -59,7 +61,7 @@ We establish a new connection between combinatorial number theory and polynomial
 \end{abstract}
 
 \section{Introduction}
-Kronecker substitution, named after the mathematician Leopold Kronecker, is a technique that allows for the efficient multiplication of integers and polynomials by encoding them as integers in a larger base \cite{kronecker1882}. While this technique has been widely used in the design of fast multiplication algorithms \cite{harvey2009kronecker, harvey2014faster}, its potential applications in combinatorial number theory have remained largely unexplored.
+Kronecker substitution, named after the mathematician Leopold Kronecker, is a technique that allows for the efficient multiplication of integers and polynomials by encoding them as integers in a larger base \cite{kronecker1882}. While this technique has been widely used in the design of fast multiplication algorithms \cite{harvey2009kronecker, harvey2014faster, albrecht2018implementing, bos2020postquantum, greuet2022modular}, its potential applications in combinatorial number theory have remained largely unexplored.
 
 In an unpublished preprint \cite{shunia2023simple}, we took the first steps in this direction by applying Kronecker substitution to binomial expansions, yielding a new formula for binomial coefficients:
 \begin{align*}
@@ -94,7 +96,7 @@ Finally, we derive a new formula for the central binomial coefficients, which ar
 \end{align*}
 
 \subsection{Structure of the Paper}
-The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas.
+The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas. We follow up with \cref{section:modn}, in which we describe a method for computing our formulas in $\mathbb{Z}/n\mathbb{Z}$. We conclude with \cref{section:futureresearch} by detailing some of our plans for future research in this area.
 
 \section{Notations} \label{section:notations}
 This section provides a brief overview of the notations used throughout this paper.
@@ -139,9 +141,45 @@ To ensure a one-to-one correspondence between the coefficients and the digits, t
 \end{align*}
 This guarantees that there is no ``carry over'' between digits when performing arithmetic operations on the integer representation.
 
+\begin{remark}
+Traditionally, the base $b$ is selected to be the smallest power of $2$ which is greater than any of the coefficients of the encoded polynomial. Though, this is typically not the optimally smallest base. In \cref{theorem:encoding}, we show that $b=f(1)$ is optimal for any polynomial in $\mathbb{Z}[x]$ with non-negative coefficients.
+\end{remark}
+
 The process of Kronecker substitution can be reversed to recover the original polynomial $f(x)$ from its integer representation $f(b)$. Given $f(b)$ and the base $b$, one can extract the coefficients by successively dividing $f(b)$ by powers of $b$ and taking the remainders. This allows for the reconstruction of $f(x)$ from $f(b)$ \cite{grimaldi2004discrete}.
 
 Kronecker substitution has found numerous applications in computer algebra and symbolic computation, particularly in the design of efficient algorithms for polynomial multiplication \cite{harvey2009kronecker, harvey2014faster}. By reducing polynomial operations to integer arithmetic, Kronecker substitution enables the use of fast integer multiplication algorithms, resulting in improved performance for polynomial computations.
+
+\subsection{Kronecker Substitution in Action}
+To demonstrate Kronecker substitution, we proceed with a simple example in base-$10$.
+
+\begin{example}
+Fix $b=10$. Consider the polynomial 
+\begin{align*}
+    f(x) = 4x^3 + 3x^2 + 2x + 1 \quad \in \mathbb{Z}[x]
+\end{align*}
+
+\textbf{Step 1. Encoding:} \\
+We encode the coefficients of $f(x)$ using base $b=10$, chosen because it exceeds the absolute values of all coefficients in $f(x)$, thereby ensuring no overlap or ``carry over'' in the encoding process.
+
+Substituting $x = 10$ into $f(x)$, we calculate
+\begin{align*}
+    f(10) &= 4(10)^3 + 3(10)^2 + 2(10) + 1 \\
+    &= 4000 + 300 + 20 + 1 \\
+    &= 4321
+\end{align*}
+
+\textbf{Step 2. Decoding:} \\
+To decode $f(x)$ from its integer representation, $f(10) = 4321$, one can extract each digit according to its positional value in base-$10$:
+
+\begin{itemize}
+    \item The thousands digit, $4$, is the coefficient of $x^3$.
+    \item The hundreds digit, $3$, is the coefficient of $x^2$.
+    \item The tens digit, $2$, is the coefficient of $x$.
+    \item The units digit, $1$, is the constant term.
+\end{itemize}
+
+Thus, we can reconstruct $f(x) = 4x^3 + 3x^2 + 2x + 1$ from the integer $4321$ by interpreting each digit according to its position in the base-$10$ representation.
+\end{example}
 
 \section{Polynomial Encoding Theorem}
 For completeness, we restate a theorem we first shared in our previous work on a formula for binomial coefficients \cite{shunia2023simple}.
@@ -191,7 +229,7 @@ Thus, we can recover all the coefficients $a_0, a_1, \ldots, a_d$ using only the
 In conclusion, under the given conditions, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$ using the provided formula.
 \end{proof}
 
-\section{Main Results} \label{section:results}
+\section{Main Result} \label{section:results}
 For our main result, we apply $\cref{theorem:encoding}$ to polynomial quotient rings to devise a theorem which serves a framework for translating polynomial quotient rings to combinatorial identities.
 
 \begin{theorem} \label{theorem:kroneckerqrings}
@@ -463,7 +501,77 @@ Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substi
 Which is the formula we wanted prove.
 \end{proof}
 
-\newpage
+\section[Kronecker Substitution Mod n]{Kronecker Substitution Mod $n$} \label{section:modn}
+As it is relevant to our applied results (\cref{section:applications}), we will demonstrate how Kronecker substitution can be efficiently performed in $\mathbb{Z}/n\mathbb{Z}$. Typically, mod $n$ reductions in Kronecker substitution are performed in a ``delayed reduction'' process \cite{greuet2022modular, dumas2011simulataneous}, which can be described as follows:
+
+Given a polynomial encoded as an integer, the first step is decode the polynomial from its integer representation. Next, the decoded polynomial is reduced mod $n$. Finally, the polynomial remainder is encoded back to an integer in the chosen base.
+
+While this algorithmic approach is considered sufficient (perhaps even ideal) for the purposes of fast multiplication algorithms, it is not ideal for us. We desire to derive explicit combinatorial identities and formulas using modular exponentiation, which necessitates in-place reduction of the coefficients mod $n$. For this purpose, we offer the theorem below.
+
+\begin{theorem} \label{theorem:modn}
+Let $n, b, d \in \mathbb{Z}$ such that $b > n > 0$ and $d \geq 0$. Consider a polynomial $f(x) \in \mathbb{Z}[x]$ of degree $d$, which has the form
+\begin{align*}
+    f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0
+\end{align*}
+
+Fix a polynomial 
+\begin{align*}
+    m(x) = \frac{n x^d - n}{x-1} = n x^d + n x^{d-1} + \cdots + n x + n
+\end{align*}
+
+Suppose $b > n$. Then, the polynomial $f(x) \pmod{n}$ can be recovered completely by calculating the integer remainder
+\begin{align*}
+    r \equiv f(b) \pmod{m(b)}
+\end{align*}
+and then reading the coefficients of $r$ out in base $b$.
+\end{theorem}
+\begin{proof}
+First, observe that evaluating $m(x)$ at $x=b$ yields
+\begin{align*}
+m(b) = n b^d + n b^{d-1} + \cdots + n b + n
+\end{align*}
+resulting in an integer where each digit in base $b$ is $n$, given the condition that $b > n$.
+
+Now, consider the operation of reducing $f(x) \bmod{n}$. We begin with
+\begin{align*}
+    f(x) \bmod{n} = (a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0) \bmod{n}
+\end{align*}
+
+Distributing the mod operation, we see
+\begin{align*}
+    f(x) \bmod{n} = (a_d x^d \bmod{n}) + (a_{d-1} x^{d-1} \bmod{n}) + \cdots + (a_1 x \bmod{n}) + (a_0 \bmod{n})
+\end{align*}
+
+The above polynomial process is analogous to the process of reducing our encoded integer value $f(b)  \bmod{m(b)}$. Writing those integers in expanded form
+\begin{align*}
+    f(b) &= a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0 \\
+    m(b) &= n b^d + n b^{d-1} + \cdots + n b + n
+\end{align*}
+
+Likewise, expanding the integer remainder $r$, we have
+\begin{align*}
+    r &\equiv f(b) \pmod{m(b)} \\
+    &\equiv (a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0) \bmod{m(b)}
+\end{align*}
+
+Due to the nature of integer arithmetic and our encoding scheme, the distributed mod operation under $f(b) \bmod{m(b)}$ reduces to
+\begin{align*}
+    r &\equiv ((a_d b^d \bmod{(n b^d)}) + \cdots + (a_1 b \bmod{(n b)}) + (a_0 \bmod{n})) \bmod{m(b)}
+\end{align*}
+To see why, consider that all digits in $f(b)$ are reduced modulo $n$ at their corresponding digit place. Thus, any remainders are also reduced modulo $n$ at their corresponding digit places. The recursive chaining of these reductions simplifies the operation to reducing the individual base $b$ digits modulo $n$.
+
+Hence, the integer value $r$ encodes the coefficients of $f(x) \pmod{n}$. By applying Kronecker substitution, we may recover those coefficients along with their degree. This completes the proof.
+\end{proof}
+
+The method described by \cref{theorem:modn} is not entirely novel. Dumas et al. \cite{dumas2011simulataneous} give a method for performing a ``simultaneous reduction'' using floored divisions which avoids the intermediate conversion steps in the ``delayed reduction''. However, their approach is still algorithmic in nature and therefore not applicable for our purposes.
+
+\section{Future Research} \label{section:futureresearch}
+Harvey (2009) \cite{harvey2009kronecker} proposed a method for improving the efficiency of integer multiplication by performing Kronecker substitution via multiple evaluations, termed ``multi-point Kronecker substitution''. Harvey described how to compute his method up to $r=4$ points. Bos et al. (2020) \cite{bos2020postquantum} generalized Harvey's result using an approach which they have called ``Kronecker+''. A brief description of the process is as follows:
+
+First, a base $b$ is selected along with a fixed constant $r$, which corresponds to the number of evaluation points. Next, the polynomial $f(x)$ is evaluated at $r$ points, which are the products of $b$ times the $r$th roots of unity. The results of all evaluations are then combined to recover the polynomial coefficients. This process is essentially a variation of the Discrete Fourier Transform (DFT) applied to Kronecker substitution.
+
+The aforementioned techniques both present promising avenues for future research.
+
 \begingroup
 \raggedright
 \bibliographystyle{unsrtnat}
