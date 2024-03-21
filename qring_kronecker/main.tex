@@ -96,7 +96,7 @@ Finally, we derive a new formula for the central binomial coefficients, which ar
 \end{align*}
 
 \subsection{Structure of the Paper}
-The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas. We follow up with \cref{section:modn}, in which we describe a method for computing our formulas in $\mathbb{Z}/n\mathbb{Z}$. We conclude with \cref{section:futureresearch} by detailing some of our plans for future research in this area.
+The rest of this paper is organized as follows. In \cref{section:notations}, we introduce the notations used throughout the paper. \cref{section:kronecker} provides a brief primer on Kronecker substitution. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas. We conclude with \cref{section:futureresearch} by detailing some of our plans for future research in this area.
 
 \section{Notations} \label{section:notations}
 This section provides a brief overview of the notations used throughout this paper.
@@ -230,7 +230,7 @@ In conclusion, under the given conditions, $f(x)$ can be completely determined b
 \end{proof}
 
 \section{Main Result} \label{section:results}
-For our main result, we apply $\cref{theorem:encoding}$ to polynomial quotient rings to devise a theorem which serves a framework for translating polynomial quotient rings to combinatorial identities.
+For our main result, we apply \cref{theorem:encoding} to polynomial quotient rings to devise a theorem which serves a framework for translating polynomial quotient rings to combinatorial identities.
 
 \begin{theorem} \label{theorem:kroneckerqrings}
 Let $k, d \in \mathbb{Z}^+$ such that $k \geq d$. Consider a polynomial
@@ -500,70 +500,6 @@ Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substi
 \end{align*}
 Which is the formula we wanted prove.
 \end{proof}
-
-\section[Kronecker Substitution Mod n]{Kronecker Substitution Mod $n$} \label{section:modn}
-As it is relevant to our applied results (\cref{section:applications}), we will demonstrate how Kronecker substitution can be efficiently performed in $\mathbb{Z}/n\mathbb{Z}$. Typically, mod $n$ reductions in Kronecker substitution are performed in a ``delayed reduction'' process \cite{greuet2022modular, dumas2011simulataneous}, which can be described as follows:
-
-Given a polynomial encoded as an integer, the first step is decode the polynomial from its integer representation. Next, the decoded polynomial is reduced mod $n$. Finally, the polynomial remainder is encoded back to an integer in the chosen base.
-
-While this algorithmic approach is considered sufficient (perhaps even ideal) for the purposes of fast multiplication algorithms, it is not ideal for us. We desire to derive explicit combinatorial identities and formulas using modular exponentiation, which necessitates in-place reduction of the coefficients mod $n$. For this purpose, we offer the theorem below.
-
-\begin{theorem} \label{theorem:modn}
-Let $n, b, d \in \mathbb{Z}$ such that $b > n > 0$ and $d \geq 0$. Consider a polynomial $f(x) \in \mathbb{Z}[x]$ of degree $d$, which has the form
-\begin{align*}
-    f(x) = a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0
-\end{align*}
-
-Fix a polynomial 
-\begin{align*}
-    m(x) = \frac{n x^d - n}{x-1} = n x^d + n x^{d-1} + \cdots + n x + n
-\end{align*}
-
-Suppose $b > n$. Then, the polynomial $f(x) \pmod{n}$ can be recovered completely by calculating the integer remainder
-\begin{align*}
-    r \equiv f(b) \pmod{m(b)}
-\end{align*}
-and then reading the coefficients of $r$ out in base $b$.
-\end{theorem}
-\begin{proof}
-First, observe that evaluating $m(x)$ at $x=b$ yields
-\begin{align*}
-m(b) = n b^d + n b^{d-1} + \cdots + n b + n
-\end{align*}
-resulting in an integer where each digit in base $b$ is $n$, given the condition that $b > n$.
-
-Now, consider the operation of reducing $f(x) \bmod{n}$. We begin with
-\begin{align*}
-    f(x) \bmod{n} = (a_d x^d + a_{d-1} x^{d-1} + \cdots + a_1 x + a_0) \bmod{n}
-\end{align*}
-
-Distributing the mod operation, we see
-\begin{align*}
-    f(x) \bmod{n} = (a_d x^d \bmod{n}) + (a_{d-1} x^{d-1} \bmod{n}) + \cdots + (a_1 x \bmod{n}) + (a_0 \bmod{n})
-\end{align*}
-
-The above polynomial process is analogous to the process of reducing our encoded integer value $f(b)  \bmod{m(b)}$. Writing those integers in expanded form
-\begin{align*}
-    f(b) &= a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0 \\
-    m(b) &= n b^d + n b^{d-1} + \cdots + n b + n
-\end{align*}
-
-Likewise, expanding the integer remainder $r$, we have
-\begin{align*}
-    r &\equiv f(b) \pmod{m(b)} \\
-    &\equiv (a_d b^d + a_{d-1} b^{d-1} + \cdots + a_1 b + a_0) \bmod{m(b)}
-\end{align*}
-
-Due to the nature of integer arithmetic and our encoding scheme, the distributed mod operation under $f(b) \bmod{m(b)}$ reduces to
-\begin{align*}
-    r &\equiv ((a_d b^d \bmod{(n b^d)}) + \cdots + (a_1 b \bmod{(n b)}) + (a_0 \bmod{n})) \bmod{m(b)}
-\end{align*}
-To see why, consider that all digits in $f(b)$ are reduced modulo $n$ at their corresponding digit place. Thus, any remainders are also reduced modulo $n$ at their corresponding digit places. The recursive chaining of these reductions simplifies the operation to reducing the individual base $b$ digits modulo $n$.
-
-Hence, the integer value $r$ encodes the coefficients of $f(x) \pmod{n}$. By applying Kronecker substitution, we may recover those coefficients along with their degree. This completes the proof.
-\end{proof}
-
-The method described by \cref{theorem:modn} is not entirely novel. Dumas et al. \cite{dumas2011simulataneous} give a method for performing a ``simultaneous reduction'' using floored divisions which avoids the intermediate conversion steps in the ``delayed reduction''. However, their approach is still algorithmic in nature and therefore not applicable for our purposes.
 
 \section{Future Research} \label{section:futureresearch}
 Harvey (2009) \cite{harvey2009kronecker} proposed a method for improving the efficiency of integer multiplication by performing Kronecker substitution via multiple evaluations, termed ``multi-point Kronecker substitution''. Harvey described how to compute his method up to $r=4$ points. Bos et al. (2020) \cite{bos2020postquantum} generalized Harvey's result using an approach which they have called ``Kronecker+''. A brief description of the process is as follows:
