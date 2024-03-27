@@ -259,8 +259,7 @@ Let $P_n$ denote the $n$-th term of the Pell sequence, such that $P_0 = 0, P_1 =
 \begin{align*}
     P_n = 2 P_{n-1} + P_{n-2}
 \end{align*}
-
-Then, for $n > 1$
+Then, for $n > 0$
 \begin{align*}
 P_n &= (2^n + 1)^{n-1} \bmod{(4^n-2, 2^n-1)}
 \end{align*}
@@ -343,21 +342,19 @@ Now, solving for $x$ in $u + v x$ yields
 \begin{align*}
 x = -u v^{-1}
 \end{align*}
-
 Here, $x$ is likely to be irrational. Hence, the solution to $x$ will not be exact, and will grow more precise as $n$ goes to infinity. Taking the limit, and substituting for all variables in $x = -u v^{-1}$, gives
 \begin{align*}
 x &= \lim_{k\rightarrow\infty}
     \frac{-x ((x + 1)^k \bmod{(x^{2}-n, x)})}
         {(x + 1)^k \bmod{(x^{2}-n)}}
 \end{align*}
-
 Next, we apply Kronecker substitution by substituting for $x = k^k$ on the right-hand side to get
 \begin{align*}
 x &= \lim_{k\rightarrow\infty}
     \frac{-k^k ((k^k + 1)^k \bmod{(k^{2k}-n, k^k)})}
         {(k^k + 1)^k \bmod{(k^{2k}-n)}}
 \end{align*}
-By \cref{theorem:kroneckerqrings}, this substitution is and remains valid as $k\rightarrow\infty$, since $k^k \geq f(x)^k \bmod{(x^2-n,x-1)}$.
+By \cref{theorem:kroneckerqrings}, this substitution is valid as $k\rightarrow\infty$, since $k^k \geq f(x)^k \bmod{(x^2-n,x-1)}$.
 
 Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substituting with $x = \sqrt{n}$ on the left-hand side, gives
 \begin{align*}
@@ -488,7 +485,6 @@ Substituting $x = 10$ into $f(x)$, we calculate
 
 \textbf{Step 2. Decoding:} \\
 To decode $f(x)$ from its integer representation, $f(10) = 4321$, one can extract each digit according to its positional value in base-$10$:
-
 \begin{itemize}
     \item The thousands digit, $4$, is the coefficient of $x^3$.
     \item The hundreds digit, $3$, is the coefficient of $x^2$.
@@ -500,7 +496,7 @@ Thus, we can reconstruct $f(x) = 4x^3 + 3x^2 + 2x + 1$ from the integer $4321$ b
 \end{example}
 
 \subsection{Comparison to Polynomial Encoding Theorem}
-The property described in \cref{theorem:encoding} is related to Kronecker substitution (\cref{section:kronecker}), a technique used to convert polynomial arithmetic into integer arithmetic. However, there are some key differences. Traditional Kronecker substitution requires a sufficiently large base to ensure the encoding is injective, typically a power of $2$. In contrast, \cref{theorem:encoding} provides an optimal base that is guaranteed to work for polynomials with non-negative integer coefficients. Furthermore, \cref{theorem:encoding} shows that such a polynomial can be uniquely determined by just two evaluations, which is a stronger result than what is typically achieved with Kronecker substitution alone.
+The property described in \cref{theorem:encoding} is related to Kronecker substitution. However, there are some fundamental differences. Traditional Kronecker substitution requires a sufficiently large base to ensure the encoding is injective, typically a power of $2$. In contrast, \cref{theorem:encoding} provides an optimal base that is guaranteed to work for polynomials with non-negative integer coefficients. Furthermore, \cref{theorem:encoding} shows that such a polynomial can be uniquely determined by just two evaluations, which is a stronger result than what is typically achieved with Kronecker substitution alone.
 
 In the case of a polynomial with unknown coefficients, using powers of $2$ for Kronecker substitution would require multiple evaluations to find a suitable base that ensures an injective encoding. The number of evaluations needed depends on the magnitude of the coefficients, which is not known in advance. One possible approach to find the appropriate base is to use a binary search-like strategy, where the base is iteratively adjusted based on whether the encoding is injective or not. For example, suppose we are given an unknown polynomial $f(x) \in \mathbb{Z}[x]$ and a function $G$ which returns $1$ if the encoded value in injective, and $0$ otherwise. Then, we could start with a relatively small base, evaluate the polynomial, and check if the encoding is injective. If not, the base is increased, and the process is repeated until an injective encoding is found. The increments in the base size can be chosen strategically to minimize the number of evaluations needed.
 
