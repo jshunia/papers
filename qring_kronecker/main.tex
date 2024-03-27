@@ -1,14 +1,11 @@
 \pdfoutput=1
-\documentclass[12pt,reqno]{article}
+\documentclass[11pt,reqno]{article}
 \usepackage{fullpage}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[numbers]{natbib}
-\usepackage[usenames]{color}
 \usepackage{url}
-\usepackage{color}
-\usepackage[usenames]{color}
 \usepackage[usenames]{color}
 \usepackage[colorlinks=true,
 linkcolor=webgreen,
@@ -65,7 +62,7 @@ Kronecker substitution, named after the mathematician Leopold Kronecker, is a te
 
 In an unpublished preprint \cite{shunia2023simple}, we took the first steps in this direction by applying Kronecker substitution to binomial expansions, yielding a new formula for binomial coefficients:
 \begin{align*}
-    \binom{n}{k} = \left\lfloor \frac{(2^n+1)^n}{2^{n k}} \right\rfloor \bmod{2^n}
+    \binom{n}{k} = \floor{\frac{(2^n+1)^n}{2^{n k}}} \bmod{2^n}
 \end{align*}
 
 In this work, we develop a general framework for applying Kronecker substitution to polynomial expansions within quotient rings, which is useful for generating combinatorial identities. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences.
@@ -149,6 +146,10 @@ Thus, we can recover all the coefficients $a_0, a_1, \ldots, a_d$ using only the
 In conclusion, under the given conditions, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$ using the provided formula.
 \end{proof}
 
+\begin{remark}
+The polynomial property described in \cref{theorem:encoding} appears to be underexplored in the literature. While writing our unpublished preprint \cite{shunia2023simple} in 2023, we conducted a preliminary literature review and were unable to find any papers explicitly describing it. However, it has been the subject of some online discussions \cite{mathoverflow2012application, reddit2023determine} and at least one blog post \cite{jcook2012polynomial}. Despite these mentions, the property has been treated mostly as a novelty or curiosity, and its applications have not been thoroughly examined. We believe this property warrants further investigation, as it may have potential applications in areas such as combinatorics, number theory, p-adic analysis, computational algebra, and cryptography.
+\end{remark}
+
 \section{Main Result} \label{section:results}
 For our main result, we apply \cref{theorem:encoding} to polynomial quotient rings to devise a theorem which serves a framework for translating polynomial quotient rings to combinatorial identities.
 
@@ -204,7 +205,7 @@ This completes the proof.
 \section{Applications} \label{section:applications}
 
 \subsection{Fibonacci Formula}
-To demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th Fibonacci number, which is sequence \seqnum{A000045} in the OEIS \cite{A000045}.  Starting from $n=1$, the sequence $F_n$ begins as
+To demonstrate the practical applications of \cref{theorem:kroneckerqrings}, we apply it to derive a new formula for the $n$-th Fibonacci number, which is sequence \seqnum{A000045} in the OEIS \cite{A000045}.  Starting from $n=0$, the sequence $F_n$ begins as
 \begin{align*}
     F_n = 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, \ldots
 \end{align*}
@@ -239,6 +240,7 @@ Substituting $\varphi = x \in R$, we can see
 Applying \cref{theorem:kroneckerqrings} by substituting with $x = 2^n$ and simplifying, yields
 \begin{align*}
     (F_{n-1} x + F_{n-2}) \bmod{(x-1)} &= (2^n)^{n-1} \bmod{((2^n)^2 - 2^n - 1, 2^n-1)} \\
+    F_{n-1} + F_{n-2} &= 2^{n (n - 1)} \bmod{(4^n - 2^n - 1, 2^n-1)} \\
     F_n &= 2^{n (n - 1)} \bmod{(4^n - 2^n - 1, 2^n-1)}
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $2^n \geq F_n$.
@@ -247,7 +249,7 @@ Considering $n = 1$, since $2^1-1 = F_1 = 1$, we have $F_1 \equiv 0 \pmod{2^n - 
 \end{proof}
 
 \subsection{Pell Formula}
-We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$-th Pell number, which is sequence \seqnum{A000129} in the OEIS \cite{A000129}. Starting from $n=1$, the sequence $P$ begins as
+We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$-th Pell number, which is sequence \seqnum{A000129} in the OEIS \cite{A000129}. Starting from $n=0$, the sequence $P$ begins as
 \begin{align*}
     P_n = 0, 1, 2, 5, 12, 29, 70, 169, 408, 985, 2378, 5741, 13860, 33461, 80782, 195025, \ldots
 \end{align*}
@@ -303,23 +305,7 @@ To arrive at our stated formula, we apply \cref{theorem:kroneckerqrings} by subs
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $2^n \geq P_n$.
 
-Considering $n = 1$, we have $P_1 = 1$. However, in applying our derived formula, we arrive at a contradiction
-\begin{align*}
-     P_1 &= (2^1+1)^{1-1} \bmod{(4^1-2, 2^1-1)} & \\ 
-     P_1 &= 3^{0} \bmod{(2, 1)} & \\
-     P_1 &= 1 \bmod{(2, 1)} & \\
-     P_1 &= 0 & \\
-     \Rightarrow 1 &= 0 & \text{(contradiction)}
-\end{align*}
-Hence, the formula is invalid for $n=1$. On the other hand, considering $n > 1$, we see that
-\begin{align*}
-     & (x+1)^n \not\equiv 0 \pmod{x^2-2, x-1}, \quad \forall n > 1 ,
-\end{align*}
-leading to
-\begin{align*}
-    & (2^n+1)^n \not\equiv 0 \pmod{4^n-2, 2^n-1}, \quad \forall n > 1 .
-\end{align*}
-Thus, the given formula is valid for $n > 1$.
+Considering $n = 0$, since $2^0-1 = 0$, the final modulus in the sequence $(4^0-2, 2^0-1)$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
 \end{proof}
 
 \subsection{Square Roots}
@@ -383,7 +369,7 @@ Which is the formula we wanted to prove.
 \end{proof}
 
 \subsection{Central Binomial Coefficients Formula}
-We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$-th central binomial coefficient $\binom{2n}{n}$, which is sequence \seqnum{A000984} in the OEIS \cite{A000984}. Starting from $n=1$, the sequence of central binomial coefficients begins as
+We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$-th central binomial coefficient $\binom{2n}{n}$, which is sequence \seqnum{A000984} in the OEIS \cite{A000984}. Starting from $n=0$, the sequence of central binomial coefficients begins as
 \begin{align*}
     \binom{2n}{n} = 1, 2, 6, 20, 70, 252, 924, 3432, 12870, 48620, 184756, 705432, 2704156, 10400600, \ldots
 \end{align*}
@@ -418,15 +404,17 @@ Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simpl
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $4^n \geq \binom{2n}{n}$.
 
-Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ is undefined. Thus, the formula is valid for $n > 0$.
+Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
 \end{proof}
 
 \section{Future Research} \label{section:futureresearch}
-Harvey (2009) \cite{harvey2009kronecker} proposed a method for improving the efficiency of integer multiplication by performing Kronecker substitution via multiple evaluations, termed ``multi-point Kronecker substitution''. Harvey described how to compute his method up to $r=4$ points. Bos et al. (2020) \cite{bos2020postquantum} generalized Harvey's result using an approach which they have called ``Kronecker+''. A brief description of the process is as follows:
+Harvey (2009) \cite{harvey2009kronecker} proposed a method for improving the efficiency of polynomial multiplication by performing Kronecker substitution via multiple evaluations, termed ``multi-point Kronecker substitution''. Harvey described how to compute his method up to $r=4$ points. Bos et al. (2020) \cite{bos2020postquantum} generalized Harvey's result using an approach which they have called ``Kronecker+''. A brief description of the process is as follows:
 
-First, a base $b$ is selected along with a fixed constant $r$, which corresponds to the number of evaluation points. Next, the polynomial $f(x)$ is evaluated at $r$ points, which are the products of $b$ times the $r$th roots of unity. The results of all evaluations are then combined to recover the polynomial coefficients. This process is essentially a variation of the Discrete Fourier Transform (DFT) applied to Kronecker substitution.
+First, a base $b$ is selected along with a fixed constant $r$, which corresponds to the number of evaluation points. Next, the polynomial $f(x)$ is evaluated at $r$ points, which are the products of $b$ and the $r$th roots of unity. The results of all evaluations are then combined using a modified version of the Inverse Discrete Fourier Transform (IDFT) to recover the polynomial coefficients. The use of multiple evaluation points allows for a more efficient encoding and decoding process, as it reduces the size of the integers involved in the arithmetic operations.
 
-The aforementioned techniques both present promising avenues for future research.
+The aforementioned techniques both present promising avenues for future research, specifically as pertains to the efficient computation of integer sequence terms using our approach.
+
+Furthermore, research into efficient computation modulo $n$ using our formulas could lead to new and improved methods. The modular arithmetic inherent in our formulas suggests potential applications in areas such as cryptography, where efficient computation modulo $n$ is foundational.
 
 \section{Appendix: Notations} \label{section:notations}
 This section provides a brief overview of the notations used throughout this paper.
@@ -510,6 +498,24 @@ To decode $f(x)$ from its integer representation, $f(10) = 4321$, one can extrac
 
 Thus, we can reconstruct $f(x) = 4x^3 + 3x^2 + 2x + 1$ from the integer $4321$ by interpreting each digit according to its position in the base-$10$ representation.
 \end{example}
+
+\subsection{Comparison to Polynomial Encoding Theorem}
+The property described in \cref{theorem:encoding} is related to Kronecker substitution (\cref{section:kronecker}), a technique used to convert polynomial arithmetic into integer arithmetic. However, there are some key differences. Traditional Kronecker substitution requires a sufficiently large base to ensure the encoding is injective, typically a power of $2$. In contrast, \cref{theorem:encoding} provides an optimal base that is guaranteed to work for polynomials with non-negative integer coefficients. Furthermore, \cref{theorem:encoding} shows that such a polynomial can be uniquely determined by just two evaluations, which is a stronger result than what is typically achieved with Kronecker substitution alone.
+
+In the case of a polynomial with unknown coefficients, using powers of $2$ for Kronecker substitution would require multiple evaluations to find a suitable base that ensures an injective encoding. The number of evaluations needed depends on the magnitude of the coefficients, which is not known in advance. One possible approach to find the appropriate base is to use a binary search-like strategy, where the base is iteratively adjusted based on whether the encoding is injective or not. For example, suppose we are given an unknown polynomial $f(x) \in \mathbb{Z}[x]$ and a function $G$ which returns $1$ if the encoded value in injective, and $0$ otherwise. Then, we could start with a relatively small base, evaluate the polynomial, and check if the encoding is injective. If not, the base is increased, and the process is repeated until an injective encoding is found. The increments in the base size can be chosen strategically to minimize the number of evaluations needed.
+
+For example, let $f(x) \in \mathbb{Z}[x]$ be a polynomial of degree $d \in \mathbb{Z}$ with unknown coefficients. To encode $f(x)$ using Kronecker substitution with powers of $2$, we need to find a base $b = 2^k$ such that the encoding is injective. Define a function $G: \mathbb{Z} \rightarrow \{0, 1\}$, where $G(b) = 1$ if the encoding of $f(x)$ using base $b$ is injective, and $G(b) = 0$ otherwise.
+
+To find a suitable base $b$, we use a binary search-like strategy. Start with $k = 1$ and evaluate $G(2^k)$. If $G(2^k) = 1$, stop the search. Otherwise, update the search range based on the value returned by $G$:
+\begin{itemize}
+\item If $G(2^k) = 0$, set $k = 2k + 1$ to search for a larger base.
+\item If $G(2^k) = 1$, set $k = \floor{k/2}$ to search for a smaller base.
+\end{itemize}
+Repeat until a suitable base is found or the search range is exhausted.
+
+The time complexity of this approach depends on the size of the search range and the number of evaluations of $G$ required. In the worst case, the number of evaluations could be as large as $\mathcal{O}(\log(\max_{0 \leq i \leq d} |a_i|)$. However, in practice, the number of evaluations required may be smaller if the heuristic for updating the search range is effective.
+
+In comparison, \cref{theorem:encoding} provides a deterministic and efficient method for encoding and decoding polynomials with non-negative integer coefficients using only two evaluations. This eliminates the need for a binary search-like approach and ensures that the encoding is always injective. The theorem's constructive nature and its stronger guarantees make it a valuable tool for applications involving polynomial manipulation and encoding, such as those explored in the preceding sections of this paper.
 
 \begingroup
 \raggedright
