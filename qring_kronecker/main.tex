@@ -47,6 +47,7 @@ citecolor=webgreen]{hyperref}
 \setlength{\parindent}{0pt}
 
 \begin{document}
+
 \title{Polynomial Quotient Rings and Kronecker Substitution for Deriving Combinatorial Identities}
 \author{Joseph M. Shunia}
 \date{March 2024}
@@ -54,7 +55,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution. We demonstrate the theorem's utility by deriving an explicit formula for famous integer sequences, such as the Fibonacci sequence, Pell sequence, and the central binomial coefficients. To give an example, we present a formula for the $n$-th Fibonacci number, valid for $n > 1$, given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$. Additionally, we find a new formula for square roots using our approach. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms.
+We establish a new connection between combinatorial number theory and polynomial ring theory by applying Kronecker substitution and related polynomial encoding techniques to polynomial expansions within quotient rings. We prove a new theorem which provides a general framework for generating combinatorial identities using polynomial quotient rings in conjunction with Kronecker substitution. We demonstrate the theorem's utility by deriving explicit formulas for famous integer sequences, such as the Fibonacci sequence, Pell sequence, and the central binomial coefficients. To give an example, we present a formula for the $n$-th Fibonacci number, valid for $n > 1$, given by: $F_n = (2^{n (n - 1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}$. Additionally, we find a new formula for square roots using our approach. This work builds upon our previous results on binomial and multinomial coefficients, extending the application of Kronecker substitution beyond its traditional use in improving the efficiency of integer and polynomial multiplication algorithms.
 \end{abstract}
 
 \section{Introduction}
@@ -75,7 +76,7 @@ First, we obtain a formula for the Fibonacci sequence, one of the most well-know
     F_n = (2^{n(n-1)} \bmod{(4^n-2^n-1)}) \bmod{(2^n-1)}
 \end{align*}
 
-Second, we derive a new formula for the Pell sequence, which is another fundamental integer sequence. The Pell sequence is \seqnum{A000129} in the OEIS \cite{A000129}. Valid for $n > 1$, our formula expresses the $n$-th Pell number $P_n$ in terms of a double modular expression involving powers of $2$:
+Second, we derive a new formula for the Pell sequence, which is another fundamental integer sequence. The Pell sequence is \seqnum{A000129} in the OEIS \cite{A000129}. Valid for $n > 0$, our formula expresses the $n$-th Pell number $P_n$ in terms of a double modular expression involving powers of $2$:
 \begin{align*}
     P_n = ((2^{n}+1)^{n-1} \bmod{(4^n-2)}) \bmod{(2^n-1)}
 \end{align*}
