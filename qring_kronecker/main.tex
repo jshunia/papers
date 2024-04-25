@@ -589,6 +589,13 @@ The aforementioned techniques both present promising avenues for future research
 
 Furthermore, research into efficient computation modulo $n$ using our formulas could lead to new and improved methods. For instance, Dumas et al. (2011) \cite{dumas2011simulataneous} give a method for computing remainders of polynomials encoded as integers via Kronecker substitution, termed ``simultaneous modular reduction''. Applying their technique to our results, or finding new methods to achieve modular reduction in Kronecker substitution form, is of great interest.
 
+\subsection{Research Questions}
+\begin{enumerate}
+    \item Can computations be optimized? For instance, by way of Multipoint Kronecker Substitution \cite{harvey2009kronecker} or Kronecker+ \cite{bos2020postquantum}.
+    \item Can computations modulo $n$ be optimized? For instance, using simultaneous modular reduction \cite{dumas2011simulataneous}.
+    \item Can our root formulas be modified or adapted to find roots in finite fields like $\mathbb{F}_p$?
+\end{enumerate}
+
 \subsection{An Open Problem}
 Let $n,b \in \mathbb{Z}^+$. Let $f(x),g(x) \in \mathbb{Z}[x]$ such that $\deg(f(x)),\deg(g(x)) = O(n)$. Find an efficient algorithm or method to compute the remainder $\ell$ in the congruence
 \begin{align*}
@@ -598,13 +605,6 @@ by avoiding direct computation of $f(b),g(b) \in \mathbb{Z}$ to calculate the in
 \begin{align*}
     f(b) \bmod{g(b)}
 \end{align*}
-
-\subsection{Other Open Questions}
-\begin{enumerate}
-    \item Can computations be optimized? For instance, by way of Multipoint Kronecker Substitution \cite{harvey2009kronecker} or Kronecker+ \cite{bos2020postquantum}.
-    \item Can computations modulo $n$ be optimized? For instance, using simultaneous modular reduction \cite{dumas2011simulataneous}.
-    \item Can our root formulas be modified or adapted to find roots in finite fields like $\mathbb{F}_p$?
-\end{enumerate}
 
 \newpage
 \section{Appendix: A Primer on Kronecker Substitution} \label{section:kronecker}
