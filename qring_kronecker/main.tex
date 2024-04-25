@@ -408,7 +408,7 @@ To arrive at our stated formula, we apply \cref{theorem:kroneckerqrings} by subs
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $3^n > P_n$.
 
-Considering $n = 0$, since $3^0-1 = 0$, the final modulus in the sequence $(9^0-2, 3^0-1)$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
+Considering $n = 0$, since the final modulus $(3^0-1) = 1 - 1 = 0$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
 \end{proof}
 
 \subsection{Roots}
@@ -540,7 +540,7 @@ Fix a ring $R = \mathbb{Z}[x]/(x^{n+1} + 1)$. In the ring $R$, the elements obey
 
 Let $f(x) = (x + 1)^{2n} \in R$. Expanding $f(x)$ and taking the result modulo $(x-1)$ gives
 \begin{align*}
-& ((x + 1)^{2n} \bmod{(x^{n+1} + 1)}) \bmod{(x-1)} \\
+& \left((x + 1)^{2n} \bmod{(x^{n+1} + 1)}\right) \bmod{(x-1)} \\
 &= \sum_{k=0}^{2n} \binom{2n}{k} (-1)^{\floor{\frac{k}{n+1}}} \\
 &= \left( \sum_{k=0}^{n} \binom{2n}{k} (-1)^{\floor{\frac{k}{n+1}}} \right) + \left( \sum_{k=n+1}^{2n} \binom{2n}{k} (-1)^{\floor{\frac{k}{n+1}}} \right) \\
 &= \left( \sum_{k=0}^{n} \binom{2n}{k} (-1)^0 \right) + \left( \sum_{k=n+1}^{2n} \binom{2n}{k} (-1)^1 \right) \\
@@ -559,7 +559,7 @@ Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simpl
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $4^n > \binom{2n}{n}$.
 
-Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
+Considering $n = 0$, the final modulus $(4^n-1) = 4^0-1 = 0$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
 \end{proof}
 
 \section{Literature Review and the Resolution of an Open Question} \label{section:litreview}
