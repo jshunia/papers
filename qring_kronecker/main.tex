@@ -638,7 +638,7 @@ The stated problem is equivalent to integer factorization by way of our binomial
 To elaborate: Given a polynomial time algorithm for calculating $\binom{2k}{k} \pmod{n}$, one can calculate $k! \pmod{n}$. Then, $\gcd(n, k! \bmod{n})$ computations can be performed in $O(n \log n)$ time to find a nontrivial factor of $n$. Thus, an efficient solution to our problem would enable an efficient solution to the problem of integer factorization.
 
 \subsubsection{On Difficulty}
-While our problem is an interesting framing of the integer factorization problem, this variant is seemingly quite difficult. Indeed, the naive approach to solving it exhibits an exponential complexity of $O(2^n)$ \cite{shunia2023simple}. In contrast, several randomized subexponential time algorithms on the order of $O(2^{\log n})$ are known for integer factorization \cite{pomerance1998sieves}.
+While our problem is an interesting framing of the integer factorization problem, this variant is seemingly quite difficult. Indeed, the naive approach to solving it exhibits an exponential complexity of $O(2^n)$ \cite{shunia2023simple}. In contrast, several randomized subexponential time algorithms on the order of $O(2^{\sqrt{n}})$ are known for integer factorization \cite{pomerance1998sieves}.
 
 In the given example, the bottleneck is in the calculation of the intermediate term
 \begin{align*}
