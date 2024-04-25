@@ -56,7 +56,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We connect combinatorial number theory and polynomial ring theory by applying Kronecker substitution to polynomial expansions within quotient rings. We prove several new theorems which provide a general framework for generating combinatorial identities using our approach. We demonstrate the utility of our framework by deriving a general formula for linear recurrences and explicit formulas for some famous integer sequences, such as the Pell sequence, and the central binomial coefficients. To give an example, we present a novel formula for the $n$th central binomial coefficient, given by: $\binom{2n}{n} = ((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}) \bmod{(4^n-1)}$. Additionally, we extend the technique beyond integer sequences to find a new formula for $\sqrt[r]{n}$ as the limit of a modular expression.
+We introduce a framework for generating combinatorial identities by applying Kronecker substitution to polynomial expansions within quotient rings. We apply this methodology to derive a general formula for linear recurrences, as well as explicit formulas for certain combinatorial sequences, including the Pell numbers and central binomial coefficients. For example, we present the formula: $\binom{2n}{n} = \left((4^n + 1)^{2n} \mod (4^{n(n+1)} + 1)\right) \mod (4^n-1)$. We also discover an intriguing representation for the real $r$th roots of positive integers, characterized as the limit of a modular congruence. Our theorems and results lay a foundation for systematic investigations into the relationship between Kronecker substitution, polynomial ring expansions, and combinatorial sequences, enabling further research into this area.
 \end{abstract}
 
 \section{Introduction}
@@ -67,49 +67,48 @@ In an unpublished preprint \cite{shunia2023simple}, we took some of the first st
     \binom{n}{k} = \floor{\frac{(2^n+1)^n}{2^{n k}}} \bmod{2^n}
 \end{align*}
 
-In this work, we develop a general framework for applying Kronecker substitution to polynomial expansions within quotient rings, which is useful for generating combinatorial identities. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences.
+In this work, we develop a general framework for applying Kronecker substitution to polynomial expansions within quotient rings, which is useful for generating combinatorial identities. Our main theorem establishes a connection between the coefficients of a polynomial remainder and the integers obtained by evaluating the polynomials at specific values. By carefully selecting these values, we can generate new identities for combinatorial sequences and more.
 
 \subsection{New Formulas}
-To demonstrate the power of our approach, we apply our main theorem to derive new explicit formulas for linear recurrences and some important combinatorial sequences. We also find a new formula for square roots which combines modular expressions with a limit.
+To demonstrate the power and flexibility of our approach, we apply our main result (\cref{theorem:kroneckerqrings}) to derive several others.
 
-First, we obtain a general formula for the $n$th term of a linear recurrence with constant coefficients. Let $n,d,b \in \mathbb{Z}^+$. Let $A_n$ be a linear recurrence relation with constant coefficients of order $d$ and initial starting conditions $A_0=A_1=\cdots=A_{d-1}=1$, taking the form
+First, we obtain a general formula for the $n$th term of a linear recurrence with constant coefficients (\cref{theorem:recurrences}). Let $n,d,b \in \mathbb{Z}^+$. Let $A_n$ be a linear recurrence relation with constant coefficients of order $d$ and initial starting conditions $A_0=A_1=\cdots=A_{d-1}=1$, taking the form
 \begin{align*}
     A_{n} = c_{d-1} A_{n-1} + c_{d-2} A_{n-2} + \cdots + c_{0} A_{n-d-1}
 \end{align*}
 where the $c_j$ are coefficients in $\mathbb{Z}$. For $b > A_n$, we have
 \begin{align*}
-    A_{n} = (b^{n-1} \bmod{(b^d - c_{d-1} b^{d-1} - \cdots -  c_1 b - c_0 )}) \bmod{(b-1)}
+    A_{n} = \left( b^{n-1} \bmod{(b^d - c_{d-1} b^{d-1} - \cdots -  c_1 b - c_0 )} \right) \bmod{(b-1)}
 \end{align*}
 
-Second, we apply our result on linear recurrence relations to derive a new formula for the Pell sequence, which is a fundamental integer sequence. The Pell sequence is \seqnum{A000129} in the OEIS \cite{A000129}. Valid for $n > 0$, our formula expresses the $n$th Pell number $P_n$ in terms of a double modular expression involving powers of $3$:
+Second, to illustrate practical specificity, we derive a new formula for the Pell sequence (\cref{theorem:pell}), which is a fundamental integer sequence. The Pell sequence is \seqnum{A000129} in the OEIS \cite{A000129}. Valid for $n > 0$, our formula expresses the $n$th Pell number $P_n$ in terms of a double modular expression involving powers of $3$:
 \begin{align*}
-    P_n = ((3^{n}+1)^{n-1} \bmod{(9^n-2)}) \bmod{(3^n-1)}
+    P_n = \left((3^{n}+1)^{n-1} \bmod{(9^n-2)}\right) \bmod{(3^n-1)}
 \end{align*}
-
-In proving the above formula for the Pell sequence, we uncover a general formula for square roots. Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
+Our proof of the formula for the Pell sequence leads us to a general formula for square roots (\cref{corollary:squareroots}). Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
 \begin{align*}
 \sqrt{n} &= \lim_{k\rightarrow\infty}
-    \frac{k^k (((k^k + 1)^k \bmod{(k^{2k}-n)}) \bmod{k^k})}
+    \frac{k^k \left(((k^k + 1)^k \bmod{(k^{2k}-n)}\right) \bmod{k^k})}
         {(k^k + 1)^k \bmod{(k^{2k}-n)}} \quad \in \mathbb{R}
 \end{align*}
-Intrigued by this unusual representation for $\sqrt{n}$, we take a slightly different approach to find a general formula for the $r$th roots of $n$. Let $n,r \in \mathbb{Z}^+$ such that $n > 1$. Then
+Intrigued by this unusual representation for $\sqrt{n}$, we take a slightly different approach to find a general formula for the $r$th roots of $n$ (\cref{corollary:roots}). Let $n,r \in \mathbb{Z}^+$ such that $n > 1$. Then
 \begin{align*}
 \sqrt[r]{n} &= \lim_{k\rightarrow\infty}
     \frac{(k^{kr} + 1)^{kr+1} \bmod{(k^{kr^2}-n)}}
     {(k^{kr} + 1)^{kr} \bmod{ (k^{kr^2}-n)}} - 1  \quad \in \mathbb{R}
 \end{align*}
-Finally, we creatively use quotient rings to derive a new formula for the central binomial coefficients, which are the binomial coefficients of the form $\binom{2n}{n}$. These coefficients form sequence \seqnum{A000984} in the OEIS \cite{A000984} and have numerous applications in combinatorics and number theory. Our formula, which is valid for $n > 0$, expresses the $n$th central binomial coefficient in terms of a double modular expression involving powers of $4$:
+Finally, we show one more specific application through creative application of quotient rings, to derive a new formula for the central binomial coefficients (\cref{theorem:cbc}), which are the binomial coefficients of the form $\binom{2n}{n}$. These coefficients form sequence \seqnum{A000984} in the OEIS \cite{A000984} and have numerous applications in combinatorics and number theory. Our formula, which is valid for $n > 0$, expresses the $n$th central binomial coefficient in terms of a double modular expression involving powers of $4$:
 \begin{align*}
-    \binom{2n}{n} &= ((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}) \bmod{(4^n-1)}
+    \binom{2n}{n} &= \left((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}\right) \bmod{(4^n-1)}
 \end{align*}
 
 \subsection{Structure of the Paper}
-The rest of this paper is organized as follows.  Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas. We conclude with \cref{section:futureresearch} by detailing some of our plans for future research in this area.
+The rest of this paper is organized as follows. We begin by briefly restating relevant results from our previous work on binomial and multinomial coefficient formulas \cref{section:encodingtheorem}. Our main results, including the quotient ring encoding theorem and its proof, are presented in \cref{section:results}. In \cref{section:applications}, we apply our quotient ring encoding theorem to derive new formulas. In \cref{section:litreview}, we cover our literature review process and a prior work of note, which posed an open question that is resolved by our findings. We conclude with \cref{section:futureresearch} by detailing some of our plans for future research in this area, as well as stating some related questions and an open problem that is equivalent to integer factorization.
 
 \subsubsection{Appendices}
 For those unfamiliar with Kronecker substitution, \cref{section:kronecker} provides a brief overview and an example.
 
-\section{Polynomial Encoding Theorem}
+\section{Polynomial Encoding Theorem} \label{section:encodingtheorem}
 For completeness, we restate a theorem we first proved in our previous work regarding a novel formula for binomial and multinomial coefficients \cite{shunia2023simple}.
 
 \begin{theorem} \label{theorem:encoding}
@@ -163,7 +162,7 @@ The polynomial property described in \cref{theorem:encoding} appears to be under
 
 To show how \cref{theorem:encoding} can be used, we reprove another result from our previous paper \cite{shunia2023simple} as a corollary.
 
-\begin{corollary}
+\begin{corollary} \label{corollary:binomialcoefficients}
 Let $n,k \in \mathbb{Z} : 0 \leq k \leq n$. Then
 \begin{align*}
 \binom{n}{k} = \floor{\frac{(2^n+1)^n}{2^{n k}}} \bmod{2^n}
@@ -226,7 +225,7 @@ r(x) := f(x)^k  \bmod{\tilde{g}(x)}
 \end{align*}
 where $f(x)$ is any non-constant polynomial in $\mathbb{Z}[x]$. Let $c, \gamma \in \mathbb{Z}^+$ and suppose $\gamma^k > |r(b)|$. Then,
 \begin{align*}
-r(b) = (f(\gamma^k)^k \bmod{\tilde{g}(\gamma^k)}) \bmod{(\gamma^k - b)}
+r(b) = \left(f(\gamma^k)^k \bmod{\tilde{g}(\gamma^k)}\right) \bmod{(\gamma^k - b)}
 \quad \textup{ or }
 \quad r(b) \equiv 0 \pmod{\gamma^k - b}
 \end{align*}
@@ -238,11 +237,11 @@ First, consider the evaluation
 \end{align*}
 In modular arithmetic, evaluating a polynomial $h(x) \in \mathbb{Z}[x]$ at $x=b$ is the same as taking $h(x)$ modulo $(x - b)$. In our case, since we are working modulo $\tilde{g}(x)$, we have the relation
 \begin{align*}
-    r(b) = (f(x)^k \bmod{\tilde{g}(x)}) \bmod{(x - b)}
+    r(b) = \left(f(x)^k \bmod{\tilde{g}(x)}\right) \bmod{(x - b)}
 \end{align*}
 Applying Kronecker substitution to all polynomials in the above equation, using the substitution $x = \gamma^k$, yields
 \begin{align*}
-    r(b) = (f(\gamma^k)^k \bmod{\tilde{g}(\gamma^k)}) \bmod{(\gamma^k - b)}
+    r(b) = \left(f(\gamma^k)^k \bmod{\tilde{g}(\gamma^k)}\right) \bmod{(\gamma^k - b)}
 \end{align*}
 Which is the formula we aimed to prove. Furthermore, recall that we are given $\gamma$ such that
 \begin{align*}
@@ -250,7 +249,7 @@ Which is the formula we aimed to prove. Furthermore, recall that we are given $\
 \end{align*}
 This implies that, when applying Kronecker substitution, the base $\gamma^k$ is sufficient to losslessly encode all of the coefficients of $r(x)$ (\cref{theorem:encoding}). Moreover, since $k \geq d$, the same is true of $f(x)$ and $g(x)$. Thus, the only way to have
 \begin{align*}
-    r(b) \not= (f(\gamma^k)^k \bmod{\tilde{g}(\gamma^k)}) \bmod{(\gamma^k - b)}
+    r(b) \not= \left(f(\gamma^k)^k \bmod{\tilde{g}(\gamma^k)}\right) \bmod{(\gamma^k - b)}
 \end{align*}
 is if
 \begin{align*}
@@ -333,7 +332,7 @@ where the $c_j$ are coefficients in $\mathbb{Z}$. Consider a polynomial
 \end{align*}
 Let $b \in \mathbb{Z}^+$. Suppose $b > A_n$. Then
 \begin{align*}
-    A_{n} = (b^{n-1} \bmod{(b^d - g(b))}) \bmod{(b-1)}
+    A_{n} = \left(b^{n-1} \bmod{(b^d - g(b))}\right) \bmod{(b-1)}
 \end{align*}
 \end{theorem}
 \begin{proof}
@@ -349,12 +348,12 @@ In the ring $R$, the elements obey the relation $x^d = g(x)$. This means that in
 \end{align*}
 In modular arithmetic, evaluating at $x=1$ is the same as reducing modulo $(x-1)$. Hence, the evaluation of $f(1) \in R$ is equal to
 \begin{align*}
-    f(1) &= (x^{n-1} \bmod{(x^d - g(x))}) \bmod{(x-1)} \in R
+    f(1) &= \left(x^{n-1} \bmod{(x^d - g(x))}\right) \bmod{(x-1)} \in R
 \end{align*}
 
 Applying \cref{theorem:kroneckerqrings} by substituting with $x = b$, we arrive at the given formula
 \begin{align*}
-    A_n &= (b^{n-1} \bmod{(b^d - g(b))}) \bmod{(b-1)}
+    A_n &= \left(b^{n-1} \bmod{(b^d - g(b))}\right) \bmod{(b-1)}
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $b > A_n$. This completes the proof.
 \end{proof}
@@ -372,7 +371,7 @@ Let $P_n$ denote the $n$th term of the Pell sequence, such that $P_0 = 0, P_1 = 
 \end{align*}
 Then, for $n > 0$
 \begin{align*}
-P_n &= ((3^n+1)^{n-1} \bmod{(9^n-2)}) \bmod{(3^n-1)} 
+P_n &= \left((3^n+1)^{n-1} \bmod{(9^n-2)}\right) \bmod{(3^n-1)} 
 \end{align*}
 \end{theorem}
 \begin{proof}
@@ -387,7 +386,7 @@ In the ring $R$, the elements obey the relation $x^2 = 2$. This means that in th
 \end{align*}
 Recall that evaluating at $x=1$ is the same as reducing modulo $(x-1)$. Thus, we have
 \begin{align*}
-    (f(x)^n \bmod{(x^2-2)}) \bmod{(x-1)} = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{2}}}
+    \left(f(x)^n \bmod{(x^2-2)}\right) \bmod{(x-1)} = \sum_{k=0}^{n} \binom{n}{k} 2^{\floor{\frac{k}{2}}}
 \end{align*}
 From the OEIS \cite{A000129}, we have the formula
 \begin{align*}
@@ -395,8 +394,8 @@ From the OEIS \cite{A000129}, we have the formula
 \end{align*}
 Hence
 \begin{align*}
-    P_{n+1} &= (f(x)^n \bmod{(x^2-2)}) \bmod{(x-1)} \\
-    &= ((x+1)^n \bmod{(x^2-2)}) \bmod{(x-1)}
+    P_{n+1} &= \left( f(x)^n \bmod{(x^2-2)} \right) \bmod{(x-1)} \\
+    &= \left( (x+1)^n \bmod{(x^2-2)} \right) \bmod{(x-1)}
 \end{align*}
 Replacing $n$ with $n-1$ yields
 \begin{align*}
@@ -404,8 +403,8 @@ Replacing $n$ with $n-1$ yields
 \end{align*}
 To arrive at our stated formula, we apply \cref{theorem:kroneckerqrings} by substituting with $x = 3^n$, followed by simplifying
 \begin{align*}
-     P_n &= ((3^n+1)^{n-1} \bmod{((3^n)^2-2)}) \bmod{(3^n-1)} \\
-     &= ((3^n+1)^{n-1} \bmod{(9^n-2)}) \bmod{(3^n-1)} 
+     P_n &= \left((3^n+1)^{n-1} \bmod{((3^n)^2-2)}\right) \bmod{(3^n-1)} \\
+     &= \left((3^n+1)^{n-1} \bmod{(9^n-2)}\right) \bmod{(3^n-1)} 
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $3^n > P_n$.
 
@@ -419,8 +418,8 @@ The previous result on Pell numbers (\cref{theorem:pell}) leads us to an interes
 Let $n \in \mathbb{Z}^+$ such that $n > 1$. Then
 \begin{align*}
 \sqrt{n} &= \lim_{k\rightarrow\infty}
-    \frac{k^k (((k^k + 1)^k \bmod{(k^{2k}-n)}) \bmod{k^k})}
-        {(k^k + 1)^k \bmod{(k^{2k}-n)}} \quad \in \mathbb{R}
+    \frac{k^k \Bigl( \bigl( (k^k + 1)^k \bmod{(k^{2k}-n)} \bigr) \bmod{k^k} \Bigr)}
+        {(k^k + 1)^k \bmod{(k^{2k}-n)}}  \quad \in \mathbb{R}
 \end{align*}
 \end{corollary}
 \begin{proof}
@@ -447,13 +446,13 @@ x = -u v^{-1}
 Here, the root of $x$ is likely to be irrational. Hence, the solution to $x \in S$ will not be exact, and will grow more precise as $n$ goes to infinity. Taking the limit, and substituting for all variables in $x = -u v^{-1}$, gives
 \begin{align*}
 x &= \lim_{k\rightarrow\infty}
-    \frac{-x (((x + 1)^k \bmod{(x^2-n)}) \bmod{x})}
+    \frac{-x \Bigl( \bigl( (x + 1)^k \bmod{(x^2-n)} \bigr) \bmod{x} \Bigr) }
         {(x + 1)^k \bmod{(x^2-n)}}
 \end{align*}
 Next, we apply Kronecker substitution on the right-hand side with $x = k^k$, to get
 \begin{align*}
 x &= \lim_{k\rightarrow\infty}
-    \frac{-k^k (((k^k + 1)^k \bmod{(k^{2k}-n)}) \bmod{k^k})}
+    \frac{-k^k \Bigl( \bigl( (k^k + 1)^k \bmod{(k^{2k}-n)} \bigr) \bmod{k^k} \Bigr)}
         {(k^k + 1)^k \bmod{(k^{2k}-n)}}
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this Kronecker substitution is valid as $k\rightarrow\infty$, since $k^k$ is greater than the coefficient sum of $f(x)^k \bmod{(x^2-n)}$. It is important to note that, by the nature of Kronecker substitution, substituting $x=k^k$ does not change the value of $x$ on the left-hand side. This is because the substitution is injective and only used temporarily. The value of $x$ is restored to $\sqrt{n}$ upon decoding from the base $k^k$, which is carried out by the mod operations.
@@ -461,14 +460,14 @@ By \cref{theorem:kroneckerqrings}, this Kronecker substitution is valid as $k\ri
 Typically, $\sqrt{n}$ is defined as positive. Making this adjustment, and substituting with $x = \sqrt{n} \in \mathbb{R}$ on the left-hand side, gives
 \begin{align*}
 \sqrt{n} &= \lim_{k\rightarrow\infty}
-    \frac{k^k (((k^k + 1)^k \bmod{(k^{2k}-n)}) \bmod{k^k})}
+    \frac{k^k \Bigl( \bigl( (k^k + 1)^k \bmod{(k^{2k}-n)} \bigr) \bmod{k^k} \Bigr)}
         {(k^k + 1)^k \bmod{(k^{2k}-n)}}  \quad \in \mathbb{R}
 \end{align*}
 Which is the formula we wanted to prove. This completes the proof.
 \end{proof}
 
 \begin{remark}
-The square root formula derived in \cref{corollary:squareroots} is quite intriguing. It is unusual to see an irrational number, such as $\sqrt{n}$, represented as the limit of a modular expression. Fascinated by this, we proceed by generalizing our approach to calculate the $r$th roots of $n$.    
+The square root formula derived in \cref{corollary:squareroots} is quite intriguing. It is unusual to see an irrational number, such as $\sqrt{n}$, represented as the limit of a modular expression. Fascinated by this, we proceed by generalizing our approach to calculate the $r$th roots of $n$.   
 \end{remark}
 
 \begin{corollary} \label{corollary:roots}
@@ -505,19 +504,23 @@ Next, using \cref{theorem:kroneckerqrings}, we apply Kronecker substitution to t
 Which is the formula we wanted to prove. By \cref{theorem:kroneckerqrings}, the Kronecker substitution is valid as $k\rightarrow\infty$, since $k^{kr}$ is greater than the coefficient sum of $f(x)^{kr} \bmod{(x^r-n)}$. As in our proof of \cref{corollary:squareroots}, applying Kronecker substitution using $x=k^{kr}$ does not change the value of $x$ on the left-hand side. This is because the substitution is injective and only used temporarily. The value of $x$ is restored to $\sqrt[r]{n}$ upon decoding from the base $k^{kr}$, which is being carried out by the mod operations. This complete the proof.
 \end{proof}
 \begin{remark}
-An notable observation is that, in the formula for $\sqrt[r]{n}$ given by \cref{corollary:roots}, a second modular reduction may be applied to evaluate the polynomial $f(x)$ at $x=1$. In this case, the result is the same. Let $c \in \mathbb{Z}_{\geq -1}$. Then, we have
+An interesting aspect of the formula for $\sqrt[r]{n}$, as provided in \cref{corollary:roots}, is the applicability of a second modular reduction when evaluating the polynomial $f(x)$. Although it appears that both the original and modified formulas theoretically converge to the same value, our cursory analysis suggests that the convergence rates and the actual values in $\mathbb{R}$ differ. Let $c \in \mathbb{Z}_{\geq -1}$. Then, we observe
 \begin{align*}
-\sqrt[r]{n} = \lim_{k\rightarrow\infty}
-\frac{((k^{kr} + 1)^{kr+1} \bmod{(k^{kr^2}-n)}) \bmod{(k^{kr}-c)}}
-    {((k^{kr} + 1)^{kr} \bmod{ (k^{kr^2}-n)}) \bmod{(k^{kr}-c)}} - 1  \quad \in \mathbb{R}
+\sqrt[r]{n} = \lim_{k \rightarrow \infty}
+\frac{\left( (k^{kr} + 1)^{kr+1} \bmod{(k^{kr^2}-n)} \right) \bmod{(k^{kr}-c)}}
+    {\left( (k^{kr} + 1)^{kr} \bmod{ (k^{kr^2}-n)} \right) \bmod{(k^{kr}-c)}} - 1  \quad \in \mathbb{R},
 \end{align*}
-and also
+contrasted with
 \begin{align*}
-\sqrt[r]{n} &= \lim_{k\rightarrow\infty}
+\sqrt[r]{n} &= \lim_{k \rightarrow \infty}
     \frac{(k^{kr} + 1)^{kr+1} \bmod{(k^{kr^2}-n)}}
-    {(k^{kr} + 1)^{kr} \bmod{ (k^{kr^2}-n)}} - 1  \quad \in \mathbb{R}
+    {(k^{kr} + 1)^{kr} \bmod{ (k^{kr^2}-n)}} - 1  \quad \in \mathbb{R}.
 \end{align*}
-However, the values of the two expressions are not equal in $\mathbb{R}$, and do not converge to $\sqrt[r]{n}$ at the same rate. We have not examined this in depth, though it seems plausible to us that studying the relationship between the two forms could result in a further simplification of the result, or perhaps other insights.
+A deeper examination into the differences between these expressions and their numerical stabilities could yield further simplifications or conclusions.
+\end{remark}
+
+\begin{remark}
+Additionally, the overall structure of our root formula and the machinery we employed to derive it, share notable conceptual similarities to root calculations in the field of p-adic analysis, as detailed by Kecies and Tahar \cite{kecies2013padic}. In particular, both approaches leverage integer bases, modular arithmetic, convergence, and utilize adaptations of the Newton-Raphson method to perform iterative refinement of calculations. Despite fundamental differences, the potential for results from p-adic analysis to inform or enhance our understanding, or vice versa, is compelling.
 \end{remark}
 
 \subsection{Central Binomial Coefficients Formula}
@@ -529,7 +532,7 @@ We apply \cref{theorem:kroneckerqrings} to derive a new formula for the $n$th ce
 \begin{theorem} \label{theorem:cbc}
 Let $n \in \mathbb{Z}^+$ such that $n > 0$. Then
 \begin{align*}
-\binom{2n}{n} &= ((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}) \bmod{(4^n-1)}
+\binom{2n}{n} &= \left((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}\right) \bmod{(4^n-1)}
 \end{align*}
 \end{theorem}
 \begin{proof}
@@ -547,19 +550,19 @@ Let $f(x) = (x + 1)^{2n} \in R$. Expanding $f(x)$ and taking the result modulo $
 
 Thus, we have
 \begin{align*}
-    \binom{2n}{n} &= ((x + 1)^{2n} \bmod{(x^{n+1} + 1)}) \bmod{(x-1)}
+    \binom{2n}{n} &= \left((x + 1)^{2n} \bmod{(x^{n+1} + 1)}\right) \bmod{(x-1)}
 \end{align*}
 
 Applying \cref{theorem:kroneckerqrings} by substituting with $x = 4^n$ and simplifying, yields
 \begin{align*}
-    \binom{2n}{n} &= ((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}) \bmod{(4^n-1)}
+    \binom{2n}{n} &= \left((4^n + 1)^{2n} \bmod{(4^{n(n+1)} + 1)}\right) \bmod{(4^n-1)}
 \end{align*}
 By \cref{theorem:kroneckerqrings}, this substitution is valid since $4^n > \binom{2n}{n}$.
 
 Considering $n = 0$, since $4^0-1 = 0$, the final modulus in the sequence $(4^{n(n+1)} + 1, 4^n-1)$ results in an undefined remainder (due to division by zero). Thus, the formula is valid for $n > 0$.
 \end{proof}
 
-\section{Literature Review and the Resolution of an Open Question}
+\section{Literature Review and the Resolution of an Open Question} \label{section:litreview}
 Our literature review revealed no formal studies closely aligned with the methodologies and results discussed in this paper. However, an informal reference of note is a blog post by Paul Hankin \cite{hankin2018fibonacci2} (2018). Hankin and a contributor, Faré Rideau, explored modular expressions for Fibonacci numbers, initially discovered by examining the decimal expansion of the generating function:
 \begin{align*}
 F(x) = \frac{x}{1-x-x^2}
@@ -570,7 +573,7 @@ F_n = \floor{\frac{2^{(n+1)(n+2)}}{2^{2n+2} - 2^{n+1} - 1}} \bmod{2^{n+1}}
 \end{align*}
 which was experimentally simplified by Rideau to:
 \begin{align*}
-F_n = (2^{(n+1)(n+2)} \bmod{(2^{2n+2} - 2^{n+1} - 1)}) \bmod{2^{n+1}}
+F_n = \left( 2^{(n+1)(n+2)} \bmod{(2^{2n+2} - 2^{n+1} - 1)} \right) \bmod{2^{n+1}}
 \end{align*}
 Our research developed independently as a natural extension of our previous works on quotient rings \cite{shunia2023polynomial} and binomial coefficient formulas \cite{shunia2023simple}. Coincidentally, our work addresses an important open question posed by Hankin at the conclusion of his 2018 blog post \cite{hankin2018fibonacci2}. In particular, Hankin asks whether the approach can be generalized to compute terms of other recurrence sequences. Not only does our research provide an affirmative answer to this question (\cref{theorem:recurrences}), but it also extends the methodology to real numbers via roots (\cref{corollary:squareroots}), thereby expanding the scope and potential applications of these techniques.
 
@@ -591,20 +594,57 @@ Furthermore, research into efficient computation modulo $n$ using our formulas c
 
 \subsection{Research Questions}
 \begin{enumerate}
-    \item Can computations be optimized? For instance, by way of Multipoint Kronecker Substitution \cite{harvey2009kronecker} or Kronecker+ \cite{bos2020postquantum}.
-    \item Can computations modulo $n$ be optimized? For instance, using simultaneous modular reduction \cite{dumas2011simulataneous}.
-    \item Can our root formulas be modified or adapted to find roots in finite fields like $\mathbb{F}_p$?
+    \item Can computations be optimized?
+    
+    For instance, by way of multipoint Kronecker substitution or Kronecker+ \cite{harvey2009kronecker, bos2020postquantum}.
+    
+    \item Can computations modulo $n$ be optimized?
+    
+    For instance, using simultaneous modular reduction \cite{dumas2011simulataneous}.
+    
+    \item Can our root formulas inform new methods for root finding in finite fields like $\mathbb{F}_p$?
+    
+    See  in particular \cref{corollary:roots} and its proceeding remarks.
 \end{enumerate}
 
 \subsection{An Open Problem}
-Let $n,b \in \mathbb{Z}^+$. Let $f(x),g(x) \in \mathbb{Z}[x]$ such that $\deg(f(x)),\deg(g(x)) = O(n)$. Find an efficient algorithm or method to compute the remainder $\ell$ in the congruence
+\subsubsection{Problem Statement}
+\fbox{\begin{minipage}{\dimexpr\linewidth-1\fboxrule-4\fboxsep}
+Let $n,b \in \mathbb{Z}^+$. Let $f(x), g(x) \in \mathbb{Z}[x]$ such that $g(x)$ is a monomial, and
 \begin{align*}
-    \ell \equiv (f(b) \bmod{g(b)}) \pmod{n}
+    \deg(f(x)),\deg(g(x)) = O(n)
 \end{align*}
-by avoiding direct computation of $f(b),g(b) \in \mathbb{Z}$ to calculate the intermediate remainder
+Find an efficient algorithm or method to compute the remainder $\alpha \in \mathbb{Z}/n\mathbb{Z}$, given by:
 \begin{align*}
-    f(b) \bmod{g(b)}
+    \alpha \equiv \bigl( f(b) \bmod{g(b)} \bigr) \pmod{n}
 \end{align*}
+Solutions should avoid direct computations of $f(b), g(b) \in \mathbb{Z}$ in calculating the intermediate remainder term $f(b) \bmod{g(b)}$, as their values can be exponential in $n$.
+\end{minipage}}
+
+\subsubsection{A Non-Trivial Example}
+Let $f(x) := (x+1)^{2n}$, $g(x) := x^n$, and $b = 4^n$. Hence, we have
+\begin{align*}
+    f(b) &= f(4^n) = (4^n+1)^{2n} \\
+    g(b) &= g(4^n) = (4^n)^n = 4^{n^2}
+\end{align*}
+A solution to this problem would be able to efficiently calculate the remainder
+\begin{align*}
+ & \alpha \equiv \bigl( f(b) \bmod {g(b)} \bigr) \pmod{n} \\
+ & \Longleftrightarrow
+ \alpha \equiv \bigl( (4^n+1)^{2n} \bmod {4^{n^2}} \bigr) \pmod{n}
+\end{align*}
+The stated problem is equivalent to integer factorization by way of our binomial coefficient formulas (\cref{corollary:binomialcoefficients}, \cref{theorem:cbc}) \cite{shunia2023simple}. This equivalence is due to existence of a polynomial time algorithm for calculating $k!$ given $\binom{2k}{k}$ \cite{A000984}, where $k \in \mathbb{Z}^+ : k < n$.
+
+To elaborate: Given a polynomial time algorithm for calculating $\binom{2k}{k} \pmod{n}$, one can calculate $k! \pmod{n}$. Then, $\gcd(n, k! \bmod{n})$ computations can be performed in $O(n \log n)$ time to find a nontrivial factor of $n$. Thus, an efficient solution to our problem would enable an efficient solution to the problem of integer factorization.
+
+\subsubsection{On Difficulty}
+While our problem is an interesting framing of the integer factorization problem, this variant is seemingly quite difficult. Indeed, the naive approach to solving it exhibits an exponential complexity of $O(2^n)$ \cite{shunia2023simple}. In contrast, several randomized subexponential time algorithms on the order of $O(2^{\log n})$ are known for integer factorization \cite{pomerance1998sieves}.
+
+In the given example, the bottleneck is in the calculation of the intermediate term
+\begin{align*}
+    (4^n+1)^{2n} \bmod {4^{n^2}}
+\end{align*}
+Finding an efficient way to calculate remainders such as these modulo $n$, is the key to solving the problem. Any improvement over the naive approach would be of interest.
 
 \newpage
 \section{Appendix: A Primer on Kronecker Substitution} \label{section:kronecker}
@@ -665,24 +705,6 @@ To decode $f(x)$ from its integer representation, $f(10) = 4321$, one can extrac
 
 Thus, we can reconstruct $f(x) = 4x^3 + 3x^2 + 2x + 1$ from the integer $4321$ by interpreting each digit according to its position in the base-$10$ representation.
 \end{example}
-
-\subsection{Comparison to Polynomial Encoding Theorem}
-The property described in \cref{theorem:encoding} is related to Kronecker substitution. However, there are some fundamental differences. Traditional Kronecker substitution requires a sufficiently large base to ensure the encoding is injective, typically a power of $2$. In contrast, \cref{theorem:encoding} provides an optimal base that is guaranteed to work for polynomials with non-negative integer coefficients. Furthermore, \cref{theorem:encoding} shows that such a polynomial can be uniquely determined by just two evaluations, which is a stronger result than what is typically achieved with Kronecker substitution alone.
-
-In the case of a polynomial with unknown coefficients, using powers of $2$ for Kronecker substitution would require multiple evaluations to find a suitable base that ensures an injective encoding. The number of evaluations needed depends on the magnitude of the coefficients, which is not known in advance. One possible approach to find the appropriate base is to use a binary search-like strategy, where the base is iteratively adjusted based on whether the encoding is injective or not. For example, suppose we are given an unknown polynomial $f(x) \in \mathbb{Z}[x]$ and a function $G$ which returns $1$ if the encoded value in injective, and $0$ otherwise. Then, we could start with a relatively small base, evaluate the polynomial, and check if the encoding is injective. If not, the base is increased, and the process is repeated until an injective encoding is found. The increments in the base size can be chosen strategically to minimize the number of evaluations needed.
-
-For example, let $f(x) \in \mathbb{Z}[x]$ be a polynomial of degree $d \in \mathbb{Z}$ with unknown coefficients. To encode $f(x)$ using Kronecker substitution with powers of $2$, we need to find a base $b = 2^k$ such that the encoding is injective. Define a function $G: \mathbb{Z} \rightarrow \{0, 1\}$, where $G(b) = 1$ if the encoding of $f(x)$ using base $b$ is injective, and $G(b) = 0$ otherwise.
-
-To find a suitable base $b$, we use a binary search-like strategy. Start with $k = 1$ and evaluate $G(2^k)$. If $G(2^k) = 1$, stop the search. Otherwise, update the search range based on the value returned by $G$:
-\begin{itemize}
-\item If $G(2^k) = 0$, set $k = 2k + 1$ to search for a larger base.
-\item If $G(2^k) = 1$, set $k = \floor{k/2}$ to search for a smaller base.
-\end{itemize}
-Repeat until a suitable base is found or the search range is exhausted.
-
-The time complexity of this approach depends on the size of the search range and the number of evaluations of $G$ required. In the worst case, the number of evaluations could be as large as $\mathcal{O}(\log(\max_{0 \leq i \leq d} |a_i|)$. However, in practice, the number of evaluations required may be smaller if the heuristic for updating the search range is effective.
-
-In comparison, \cref{theorem:encoding} provides a deterministic and efficient method for encoding and decoding polynomials with non-negative integer coefficients using only two evaluations. This eliminates the need for a binary search-like approach and ensures that the encoding is always injective. The theorem's constructive nature and its stronger guarantees make it a valuable tool for applications involving polynomial manipulation and encoding, such as those explored in the preceding sections of this paper.
 
 \newpage
 \small
