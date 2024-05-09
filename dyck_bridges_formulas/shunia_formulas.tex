@@ -1,0 +1,48 @@
+\pdfoutput=1
+\documentclass[11pt,reqno]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage[usenames]{color}
+\usepackage{url}
+\usepackage{color}
+\usepackage{fullpage}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+\usepackage{cleveref}
+\usepackage{placeins}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+
+\title{Formulas for the Number of Nondeterministic Dyck Bridges of Length $2n$}
+\author{Joseph M. Shunia}
+\date{May 9, 2024}
+
+\begin{document}
+\maketitle
+
+\section{Formulas}
+The included formulas are for OEIS sequence \seqnum{A368164}: ``Number of nondeterministic Dyck bridges of length $2n$''. This sequence is related to the recent work of de Panafieu and Wallner (2023) \cite{depanafieu2023combinatorics}.
+
+\begin{align}
+\seqnum{A368164}(n) &= 1 + \sum_{k=0}^{n-1} \frac{2^{n-k} \left(2^n (n+k+1) \binom{2n}{k} + (2k+1) \binom{2n}{n-k}\right)}{n+k+1} \\
+\seqnum{A368164}(n) &= \seqnum{A089022}(n) + \sum_{k=0}^{n-1} \binom{2n}{k} 2^{2n-k} \\
+\seqnum{A368164}(n) &= \sum_{k=0}^{2n} \binom{2n}{k} 2^{2n-k} (-1)^{\lfloor \frac{k}{n+1} \rfloor} \\
+\seqnum{A368164}(n) &= \left((x+2)^{2n} \bmod (x^{n+1} + 1)\right) \bmod (x-1) 
+\end{align}
+
+\begingroup
+\raggedright
+\bibliographystyle{unsrtnat}
+\bibliography{shunia_formulas}
+\endgroup
+
+\end{document}
