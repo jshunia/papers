@@ -20,6 +20,7 @@ citecolor=webgreen]{hyperref}
 \usepackage{cleveref}
 \usepackage{tabularx}
 \usepackage{placeins}
+\usepackage{titling}
 \theoremstyle{plain}
 \newtheorem{conjecture}{Conjecture}
 \newtheorem*{conjecture*}{Conjecture}
@@ -54,13 +55,20 @@ citecolor=webgreen]{hyperref}
 \newcommand{\ord}{\text{ord}}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
 \newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+\newcommand{\subtitle}[1]{%
+\posttitle{
+\par\end{center}
+\begin{center}\large#1\end{center}
+\vskip0.5em}
+}
 
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 
 \title{An Efficient Deterministic Primality Test}
+\subtitle{Version 3}
 \author{Joseph M. Shunia}
-\date{December 2023 \\ \small Revised: May 2024 \normalsize}
+\date{May 2024}
 
 \begin{document}
 
