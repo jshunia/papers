@@ -267,9 +267,9 @@ p_{\log n} < \log n \left( \log\log (n) + \log\log\log n \right) .
 \end{align*}
 This expression gives an upper bound for the smallest prime $p$ that is coprime to $n$.
 \end{proof}
-\begin{corollary} \label{proof:leastcoprimesofto}
+\begin{theorem} \label{proof:leastcoprimesofto}
 Let $n \in \Z_{>6}$. Then, there exists a prime $r = \tilde{O}(\log n)$ such that $r \nmid (n-1)$.
-\end{corollary}
+\end{theorem}
 \begin{proof}
 By \cref{proof:leastcoprime}, there exists a prime integer $r$ coprime to $n-1$, satisfying
 \begin{align*}
@@ -312,7 +312,7 @@ The given algorithm is a primality test that involves several computational step
 
     \item \textbf{Finding $r$}:
     
-        Finding the least $r \in \mathbb{P}_{\geq 3}$ such that $n \not\equiv 1 \pmod{r}$ takes at most $O(\log n (\log \log n + \log \log \log n))$ steps (\cref{proof:leastcoprime}), with each step requiring $O(1)$ time for the mod operation. Hence, the overall complexity of this step is $ T_2(n) = O(\log n (\log \log n + \log \log \log n))$.
+        Finding the least $r \in \mathbb{P}_{\geq 3}$ such that $n \not\equiv 1 \pmod{r}$ takes at most $O(\log n (\log \log n + \log \log \log n))$ steps (\cref{proof:leastcoprimesofto}), with each step requiring $O(1)$ time for the mod operation. Hence, the overall complexity of this step is $ T_2(n) = O(\log n (\log \log n + \log \log \log n))$.
 
     \item \textbf{Computing $x^n \pmod{(x^r-2,n)}$}:
     
