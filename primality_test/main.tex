@@ -20,7 +20,6 @@ citecolor=webgreen]{hyperref}
 \usepackage{cleveref}
 \usepackage{tabularx}
 \usepackage{placeins}
-\usepackage{titling}
 \theoremstyle{plain}
 \newtheorem{conjecture}{Conjecture}
 \newtheorem*{conjecture*}{Conjecture}
@@ -55,13 +54,6 @@ citecolor=webgreen]{hyperref}
 \newcommand{\ord}{\text{ord}}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
 \newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
-\newcommand{\subtitle}[1]{
-\posttitle{
-\par\end{center}
-\begin{center}\large#1\end{center}
-\vskip0.5em}
-}
-
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 
@@ -74,7 +66,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-A deterministic primality test with a polynomial time complexity of $\tilde{O}(\log^3 n)$ is proposed. The basis for our test is a variant of Agrawal's conjecture, a prominent yet unresolved conjecture in primality testing. We show how slightly modifying the conditions of Agrawal's conjecture leads to a deterministic primality test with an efficient running time.
+We propose a new approach to primality testing based on a modified version of Agrawal's conjecture, a significant yet unresolved conjecture in the field. By slightly altering the conditions of Agrawal's conjecture and leveraging specific number-theoretic properties, we arrive at a deterministic primality test that achieves improved efficiency compared to existing methods.
 \end{abstract}
 
 \section{Introduction}
