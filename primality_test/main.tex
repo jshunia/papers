@@ -105,7 +105,7 @@ Hence, we have trivially
 \begin{align*}
     f(x) \equiv (x+1)^n - x^n - 1 \equiv 0 \pmod{(x^r-2, p)} .
 \end{align*}
-Next, suppose $r \mid (n-1)$. Then $r \mid (p-1)$ for some $p \mid n$. Since $p$ is prime, $(p-1) = \phi(p)$. Leading to
+Next, suppose $r \mid (n-1)$. Then $r \mid (p-1)$ for some $p \mid n$. Since $p$ is prime, $\varphi(p) = p-1$, where $\varphi$ is Euler's totient function. Leading to
 \begin{align*}
     x^n \equiv x \pmod{(x^r-2, p)}
     \quad \Longrightarrow \quad
@@ -171,7 +171,24 @@ and
 \begin{align*}
     (x+1)^n \equiv \zeta_p x + 1 \pmod{((x^r-2)(x-\alpha)^r, p)} .
 \end{align*}
-However, we showed above that $\zeta_n \equiv 1 \pmod{(x^r-2, n)}$ and the same argument applies mod $((x^r-2)(x-\alpha)^r, n)$. Hence, this would imply $x^n \equiv \zeta_n x \equiv x \pmod{(x^r-2, n)}$, contradicting the assumption in the theorem that $x^n \not\equiv x \pmod{(x^r-2, n)}$.
+However, this would imply
+\begin{align*}
+    x^n &\equiv \zeta_n x \pmod{((x^r-2)(x-\alpha)^r, n)} \\
+    &\equiv ((x+1)^{n/n} - x^{n/n}) x \pmod{((x^r-2)(x-\alpha)^r, n)} \\
+    &\equiv (x+1 - x) x \pmod{((x^r-2)(x-\alpha)^r, n)} \\
+    &\equiv x \pmod{((x^r-2)(x-\alpha)^r, n)} .
+\end{align*}
+Now, consider the natural projection homomorphism:
+\begin{align*}
+    \phi : \Z[x]/((x^r-2)(x-\alpha)^r, n) \to \Z[x]/(x^r-2, n) .
+\end{align*}
+Applying $\phi$ to both sides of the congruence, we get
+\begin{align*}
+    \phi(x^n) \equiv \phi(x) \pmod{(x^r-2, n)}
+    \Longleftrightarrow x^n 
+    \equiv x \pmod{(x^r-2, n)} .
+\end{align*}
+However, this contradicts the assumption in the theorem that $x^n \not\equiv x \pmod{(x^r-2, n)}$. Therefore, the existence of non-trivial $p$-th roots of unity in the ring $\mathbb{F}_p[x]/((x^r-2)(x-\alpha)^r)$ that satisfy the given congruences would lead to a contradiction. Thus, we conclude that if cases (i) and (ii) are both false, then $f(x) \not\equiv 0 \pmod{(x^r-2, p)}$ for some prime factor $p$ of $n$, which implies $f(x) \not\equiv 0 \pmod{(x^r-2, n)}$.
 
 Finally, suppose either case (i) or (ii) is true for all primes $p \mid n$. For $n$, the two cases (i) and (ii) collapse to a single case, since $p$ is replaced by $n$ in the exponents when lifting via the CRT:
 \begin{align*}
