@@ -395,6 +395,17 @@ The overall complexity $\tilde{O}(\log^3 n)$ is polynomial in the size of $n$ wh
 \section{Implementation Details}
 Sample open source .NET and Python implementations, along with test data, are available on the author's Github page \cite{githubrepo}.
 
+\section{Closing Remarks}
+It is tempting to wonder if perhaps $\tilde{O}(\log^3 n)$ is the end of the road for primality testing. However, it the opinion of the author that this is likely not the case. As Agrawal did in the PRIMES is in P paper \cite{aks2002}, we conclude with a conjecture on primality.
+\begin{conjecture}
+Let $n \in \mathbb{Z}_{\mathrm{odd}}^+$ such that $2^{n-1} \equiv 1 \pmod{n}$. Suppose
+\begin{align*}
+    (x^4 + x)^n - x^{4n} - x^n \equiv 0 \pmod{(x^8 - x^2 + 2, n)} .
+\end{align*}
+Then, $n$ is prime.
+\end{conjecture}
+The time complexity of the conjectured primality test is $\tilde{O}(\log^2 n)$. There are no counterexamples to the conjecture for $n \leq 2^{64}$. While we believe this particular version of the conjecture is likely false, as with Agrawal's conjecture, it it is plausible that a variation can be constructed which is indeed infallible.
+
 \begingroup
 \raggedright
 \bibliographystyle{unsrtnat}
