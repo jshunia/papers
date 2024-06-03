@@ -59,7 +59,7 @@ citecolor=webgreen]{hyperref}
 
 \title{Modifying Agrawal's Conjecture for Efficient Primality Testing}
 \author{Joseph M. Shunia}
-\date{December 2023 \\ \small Revised: May 2024 (Version 3) \normalsize}
+\date{December 2023 \\ \small Revised: June 2024 (Version 3) \normalsize}
 
 \begin{document}
 
@@ -376,6 +376,7 @@ Harvey and van Der Heoven (2021) \cite{harveyvanderhoeven2021} have given an alg
     \\ &= O(\log n \log n \log\log n \cdot  T_2(n))
     \\ &= O(\log^2 n \log\log n \cdot  T_2(n)) .
 \end{align*}
+
 In soft-O notation \cite{gathengerhard2013softo}, typically denoted as $\tilde{O}$, simplicity is achieved by omitting slower-growing logarithmic and lower-order factors that do not significantly contribute to the overall growth rate of the function.
 
 In the context of our overall time complexity $T(n) = O(\log^2 n \log\log n \cdot T_2(n))$, where the dominant term is $O(\log^2 n)$, the linear factors $\log\log n$ are omitted, and the time complexity simplifies to
