@@ -203,7 +203,7 @@ In our proof of \cref{proof:carmichaelnumbersfail}, if the polynomial generator 
 \begin{align*}
     x^n \equiv x^{n \bmod r} \pmod{(x^r-1, p)}
 \end{align*}
-In such case, it is plausible to have $(x+1)^n \equiv x^n + 1 \bmod{(x^r-1, n)}$ under alternative circumstances. However, with the generator $x^r-2$, under the given conditions, the remainder $x^{n \bmod r}$ cannot have a coefficient of $1$ unless $n \bmod r \equiv 1 \pmod{n}$, and thus $x^n \equiv x \pmod{(x^r-2,n)}$. In the case of Agrawal's conjecture, the multiplicative order of $1$ modulo $n$ is trivially $\ord_1 n = 1$. For that reason, it is not useful eliminating edge cases. This shows why using the generator $x^r-2$ is an important strengthening of the conjecture.
+In such case, it is plausible to have $(x+1)^n \equiv x^n + 1 \bmod{(x^r-1, n)}$ under alternative circumstances. However, with the generator $x^r-2$, under the given conditions, the remainder $x^{n \bmod r}$ cannot have a coefficient of $1$ unless $n \bmod r \equiv 1 \pmod{n}$, and thus $x^n \equiv x \pmod{(x^r-2,n)}$. In the case of Agrawal's conjecture, the multiplicative order of $1$ modulo $n$ is trivially $\ord_n 1 = 1$. For that reason, it is not useful eliminating edge cases. This shows why using the generator $x^r-2$ is an important strengthening of the conjecture.
 \end{remark}
 
 \begin{lemma} \label{proof:niscarmichaelnumber}
