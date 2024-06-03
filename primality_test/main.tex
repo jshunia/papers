@@ -50,8 +50,8 @@ citecolor=webgreen]{hyperref}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\K}{\mathcal{K}}
 \newcommand{\wt}[1]{\#(#1)}
-\newcommand{\lcm}{\text{lcm}}
-\newcommand{\ord}{\text{ord}}
+\newcommand{\lcm}{\mathrm{lcm}}
+\newcommand{\ord}{\mathrm{ord}}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
 \newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
 \setlength{\parskip}{0.5em}
@@ -142,7 +142,6 @@ where $\zeta_p$ is a $p$-th root of unity modulo $(x^r-2, p)$. By the Chinese Re
 \begin{align*}
 \zeta_n &\equiv (x+1)^{n/n} - x^{n/n} \pmod{(x^r-2, n)} \\
 &\equiv (x+1)^1 - x^1 \pmod{(x^r-2, n)} \\
-&\equiv (x+1) - x \pmod{(x^r-2, n)} \\
 &\equiv 1 \pmod{(x^r-2, n)} .
 \end{align*}
 This is consistent with $\zeta_p$ being a trivial $p$-th root of unity modulo $(x^r-2, n)$. That is
@@ -155,8 +154,8 @@ Hence, we have
 \end{align*}
 Then, for each $p$, we must consider the following mutually exclusive cases:
 \begin{enumerate}
-\item[(i)] $x^p \equiv x^{n/p} \pmod{(x^r-2, p)} \quad\Longleftrightarrow\quad (x+1)^p \equiv (x+1)^{n/p} \pmod{(x^r-2, p)}$,
-\item[(ii)] $x^n \equiv x^p \pmod{(x^r-2, p)} \quad\Longleftrightarrow\quad (x+1)^n \equiv (x+1)^p \pmod{(x^r-2, p)}$.
+\item[(i)] $x^n \equiv x^p \pmod{(x^r-2, p)} \quad\Longleftrightarrow\quad (x+1)^n \equiv (x+1)^p \pmod{(x^r-2, p)}$.
+\item[(ii)] $x^p \equiv x^{n/p} \pmod{(x^r-2, p)} \quad\Longleftrightarrow\quad (x+1)^p \equiv (x+1)^{n/p} \pmod{(x^r-2, p)}$,
 \end{enumerate}
 Each case, taken individually, allows for $f(x) \equiv 0 \pmod{(x^r-2,p)}$. These cases are mutually exclusive, since satisfying both (i) and (ii) leads to
 \begin{align*}
@@ -164,14 +163,55 @@ Each case, taken individually, allows for $f(x) \equiv 0 \pmod{(x^r-2,p)}$. Thes
 \end{align*}
 implying that $p=r$ and $r \mid n$, contradicting the theorem.
 
-Now, suppose cases (i) and (ii) are both false. If $x^n \equiv \zeta_p x \pmod{(x^r-2, p)}$, where $\zeta_p$ is a non-trivial $p$-th root of unity modulo $(x^r-2, p)$, then $(x+1)^n \equiv \zeta_p (x+1) \pmod{(x^r-2, p)}$. This is possible because the polynomial ring $\Z[x]/(x^r-2, p)$ is isomorphic to the direct product of fields $\mathbb{F}_p[x]/(x-\alpha_1) \times \cdots \times \mathbb{F}_p[x]/(x-\alpha_r)$, where the $\alpha_i$ are the roots of $x^r-2$ in an algebraic closure of $\mathbb{F}_p$. In some of these fields, there may exist non-trivial $p$-th roots of unity, allowing for this. However, we showed above that $\zeta_n \equiv 1 \pmod{(x^r-2, n)}$, so this would imply $x^n \equiv \zeta_n x \equiv x \pmod{(x^r-2, n)}$, contradicting the assumption in the theorem that $x^n \not\equiv x \pmod{(x^r-2, n)}$.
+Now, suppose cases (i) and (ii) are both false. If $x^n \equiv \zeta_p x \pmod{(x^r-2, p)}$, where $\zeta_p$ is a non-trivial $p$-th root of unity modulo $(x^r-2, p)$, then $(x+1)^n \equiv \zeta_p (x+1) \pmod{(x^r-2, p)}$. This is possible because the polynomial ring $\Z[x]/(x^r-2, p)$, the polynomial generator $x^r-2$ factors as $(x-\alpha)^r \pmod{p}$. Thus, the ring is isomorphic to the direct product of field taken $r$ times $\mathbb{F}_p[x]/(x-\alpha) \times \cdots \times \mathbb{F}_p[x]/(x-\alpha)$, where  $\alpha$ is the root of $x^r-2$ in an algebraic closure of $\mathbb{F}_p$. In particular, $\Z[x]/(x^r-2, p) \cong \mathbb{F}_p[x]/((x-\alpha)^r)$. In the field $\mathbb{F}_p[x]/(x-\alpha)$, there may exist non-trivial $p$-th roots of unity, allowing for this. However, we showed above that $\zeta_n \equiv 1 \pmod{(x^r-2, n)}$, so this would imply $x^n \equiv \zeta_n x \equiv x \pmod{(x^r-2, n)}$, contradicting the assumption in the theorem that $x^n \not\equiv x \pmod{(x^r-2, n)}$.
 
 Finally, suppose either case (i) or (ii) is true for all primes $p \mid n$. For $n$, the two cases (i) and (ii) collapse to a single case, since $p$ is replaced by $n$ in the exponents when lifting via the CRT:
 \begin{align*}
-x^n \equiv x \pmod{(x^r-2, n)} \quad\Longleftrightarrow\quad (x+1)^n \equiv x+1 \pmod{(x^r-2, n)} .
+x^n \equiv x \pmod{(x^r-2, n)}
+\quad\Longleftrightarrow\quad
+(x+1)^n \equiv x+1 \pmod{(x^r-2, n)} .
 \end{align*}
-However, this is a contradiction, since again, $x^n \not\equiv x \pmod{(x^r-2, n)}$ by assumption in the theorem. Therefore $f(x) \not\equiv 0 \pmod{(x^r-2, n)}$. This completes the proof.
+However, this is a contradiction, since again, $x^n \not\equiv x \pmod{(x^r-2, n)}$ by assumption in the theorem. Therefore $f(x) \not\equiv 0 \pmod{(x^r-2, n)}$.
+
+To illustrate, notice
+\begin{align*}
+    x^n \equiv 2^{\floor{n/r}} x^{n \bmod r} \pmod{x^r-2} , \\
+    x^p \equiv 2^{\floor{p/r}} x^{p \bmod r} \pmod{x^r-2} , \\
+    x^{n/p} \equiv 2^{\floor{n/(rp)}} x^{(n/p) \bmod r} \pmod{x^r-2} .
+\end{align*}
+
+Hence, for case (i), we have
+\begin{align*}
+    2^{\floor{n/r} - \floor{p/r}} \equiv 1 \pmod{p} 
+    \quad \Longleftrightarrow \quad
+    \floor{n/r} - \floor{p/r} \equiv 0 \pmod{p-1} .
+\end{align*}
+
+For case (ii), we have
+\begin{align*}
+    2^{\floor{n/r} - \floor{n/(pr)}} \equiv 1 \pmod{p} 
+    \quad \Longleftrightarrow \quad
+    \floor{n/r} - \floor{n/(pr)} \equiv 0 \pmod{p-1} .
+\end{align*}
+
+For $n$, again lifting via the CRT, since $n$ is a Carmichael number and $(p-1) \mid (n-1)$ for all $p$, this would imply
+\begin{align*}
+    2^{\floor{n/r}} \equiv 1 \pmod{n} 
+    \quad \Longleftrightarrow \quad
+    \floor{n/r} \equiv 0 \pmod{\ord_2 n} ,
+\end{align*}
+where $\ord_2 n$ is the multiplicative order of $2$ modulo $n$. However, since $n$ is a Carmichael number, this is impossible, since $\ord_2 n \mid (n-1)$, and $r \nmid (n-1)$.
+
+This completes the proof.
 \end{proof}
+
+\begin{remark}
+In our proof of \cref{proof:carmichaelnumbersfail}, if the polynomial generator of the ideal was instead $x^r-1$, as in Agrawal's conjecture, we would have:
+\begin{align*}
+    x^n \equiv x^{n \bmod r} \pmod{(x^r-1, p)}
+\end{align*}
+In such case, it is plausible to have $(x+1)^n \equiv x^n + 1 \bmod{(x^r-1, n)}$ under alternative circumstances. However, with the generator $x^r-2$, under the given conditions, the remainder $x^{n \bmod r}$ cannot have a coefficient of $1$ unless $n \bmod r \equiv 1 \pmod{n}$, and thus $x^n \equiv x \pmod{(x^r-2,n)}$. In the case of Agrawal's conjecture, the multiplicative order of $1$ modulo $n$ is trivially $\ord_1 n = 1$. For that reason, it is not useful eliminating edge cases. This shows why using the generator $x^r-2$ is an important differentiation.
+\end{remark}
 
 \begin{lemma} \label{proof:niscarmichaelnumber}
 Let $n, r \in \Z_{>1}$ such that $n$ is odd, $r \geq 3$, and $r \nmid n$. Consider the polynomial
@@ -214,7 +254,7 @@ Let $n \in \Z_{>1}$ be a Carmichael number. Hence, $n$ is odd, composite, and sq
 \begin{proof}
 The reduction of $x^n \pmod{(x^r-2)}$ leaves a polynomial remainder of degree $d = (n \bmod r)$. Formally, we have
 \begin{align*}
-    x^n \equiv 2^{\floor{n/r}} x^d \equiv 2^{\floor{n/r}} x^{n \bmod r} \pmod{(x^r-2)}
+    x^n \equiv 2^{\floor{n/r}} x^d \equiv 2^{\floor{n/r}} x^{n \bmod r} \pmod{x^r-2}
 \end{align*}
 Since $n = p_1 p_2 \cdots p_m$ is a Carmichael number, we know that $(p_i-1) \mid (n-1)$ for all prime factors $p_i \mid n$. In such case
 \begin{align*}
@@ -263,7 +303,7 @@ Re-arranging terms, we see
 \end{align*}
 Next, we want to establish an upper bound for $p_{\log n}$, the $\log n$-th prime number. Substituting $\log n$ for $n$ in the inequality, we get
 \begin{align*}
-p_{\log n} < \log n \left( \log\log (n) + \log\log\log n \right) .
+p_{\log n} < \log n \left( \log\log n + \log\log\log n \right) .
 \end{align*}
 This expression gives an upper bound for the smallest prime $p$ that is coprime to $n$.
 \end{proof}
