@@ -391,7 +391,7 @@ Sample open source .NET and Python implementations, along with test data, are av
 \section{Closing Remarks}
 It is tempting to wonder if perhaps $\tilde{O}(\log^3 n)$ is the end of the road for primality testing. However, it the opinion of the author that this is likely not the case. As Agrawal did in the PRIMES is in P paper \cite{aks2002}, we conclude with a conjecture on primality testing.
 \begin{conjecture*}
-Let $n \in \mathbb{Z}_{\mathrm{odd}}^+$ such that $2^{n-1} \equiv 1 \pmod{n}$. Suppose
+Let $n \in \mathbb{Z}_{>1}$ such that $n$ is odd and $2^{n-1} \equiv 1 \pmod{n}$. Suppose
 \begin{align*}
     (x^4 + x)^n - x^{4n} - x^n \equiv 0 \pmod{(x^8 - x^2 + 2, n)} ,
 \end{align*}
