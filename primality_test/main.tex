@@ -398,7 +398,7 @@ The given algorithm is a primality test that involves several computational step
 
     \item \textbf{Finding $r$}:
     
-        Finding the least $r \in \mathbb{P}_{\geq 3}$ such that $n \not\equiv 1 \pmod{r}$ takes at most $O(\log n (\log \log n + \log \log \log n))$ steps (\cref{proof:leastcoprimesofto}), with each step requiring $O(1)$ time for the mod operation. Hence, the overall complexity of this stage is $ T_2(n) = O(\log n (\log \log n + \log \log \log n))$.
+        Finding the least $r \in \mathbb{P}_{\geq 3}$ such that $n(n-1) \not\equiv 0 \pmod{r}$ takes at most $O(\log n (\log \log n + \log \log \log n))$ steps (\cref{proof:leastcoprimesofto}), with each step requiring $O(1)$ time for the mod operation. Hence, the overall complexity of this stage is $ T_2(n) = O(\log n (\log \log n + \log \log \log n))$.
 
     \item \textbf{Checking for a prime divisor up to $4r$}:
     
