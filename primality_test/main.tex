@@ -464,7 +464,7 @@ Now, suppose $n$ is composite. For $(x+y)^n - x^n - y^n$ to be zero modulo the i
 \begin{align*}
     a^2 - b^2 \equiv -2 \pmod{p} \quad \land \quad b^4 \equiv a \pmod{p} . 
 \end{align*}
-While necessary, the property alone is not sufficient. It is necessary, since if the tuple $(x^2-y^2+2, y^4-x)$ is irreducible mod $p$, then the quotient ring $\mathbb{F}_p[x,y]/(x^2-y^2+2, y^4-x)$ forms a finite field. In a finite field, a polynomial cannot have more roots than it's degree. Thus, $f(x,y)$ is nonzero mod $p$ and since $p \mid n$, $f(x,y)$ is also nonzero mod $n$. On the other hand, it is easy to see that it always holds for prime $n$, since $f(x,y) = (x+y)^n - x^n - y^n = \sum_{k=1}^{n-1} \binom{n}{k} x^k y^{n-k}$ and prime $n$ will divide all $\binom{n}{k}$ in the sum.
+While necessary, the property alone is not sufficient. It is necessary, since if the tuple $(x^2-y^2+2, y^4-x)$ is irreducible mod $p$, then the quotient ring $\mathbb{F}_p[x,y]/(x^2-y^2+2, y^4-x)$ forms a finite field. In a finite field, a polynomial cannot have more roots than its degree. Thus, $f(x,y)$ is nonzero mod $p$ and since $p \mid n$, $f(x,y)$ is also nonzero mod $n$. On the other hand, it is easy to see that it always holds for prime $n$, since $f(x,y) = (x+y)^n - x^n - y^n = \sum_{k=1}^{n-1} \binom{n}{k} x^k y^{n-k}$ and prime $n$ will divide all $\binom{n}{k}$ in the sum.
 
 We further conjecture that if composite $n$ is a pseudoprime the conjectured test, then it must also be a Fermat base-$2$ pseudoprime. Under the assumption this statement is true, we have used the Fermat base-$2$ pseudoprime tables provided by William Galway and computed by Jan Feitsma \cite{pseudoprimestables} to verify that there is no composite $n$ which passes the test for $n \leq 2^{64}$.
 
