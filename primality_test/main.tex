@@ -59,7 +59,7 @@ citecolor=webgreen]{hyperref}
 
 \title{Modifying Agrawal's Conjecture for Efficient Primality Testing}
 \author{Joseph M. Shunia}
-\date{December 2023 \\ \small Revised: June 2024 (Version 3.2) \normalsize}
+\date{December 2023 \\ \small Revised: June 2024 (Version 3.2.1) \normalsize}
 
 \begin{document}
 
@@ -85,6 +85,8 @@ Then, $n$ is prime.
 We alter the conditions of Agrawal's conjecture to use the generator $x^r-2$ instead of $x^r-1$, and update the restriction on $r$ so that $r$ is the least odd prime such that $r \nmid n (n-1)$. These changes allow us to leverage specific number theoretic properties to establish determinism, which were previously unavailable.
 
 Through the proof of our main theorem (\cref{section:maintheorem}) and its supporting lemmas (\cref{section:supportinglemmas}), we demonstrate that our modified test is equivalent to checking the polynomial congruence $(x+1)^n \equiv x^n+1 \pmod{n} \in \mathbb{Z}[x]$, which is known to hold for only prime integers $n$ \cite{granville2004primes}.
+
+\textbf{Disclaimer.} While we believe our main theorem and overall approach is correct, there are still some gaps in a supporting proof that require further work. For details, see the disclaimer following the proof of \cref{proof:carmichaelnumbersfail}.
 
 \section{Supporting Lemmas} \label{section:supportinglemmas}
 We begin by presenting the supporting lemmas for our main theorem (\cref{section:maintheorem}).
@@ -258,6 +260,8 @@ In our proof of \cref{proof:carmichaelnumbersfail}, if the polynomial generator 
 \end{align*}
 In such case, it is plausible to have $(x+1)^n \equiv x^n + 1 \bmod{(x^r-1, n)}$ under alternative circumstances. However, with the generator $x^r-2$, under the given conditions, the remainder $x^{n \bmod r}$ cannot have a coefficient of $1$ unless $n \bmod r \equiv 1 \pmod{n}$, and thus $x^n \equiv x \pmod{(x^r-2,n)}$. In the case of Agrawal's conjecture, the multiplicative order of $1$ modulo $n$ is trivially $\ord_n 1 = 1$. For that reason, it is not useful eliminating edge cases. This shows why using the generator $x^r-2$ is an important strengthening of the conjecture.
 \end{remark}
+
+\textbf{Disclaimer.} While we believe \cref{proof:carmichaelnumbersfail} is true and that our proof captures the essence of why, we acknowledge that there are still some gaps to be filled. Specifically, we have outlined various cases for which $p \mid n$ can satisfy the polynomial congruence mod $p$, and demonstrated how these all lead to a contradiction mod $n$. However, we have not shown concretely that these comprise \textbf{all} of the possible cases the polynomial congruence can hold mod $p$ for $p \mid n$. It remains plausible that alternative cases exist. Using Carmichael number tables computed by Richard Pinch \cite{pinch2007carmichael}, we have computationally verified that these are all the possible cases for all $p \mid n$, where $n$ is a Carmichael number, and $n \leq 10^{21} \approx 2^{70}$. This provides some evidence that our assertions are correct, but it is no substitute for a rigorous theoretical proof. Additionally, the congruence $2^{\floor{n/(2r)} - w} \equiv 2^{\floor{n/r}} \pmod{p}$ was found experimentally and we do not yet have a theoretical justification for why it allows for the polynomial congruence to hold mod $p \mid n$.
 
 \begin{lemma} \label{proof:niscarmichaelnumber}
 Let $n, r \in \Z_{>1}$ such that $n$ is odd, $r \geq 3$, and $r \nmid n$. Consider the polynomial
@@ -442,8 +446,10 @@ We have $T_2(n) = O(\log n (\log \log n + \log \log \log n))$, which in soft-O s
 \subsubsection{Conclusion}
 The overall complexity $\tilde{O}(\log^3 n)$ is polynomial in the size of $n$ when expressed in terms of bit operations, making the algorithm efficient for large values of $n$.
 
-\section{Implementation Details}
-Sample open source .NET and Python implementations, along with test data, are available on the author's Github page \cite{githubrepo}.
+\subsection{Preliminary Computational Verification}
+Using tables calculated by Richard Pinch \cite{pinch2007carmichael}, we have computationally verified that there are no counterexamples to the proposed primality test (\cref{proof:main}) for $n \leq 10^{21} \approx 2^{70}$. Additionally, we have verified that all prime divisors $p$ dividing the Carmichael numbers $n \leq 10^{21}$ obey the conditions precisely as described in \cref{proof:carmichaelnumbersfail}.
+
+Sample open source .NET and Python implementations, along with test data, are available on the author's GitHub page \cite{githubrepo}.
 
 \section{Closing Remarks}
 It is tempting to wonder if perhaps $\tilde{O}(\log^3 n)$ is the end of the road for primality testing. However, it the opinion of the author that this is likely not the case. As Manindra Agrawal did in the PRIMES is in P paper \cite{aks2002}, we conclude with a conjecture on primality testing.
@@ -464,7 +470,8 @@ Now, suppose $n$ is composite. For $(x+y)^n - x^n - y^n$ to be zero modulo the i
 \begin{align*}
     a^2 - b^2 \equiv -2 \pmod{p} \quad \land \quad b^4 \equiv a \pmod{p} . 
 \end{align*}
-While necessary, the property alone is not sufficient. It is necessary, since if the tuple $(x^2-y^2+2, y^4-x)$ is irreducible mod $p$, then the quotient ring $\mathbb{F}_p[x,y]/(x^2-y^2+2, y^4-x)$ forms a finite field. In a finite field, a polynomial cannot have more roots than its degree. Thus, $f(x,y)$ is nonzero mod $p$ and since $p \mid n$, $f(x,y)$ is also nonzero mod $n$. On the other hand, it is easy to see that it always holds for prime $n$, since $f(x,y) = (x+y)^n - x^n - y^n = \sum_{k=1}^{n-1} \binom{n}{k} x^k y^{n-k}$ and prime $n$ will divide all $\binom{n}{k}$ in the sum.
+While necessary, the property alone is not sufficient. It is necessary, since if the tuple $(x^2-y^2+2, y^4-x)$ is irreducible mod $p$, the
+n the quotient ring $\mathbb{F}_p[x,y]/(x^2-y^2+2, y^4-x)$ forms a finite field. In a finite field, a polynomial cannot have more roots than its degree. Thus, $f(x,y)$ is nonzero mod $p$ and since $p \mid n$, $f(x,y)$ is also nonzero mod $n$. On the other hand, it is easy to see that it always holds for prime $n$, since $f(x,y) = (x+y)^n - x^n - y^n = \sum_{k=1}^{n-1} \binom{n}{k} x^k y^{n-k}$ and prime $n$ will divide all $\binom{n}{k}$ in the sum.
 
 We further conjecture that if composite $n$ is a pseudoprime to the conjectured test, then $n$ must also be a Fermat base-$2$ pseudoprime. Under the assumption this statement is true, we have used the Fermat base-$2$ pseudoprime tables provided by William Galway and computed by Jan Feitsma \cite{pseudoprimestables} to verify that there is no composite $n$ which passes the test for $n \leq 2^{64}$.
 
