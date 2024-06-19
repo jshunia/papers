@@ -1,0 +1,248 @@
+\pdfoutput=1
+\documentclass[11pt,reqno]{article}
+\usepackage{fullpage}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage[usenames]{color}
+\usepackage{url}
+\usepackage{color}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+\usepackage{cleveref}
+\usepackage{tabularx}
+\usepackage{placeins}
+\theoremstyle{plain}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}{Remark}
+\crefname{conjecture}{Conjecture}{Conjectures}
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{remark}{Remark}{Remarks}
+\crefname{corollary}{Corollary}{Corollaries}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\newtheorem{example}{Example}
+\crefname{definition}{Definition}{Definitions}
+\crefname{notation}{Notation}{Notations}
+\crefname{example}{Example}{Examples}
+\crefname{section}{\S}{Sections}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\sg}{\mathrm{sg}}
+\newcommand{\lcm}{\mathrm{lcm}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\wt}[1]{\#(#1)}
+\newcommand{\eval}[2]{\left . #1 \right|_{#2}}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{On Arithmetic Terms for Number Theory}
+\author{Joseph M. Shunia}
+\date{June 19, 2024 \\ \small Draft - Version 0.0.1 \normalsize}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present new results on arithmetic terms related to the greatest common divisor function $\gcd(a,b)$. We also give elementary formulas for the factors of a semiprime $n=p_1 p_2$ and the integer part of the $n$-th roots. The formulas presented require only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
+\end{abstract}
+
+\textbf{Disclaimer.} This paper is a work in progress and will be continuously updated until the first version of the preprint is released (v1.0.0). In the meantime, consider all results to be conjectures.
+
+\section{Greatest Common Divisor} \label{section:gcd}
+
+\begin{lemma}[Mazzanti] \label{proof:mazzantigcd}
+\begin{align*}
+\forall a,b \in \Z^+, \quad
+\gcd(a,b) = \floor{\frac{(2^{a^2 b(b+1)} - 2^{a^2 b}) (2^{a^2 b^2} - 1)}
+         {(2^{a^2 b} - 1)(2^{ab^2}-1)2^{a^2 b^2}}} \bmod 2^{ab}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+The lemma and proof belong to Mazzanti (2002) \cite{mazzanti2002plainbases}.
+\end{proof}
+
+Applying Kronecker substitution techniques from our previous works \cite{shunia2023simple, shunia2024polynomial}, we find that Mazzanti's formula can be simplified and expressed in a polynomial form.
+
+\begin{theorem} \label{proof:gcdpolynomial}
+\begin{align*}
+\forall a,b \in \Z^+, \quad
+\gcd(a,b) = \floor{\frac{x^{a+ab}}{(x^a - 1)(x^b-1)}}\bmod x .
+\end{align*}
+\end{theorem}
+\begin{proof}
+Consider Mazzanti's greatest common divisor formula (\cref{proof:mazzantigcd}), which is given by
+\begin{align*}
+\gcd(a,b) = \floor{\frac{(2^{a^2 b(b+1)} - 2^{a^2 b}) (2^{a^2 b^2} - 1)}
+         {(2^{a^2 b} - 1)(2^{ab^2}-1)2^{a^2 b^2}}} \bmod 2^{ab}.
+\end{align*}
+Observe that all integer powers in the arithmetic term are divisible by $2^{ab}$. Factoring these, we obtain
+\begin{align*}
+\gcd(a,b) = \floor{\frac{((2^{ab})^{a (b+1)} - (2^{ab})^a) ((2^{ab})^{ab} - 1)}
+ {((2^{ab})^{a} - 1)((2^{ab})^{b}-1) (2^{ab})^{ab}}} \bmod 2^{ab} .
+\end{align*}
+Substituting with $2^{ab} = x$ yields
+\begin{align*}
+\gcd(a,b) = \floor{\frac{(x^{a (b+1)} - x^a) (x^{ab} - 1)}
+ {(x^{a} - 1)(x^{b}-1) x^{ab}}} \bmod x .
+\end{align*}
+The substitution is valid, since $2^{ab} > \gcd(a,b)$ and the substitution $2^{ab} = x$ essentially inverts the Kronecker substitution with the base $2^{ab}$ (See Theorem 1 in \cite{shunia2023simple}).
+
+Simplifying the fraction, we obtain
+\begin{align*}
+\gcd(a,b) = \floor{
+\frac
+{ x^{a-ab} (x^{ab} - 1)^2 }
+{ (x^a - 1)(x^b-1) }
+}
+ \bmod x .
+\end{align*}
+This fraction can be expanded as the sum
+\begin{align*}
+\gcd(a,b) = \floor{
+    \frac
+    { x^{a-ab} }
+    { (x^a - 1)(x^b-1) }
+    +
+    \frac
+    { x^{a+ab} }
+    { (x^a - 1)(x^b-1) }
+    +
+    \frac
+    { -2x^{a} }
+    { (x^a - 1)(x^b-1) }
+}
+ \bmod x .
+\end{align*}
+Since we are reducing the quotient mod $x$, we need only consider the term in the fraction which yields the constant term in the polynomial, which is $\gcd(a,b)$. We find
+\begin{align*}
+\gcd(a,b) = \floor{\frac{x^{a+ab}}{(x^a-1)(x^b-1)}}\bmod x .
+\end{align*}
+\end{proof}
+
+\begin{corollary} \label{proof:gcdintegerbase}
+Let $a,b,n \in \Z^+$ such that $n > \gcd(a,b)$. Then
+\begin{align*}
+\gcd(a,b) = \floor{\frac{n^{a+ab}}{(n^a-1)(n^b-1)}}\bmod n .
+\end{align*}
+\end{corollary}
+\begin{proof}
+Consider the polynomial formula given by \cref{proof:gcdpolynomial}. Substituting with $x = n$ yields the given formula. By Theorem 2 in  \cite{shunia2024polynomial}, the substitution is valid since $n > \gcd(a,b)$.
+\end{proof}
+
+\section{Semiprime Factors} \label{section:semiprimes}
+Using our results on the greatest common divisor function (\cref{section:gcd}), as well as results from our earlier works \cite{shunia2023simple,shunia2024polynomial} and those of Mazzanti \cite{mazzanti2002plainbases}, Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we discover elementary formulas for the prime factors of a non-square semiprime $n=p_1 p_2$. We say these formulas are ``elementary'', since they require only addition, subtraction, multiplication, floored division, and exponentiation.
+
+\begin{theorem} \label{proof:semiprimefactorp1}
+Let $n \in \mathbb{Z}^+$ such that $n = p_1 p_2$ is a non-square semiprime and $p_1 < p_2$ are the prime factors of $n$.
+
+Define
+\begin{align*}
+\omega = \floor{\frac{(n^{2n} + 1)^{2n+1} \bmod (n^{4n}-n)}{(n^{2n} + 1)^{2n} \bmod (n^{4n}-n)}} - 1 .
+\end{align*}
+
+Then, set
+\begin{align*}
+\gamma = \floor
+{
+    \frac{2^{\omega (\omega+1)(\omega+2)}}
+    {
+        \floor
+        {
+        (2^{2^{(\omega+1)(\omega+2)} - n} + 2^{-\omega})^{ 2^{(\omega+1)(\omega+2)} }
+        }
+        \bmod 2^{\omega 2^{(\omega+1)(\omega+2)} }
+    }
+} .
+\end{align*}
+
+Finally, we have
+\begin{align*}
+p_1 = \floor{\frac{n^{\gamma+\gamma\omega}}{(n^\gamma-1)(n^\omega-1)}}\bmod n .
+\end{align*}
+\end{theorem}
+\begin{proof}
+From Shunia (2024) \cite{shunia2024polynomial}, for $n$ that is not a square, we get the arithmetic term
+\begin{align*}
+\floor{\sqrt{n}} &=
+\floor{\frac{(n^{2n} + 1)^{2n+1} \bmod (n^{4n}-n)}{(n^{2n} + 1)^{2n} \bmod (n^{4n}-n)}} - 1 ,
+\end{align*}
+which matches our definition of $\omega$. Hence, $\omega = \floor{\sqrt{n}}$.
+
+From Prunescu and Sauras-Altuzarra (2024) \cite{prunescu2024factorial}, we also have the factorial formula
+\begin{align*}
+n! &= \floor{2^{n(n+1)(n+2)} / \binom{2^{(n+1)(n+2)}}{n}} \\
+&= \floor
+{
+    \frac
+    {
+        2^{n(n+1)(n+2)}
+    }
+    {
+        \floor
+        {
+            \left(
+                2^{2^{(n+1)(n+2)}-n} + 2^{-n}
+            \right)^{2^{(n+1)(n+2)}}
+        }
+        \bmod
+        2^{2^{(n+1)(n+2)}} .
+    }
+}
+\end{align*}
+Considering $\omega!$, this becomes
+\begin{align*}
+\omega! = \floor
+{
+    \frac{2^{\omega (\omega+1)(\omega+2)}}
+    {
+        \floor
+        {
+        (2^{2^{(\omega+1)(\omega+2)} - n} + 2^{-\omega})^{ 2^{(\omega+1)(\omega+2)} }
+        }
+        \bmod 2^{\omega 2^{(\omega+1)(\omega+2)} }
+    }
+} ,
+\end{align*}
+which matches the definition for $\gamma$. Hence, $\gamma = \omega! = \floor{\sqrt{n}}!$.
+
+Applying \cref{proof:gcdintegerbase}, we have
+\begin{align*}
+    \gcd(n, \floor{\sqrt{n}}) = \gcd(n,\gamma) = \floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n .
+\end{align*}
+Since $n$ is a non-square semiprime and $p_1 < p_2$, we must have $p_1 < \floor{\sqrt{n}}$ and $p_2 > \floor{\sqrt{n}}$. Hence, $p_1 = \gcd(n,\floor{\sqrt{n}}!)$, which we showed is equivalent to the formula in the theorem.
+\end{proof}
+\begin{corollary} \label{proof:semiprimefactorp2}
+\begin{align*}
+p_2 = \frac{n}{\floor{\frac{n^{\gamma+\gamma\omega}}{(n^\gamma-1)(n^\omega-1)}}\bmod n}.
+\end{align*}
+\end{corollary}
+\begin{proof}
+The proof follows immediately from \cref{proof:semiprimefactorp1}, since $\frac{n}{p_1} = p_2$ in this case.
+\end{proof}
+
+\begingroup
+\raggedright
+\bibliographystyle{unsrtnat}
+\bibliography{main}
+\endgroup
+
+\end{document}
