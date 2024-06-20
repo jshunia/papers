@@ -87,14 +87,14 @@ Our new arithmetic term formulas for GCDs and semiprime factors, while entirely 
 
 Firstly, we denote by $\textbf{E}$ the class of elementary functions.
 
-In 1980, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. This result was groundbreaking, as it implies that all computable functions are contained within the class $\textbf{E}$. However, Matiyasevich's proof is non-constructive, and it does not provide a formulaic or systematic approach for constructing such elementary representations. To put this into perspective, Matiyasevich's result implies that there exists an elementary formula for calculating the $n$-th prime number, even though no such elementary formula is currently known \cite{prunescu2024factorial}. Similarly, the existence of an elementary formula for semiprime factors is also implied by Matiyasevich; we are the first to discover such a formula.
+In 1980, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. This result was groundbreaking, as it implies that all computable functions are contained within the class $\textbf{E}$. However, Matiyasevich's proof is non-constructive, and it does not provide a formulaic or systematic approach for constructing such elementary representations. To put this into perspective, Matiyasevich's result implies that there exists an elementary formula for calculating the $n$-th prime number, even though no such elementary formula is currently known \cite{prunescu2024factorial}. Although Matiyasevich's theorem suggests the existence of an elementary formula for semiprime factorization, it does not guarantee the existence of an arithmetic term that computes the factors (See \cref{subsection:kalmar}). Our work presents the first explicit arithmetic term formulas for this problem.
 
-\subsection{Kalmar Functions}
+\subsection{Kalmar Functions} \label{subsection:kalmar}
  The class of Kalmar functions, denoted by $\textbf{K}$, is the class of functions defined as
 \begin{align*}
     \textbf{K} = [\{ 1, a+b, a\Dot{-}b, ab, \floor{a/b}, a^b \} \}],
 \end{align*}
-where the notation $\Dot{-}$ represents so-called ``bounded'' or ``modified'' subtraction (see \cite{mazzanti2002plainbases} for a precise definition).
+where the notation $\Dot{-}$ represents so-called ``bounded'' or ``modified'' subtraction (See \cite{mazzanti2002plainbases} for a precise definition).
 
 Kalmar functions were introduced by Laszlo Kalmar in the 1940s as a subclass of the primitive recursive functions. Kalmar aimed to characterize the class of functions that can be computed using a certain restricted form of recursion, known as ``Kalmar elementary recursion'' or ``bounded recursion'' (hence the term ``bounded subtraction'' in the definition of $\textbf{K}$) \cite{herman1969elementary}).
 
