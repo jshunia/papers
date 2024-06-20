@@ -73,6 +73,45 @@ Semiprimes, which are numbers with exactly two prime factors, also play a key ro
 
 In this paper, we present new results on arithmetic formulas for the GCD and semiprime factorization. Building on work by Mazzanti and Marchenkov \cite{mazzanti2002plainbases, marchenkov1980superposition}, we derive a simplified polynomial form for the GCD that can be expressed in terms of an arbitrary integer base. We also obtain elementary formulas for the prime factors of a non-square semiprime $n=p_1 p_2$, using only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
 
+\subsection{Background}
+Our formulas, while entirely impractical, are of theoretical importance. We provide a brief overview and some historical context to demonstrate their significance.
+
+Firstly, we denote by $\textbf{E}$ the class of elementary functions.
+
+In 1980, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. This result was groundbreaking, as it implies that all computable functions can are contained within the class $\textbf{E}$. However, Matiyasevich's proof is non-constructive, and it does not provide a formulaic or systematic approach for constructing such elementary representations. To put this into perspective, Matiyasevich's result implies that there exists an elementary formula for calculating the $n$-th prime number, even though no such elementary formula is currently known \cite{prunescu2024factorial}. Similarly, the existence of an elementary formula for semiprime factors is also implied by Matiyasevich; we are the first to discover such a formula.
+
+\subsection{Arithmetic Terms}
+An ``arithmetic term'' is a mathematical expression which uses only the operations of addition $(a+b)$, subtraction $(a-b)$, multiplication $(ab)$, floored division $(\floor{a/b})$, and exponentiation $a^b$. Note that the modulo operation $(a \bmod b)$ is implied, since it can be expressed using subtraction and floored division:
+\begin{align*}
+    a \bmod b = a - b \floor{a/b} .
+\end{align*}
+
+ Let $\textbf{A}$ denote the class of arithmetic terms. Formally, we have
+\begin{align*}
+\textbf{A} = [ \{ 1, a+b, a-b, ab, \floor{a/b}, a^b \} \} ].
+\end{align*}
+
+\subsection{Kalmar Functions}
+ The class of Kalmar functions, denoted by $\textbf{K}$, is the class of functions defined as
+\begin{align*}
+    \textbf{K} = [\{ 1, a+b, a\Dot{-}b, ab, \floor{a/b}, a^b \} \}],
+\end{align*}
+where the notation $\Dot{-}$ represents so-called ``bounded'' or ``modified'' subtraction (see \cite{mazzanti2002plainbases} for a precise definition).
+
+Kalmar functions were introduced by Laszlo Kalmar in the 1940s as a subclass of the primitive recursive functions. Kalmar aimed to characterize the class of functions that can be computed using a certain restricted form of recursion, known as ``Kalmar elementary recursion'' or ``bounded recursion'' (hence the term ``bounded subtraction'' in the definition of $\textbf{K}$) \cite{herman1969elementary}.
+
+The class $\textbf{K}$ is known to be a subset of $\textbf{E}$, though whether or not it is proper remains an open question. It was long conjectured, and finally proved by Mazzanti, that the class $\textbf{A}$ generates the class $\textbf{K}$ \cite{mazzanti2002plainbases, marchenkov2007superposition}. Based on current knowledge, this means
+\begin{align*}
+    \textbf{A} \subseteq \textbf{K} \subset \textbf{E} ,
+\end{align*}
+where the strictness of the second inclusion is unknown.
+
+It is well-established that $\textbf{K}$ contains many important functions, such as the arithmetic operations, the exponential function, and the bounded $\mu$ operator (which is used to define the floored division operation). However, the exact relationship between $\textbf{K}$ and $\textbf{E}$ remains an open problem in computability theory and mathematical logic. Some researchers conjecture that $\textbf{K}$ is indeed a proper subset of $\textbf{E}$, meaning that there exist elementary functions that cannot be expressed using Kalmar elementary recursion. However, finding a specific example of such a function or proving that no such function exists has proven to be a challenging problem.
+
+\subsection{Latest Discoveries}
+
+Recently, Prunescu and Sauras-Altuzarra (2024) discovered an arithmetic term for computing the factorial function $n!$ \cite{prunescu2024factorial}. Coincidentally, at approximately the same time, we discovered an elementary formula for the $n$-th roots of positive integers \cite{shunia2024polynomial}. By combining these results, along with a simplified version of Mazzanti's GCD formula (\cref{proof:mazzantigcd}), we obtain the first explicit arithmetic terms for semiprime factors. This answers a question from Shamir (1978), who first hypothesized the existence of such a formula \cite{shamir1978factoring}.
+
 \section{Greatest Common Divisor} \label{section:gcd}
 
 \begin{lemma}[Mazzanti] \label{proof:mazzantigcd}
