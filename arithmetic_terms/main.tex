@@ -71,13 +71,13 @@ The greatest common divisor (GCD) of two integers $a$ and $b$, denoted $\gcd(a,b
 
 Semiprimes, which are numbers with exactly two prime factors, also play a key role in number theory and cryptography. The problem of factoring a semiprime $n=p_1 p_2$ into its constituent primes $p_1$ and $p_2$ is believed to be computationally intractable for large $n$ and forms the basis for widely used cryptosystems such as RSA \cite{rivest1978rsa}. Efficient algorithms for factoring semiprimes would have major implications for the security of these systems.
 
-An ``arithmetic term'' is a mathematical expression which uses only the operations of addition $(a+b)$, subtraction $(a-b)$, multiplication $(ab)$, floored division $(\floor{a/b})$, and exponentiation $a^b$. Note that the modulo operation $(a \bmod b)$ is implied, since it can be expressed using subtraction and floored division:
+An ``arithmetic term'' is a mathematical expression which uses only the operations of addition $(a+b)$, subtraction $(a-b)$, multiplication $(ab)$, floored division $(\floor{a/b})$, and exponentiation $a^b$. Note that the modulo operation $(a \bmod b)$ is implied, since it can be expressed using subtraction and floored division as
 \begin{align*}
     a \bmod b = a - b \floor{a/b} .
 \end{align*}
 Let $\textbf{A}$ denote the class of arithmetic terms. Formally, we have
 \begin{align*}
-\textbf{A} = [ \{ 1, a+b, a-b, ab, \floor{a/b}, a^b \} \} ].
+\textbf{A} = [ \{ 1, a+b, a-b, ab, \floor{a/b}, a^b \} ].
 \end{align*}
 
 In this paper, we present new results on arithmetic term formulas for the GCD and semiprime factorization. Building on work by Mazzanti and Marchenkov \cite{mazzanti2002plainbases, marchenkov1980superposition}, we derive a simplified polynomial form for the GCD that can be expressed in terms of an arbitrary integer base. We also obtain arithmetic term formulas for the prime factors of a non-square semiprime $n=p_1 p_2$, using only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
