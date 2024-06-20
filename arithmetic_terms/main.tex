@@ -85,26 +85,21 @@ In this paper, we present new results on arithmetic term formulas for the GCD an
 \subsection{Background}
 Our new arithmetic term formulas for GCDs and semiprime factors, while entirely impractical, are of theoretical importance. We provide a brief overview and some historical context to demonstrate their significance.
 
-Firstly, we denote by $\textbf{E}$ the class of elementary functions.
-
-In 1980, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. This result was groundbreaking, as it implies that all computable functions are contained within the class $\textbf{E}$. However, Matiyasevich's proof is non-constructive, and it does not provide a formulaic or systematic approach for constructing such elementary representations. To put this into perspective, Matiyasevich's result implies that there exists an elementary formula for calculating the $n$-th prime number, even though no such elementary formula is currently known \cite{prunescu2024factorial}. Although Matiyasevich's theorem suggests the existence of an elementary formula for semiprime factorization, it does not guarantee the existence of an arithmetic term that computes the factors (See \cref{subsection:kalmar}). Our work presents the first explicit arithmetic term formulas for this problem.
-
 \subsection{Kalmar Functions} \label{subsection:kalmar}
- The class of Kalmar functions, denoted by $\textbf{K}$, is the class of functions defined as
+Firstly, we denote by $\textbf{P}$ the class of primitive recursive functions. The class of Kalmar functions, denoted by $\textbf{K}$, is an elementary class of functions, which is a subset of $\textbf{P}$, defined as
 \begin{align*}
     \textbf{K} = [\{ 1, a+b, a\Dot{-}b, ab, \floor{a/b}, a^b \} \}],
 \end{align*}
 where the notation $\Dot{-}$ represents so-called ``bounded'' or ``modified'' subtraction (See \cite{mazzanti2002plainbases} for a precise definition).
 
-Kalmar functions were introduced by Laszlo Kalmar in the 1940s as a subclass of the primitive recursive functions. Kalmar aimed to characterize the class of functions that can be computed using a certain restricted form of recursion, known as ``Kalmar elementary recursion'' or ``bounded recursion'' (hence the term ``bounded subtraction'' in the definition of $\textbf{K}$) \cite{herman1969elementary}.
+Kalmar functions were introduced by Laszlo Kalmar in the 1940s as a subclass \textbf{P}. Kalmar aimed to characterize the class of functions that can be computed using a certain restricted form of recursion, known as ``Kalmar elementary recursion'' or ``bounded recursion'' (hence the term ``bounded subtraction'' in the definition of $\textbf{K}$) \cite{herman1969elementary}. It is well-established that $\textbf{K}$ contains many important functions, such as the arithmetic operations, the exponential function, and the bounded $\mu$ operator (which is used to define the floored division operation). However, it does not contain all primitive recursive functions. For example, the well-known Busy Beavers Problem is primitive recursive, but is not Kalmar elementary.
 
-The class $\textbf{K}$ is known to be a subset of $\textbf{E}$, though whether or not it is proper remains an open question. It was long conjectured, and finally proved by Mazzanti, that the class $\textbf{A}$ generates the class $\textbf{K}$ \cite{mazzanti2002plainbases, marchenkov2007superposition}. Based on current knowledge, this means
+In 1970, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. Matiyasevich's result implies that there exists a Diophantine equation for calculating the $n$-th prime number. However, this does not imply the existence of a Kalmar elementary formula, and it is unknown whether a Kalmar elementary formula for the $n$-th prime exists \cite{prunescu2024factorial}. Similarly, Matiyasevich's theorem suggests the existence of an Diophantine equation formula for semiprime factorization, but it does not guarantee the existence of an arithmetic term that computes the factors (See \cref{subsection:kalmar}). Our work presents the first explicit arithmetic term formulas for this problem.
+
+It was long conjectured, and finally proved by Mazzanti, that the class $\textbf{A}$ generates the class $\textbf{K}$ \cite{mazzanti2002plainbases, marchenkov2007superposition}. As mentioned above, $\textbf{K}$ is known to be a proper subset of $\textbf{P}$. In summary, we have
 \begin{align*}
-    \textbf{A} \subseteq \textbf{K} \subset \textbf{E} ,
+    \textbf{A} \subseteq \textbf{K} \subset \textbf{P} .
 \end{align*}
-where the strictness of the second inclusion is unknown.
-
-It is well-established that $\textbf{K}$ contains many important functions, such as the arithmetic operations, the exponential function, and the bounded $\mu$ operator (which is used to define the floored division operation). However, the exact relationship between $\textbf{K}$ and $\textbf{E}$ remains an open problem in computability theory and mathematical logic. Some researchers conjecture that $\textbf{K}$ is indeed a proper subset of $\textbf{E}$, meaning that there exist elementary functions that cannot be expressed using Kalmar elementary recursion. However, finding a specific example of such a function or proving that no such function exists has proven to be a challenging problem.
 
 \subsection{Latest Discoveries}
 
