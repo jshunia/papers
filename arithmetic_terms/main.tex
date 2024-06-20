@@ -53,7 +53,7 @@ citecolor=webgreen]{hyperref}
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 
-\title{Elementary Formulas for Greatest Common Divisors and Semiprime Factors}
+\title{Arithmetic Terms for Greatest Common Divisors and Semiprime Factors}
 \author{Joseph M. Shunia}
 \date{June 19, 2024}
 
@@ -62,7 +62,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We present new formulas for computing greatest common divisors (GCDs) and extracting the prime factors of semiprimes using only elementary arithmetic operations: addition, subtraction, multiplication, floored division, and exponentiation. Our GCD formula simplifies a result of Mazzanti, and is derived using Kronecker substitution techniques from our previous work. We utilize the GCD formula, along with recent developments on elementary formulas for square roots and factorials, to derive explicit expressions for the prime factors of a semiprime $n=p_1p_2$.
+We present new formulas for computing greatest common divisors (GCDs) and extracting the prime factors of semiprimes using only elementary arithmetic operations: addition, subtraction, multiplication, floored division, and exponentiation. Our GCD formula simplifies a result of Mazzanti, and is derived using Kronecker substitution techniques from our previous work. We utilize the GCD formula, along with recent developments on arithmetic terms for square roots and factorials, to derive explicit expressions for the prime factors of a semiprime $n=p_1p_2$.
 \end{abstract}
 
 \section{Introduction}
@@ -71,25 +71,23 @@ The greatest common divisor (GCD) of two integers $a$ and $b$, denoted $\gcd(a,b
 
 Semiprimes, which are numbers with exactly two prime factors, also play a key role in number theory and cryptography. The problem of factoring a semiprime $n=p_1 p_2$ into its constituent primes $p_1$ and $p_2$ is believed to be computationally intractable for large $n$ and forms the basis for widely used cryptosystems such as RSA \cite{rivest1978rsa}. Efficient algorithms for factoring semiprimes would have major implications for the security of these systems.
 
-In this paper, we present new results on arithmetic formulas for the GCD and semiprime factorization. Building on work by Mazzanti and Marchenkov \cite{mazzanti2002plainbases, marchenkov1980superposition}, we derive a simplified polynomial form for the GCD that can be expressed in terms of an arbitrary integer base. We also obtain elementary formulas for the prime factors of a non-square semiprime $n=p_1 p_2$, using only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
-
-\subsection{Background}
-Our formulas, while entirely impractical, are of theoretical importance. We provide a brief overview and some historical context to demonstrate their significance.
-
-Firstly, we denote by $\textbf{E}$ the class of elementary functions.
-
-In 1980, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. This result was groundbreaking, as it implies that all computable functions are contained within the class $\textbf{E}$. However, Matiyasevich's proof is non-constructive, and it does not provide a formulaic or systematic approach for constructing such elementary representations. To put this into perspective, Matiyasevich's result implies that there exists an elementary formula for calculating the $n$-th prime number, even though no such elementary formula is currently known \cite{prunescu2024factorial}. Similarly, the existence of an elementary formula for semiprime factors is also implied by Matiyasevich; we are the first to discover such a formula.
-
-\subsection{Arithmetic Terms}
 An ``arithmetic term'' is a mathematical expression which uses only the operations of addition $(a+b)$, subtraction $(a-b)$, multiplication $(ab)$, floored division $(\floor{a/b})$, and exponentiation $a^b$. Note that the modulo operation $(a \bmod b)$ is implied, since it can be expressed using subtraction and floored division:
 \begin{align*}
     a \bmod b = a - b \floor{a/b} .
 \end{align*}
-
- Let $\textbf{A}$ denote the class of arithmetic terms. Formally, we have
+Let $\textbf{A}$ denote the class of arithmetic terms. Formally, we have
 \begin{align*}
 \textbf{A} = [ \{ 1, a+b, a-b, ab, \floor{a/b}, a^b \} \} ].
 \end{align*}
+
+In this paper, we present new results on arithmetic term formulas for the GCD and semiprime factorization. Building on work by Mazzanti and Marchenkov \cite{mazzanti2002plainbases, marchenkov1980superposition}, we derive a simplified polynomial form for the GCD that can be expressed in terms of an arbitrary integer base. We also obtain elementary arithmetic formulas for the prime factors of a non-square semiprime $n=p_1 p_2$, using only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
+
+\subsection{Background}
+Our new arithmetic term formulas for GCDs and semiprime factors, while entirely impractical, are of theoretical importance. We provide a brief overview and some historical context to demonstrate their significance.
+
+Firstly, we denote by $\textbf{E}$ the class of elementary functions.
+
+In 1980, Matiyasevich proved that all computable functions can be expressed as Diophantine equations \cite{matiyasevich1980diophantine, matiyasevich1993hilbert}. This result was groundbreaking, as it implies that all computable functions are contained within the class $\textbf{E}$. However, Matiyasevich's proof is non-constructive, and it does not provide a formulaic or systematic approach for constructing such elementary representations. To put this into perspective, Matiyasevich's result implies that there exists an elementary formula for calculating the $n$-th prime number, even though no such elementary formula is currently known \cite{prunescu2024factorial}. Similarly, the existence of an elementary formula for semiprime factors is also implied by Matiyasevich; we are the first to discover such a formula.
 
 \subsection{Kalmar Functions}
  The class of Kalmar functions, denoted by $\textbf{K}$, is the class of functions defined as
@@ -98,7 +96,7 @@ An ``arithmetic term'' is a mathematical expression which uses only the operatio
 \end{align*}
 where the notation $\Dot{-}$ represents so-called ``bounded'' or ``modified'' subtraction (see \cite{mazzanti2002plainbases} for a precise definition).
 
-Kalmar functions were introduced by Laszlo Kalmar in the 1940s as a subclass of the primitive recursive functions. Kalmar aimed to characterize the class of functions that can be computed using a certain restricted form of recursion, known as ``Kalmar elementary recursion'' or ``bounded recursion'' (hence the term ``bounded subtraction'' in the definition of $\textbf{K}$) \cite{herman1969elementary}.
+Kalmar functions were introduced by Laszlo Kalmar in the 1940s as a subclass of the primitive recursive functions. Kalmar aimed to characterize the class of functions that can be computed using a certain restricted form of recursion, known as ``Kalmar elementary recursion'' or ``bounded recursion'' (hence the term ``bounded subtraction'' in the definition of $\textbf{K}$) \cite{herman1969elementary}).
 
 The class $\textbf{K}$ is known to be a subset of $\textbf{E}$, though whether or not it is proper remains an open question. It was long conjectured, and finally proved by Mazzanti, that the class $\textbf{A}$ generates the class $\textbf{K}$ \cite{mazzanti2002plainbases, marchenkov2007superposition}. Based on current knowledge, this means
 \begin{align*}
@@ -194,7 +192,7 @@ Consider the polynomial formula given by \cref{proof:gcdpolynomial}. Substitutin
 \end{proof}
 
 \section{Semiprime Factors} \label{section:semiprimes}
-Using our results on the greatest common divisor function (\cref{section:gcd}), as well as results from our earlier works \cite{shunia2023simple,shunia2024polynomial} and those of Mazzanti \cite{mazzanti2002plainbases}, Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we discover elementary formulas for the prime factors of a non-square semiprime $n=p_1 p_2$. We say these formulas are ``elementary'', since they require only addition, subtraction, multiplication, floored division, and exponentiation.
+Using our results on the greatest common divisor function (\cref{section:gcd}), as well as results from our earlier works \cite{shunia2023simple,shunia2024polynomial} and those of Mazzanti \cite{mazzanti2002plainbases}, Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we discover arithmetic term formulas for the prime factors of a non-square semiprime $n=p_1 p_2$.
 
 \begin{theorem} \label{proof:semiprimefactorp1}
 Let $n \in \mathbb{Z}^+$ such that $n = p_1 p_2$ is a non-square semiprime and $p_1 < p_2$ are the prime factors of $n$.
