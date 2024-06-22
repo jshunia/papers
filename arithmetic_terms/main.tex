@@ -55,23 +55,23 @@ citecolor=webgreen]{hyperref}
 
 \title{Elementary Formulas for Greatest Common Divisors and Semiprime Factors}
 \author{Joseph M. Shunia}
-\date{June 19, 2024}
+\date{June 19, 2024 \\ \small Revised: June 22, 2024 \\ Version 2 \normalsize}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-We present new formulas for computing greatest common divisors (GCDs) and extracting the prime factors of semiprimes using only elementary arithmetic operations: addition, subtraction, multiplication, floored division, and exponentiation. Our GCD formula simplifies a result of Mazzanti, and is derived using Kronecker substitution techniques from our previous work. We utilize the GCD formula, along with recent developments on arithmetic terms for square roots and factorials, to derive explicit expressions for the prime factors of a semiprime $n=p_1p_2$.
+We present new formulas for computing greatest common divisors (GCDs) and extracting the prime factors of semiprimes using only elementary arithmetic operations: addition, subtraction, multiplication, floored division, and exponentiation. Our GCD formula simplifies a result of Mazzanti, and is derived using Kronecker substitution techniques from our previous work. We utilize the GCD formula, along with recent developments on arithmetic terms for square roots and factorials, to derive explicit expressions for the prime factors of a semiprime $n=p q$.
 \end{abstract}
 
 \section{Introduction}
 
 The greatest common divisor (GCD) of two integers $a$ and $b$, denoted $\gcd(a,b)$, is the largest positive integer that divides both $a$ and $b$. Euclid's algorithm for computing the GCD is one of the oldest known algorithms, dating back to ancient Greece \cite{knuth1997art}.
 
-Semiprimes, which are numbers with exactly two prime factors, also play a key role in number theory and cryptography. The problem of factoring a semiprime $n=p_1 p_2$ into its constituent primes $p_1$ and $p_2$ is believed to be computationally intractable for large $n$ and forms the basis for widely used cryptosystems such as RSA \cite{rivest1978rsa}. Efficient algorithms for factoring semiprimes would have major implications for the security of these systems.
+Semiprimes, which are numbers with exactly two prime factors, also play a key role in number theory and cryptography. The problem of factoring a semiprime $n=p q$ into its constituent primes $p$ and $q$ is believed to be computationally intractable for large $n$ and forms the basis for widely used cryptosystems such as RSA \cite{rivest1978rsa}. Efficient algorithms for factoring semiprimes would have major implications for the security of these systems.
 
-An ``arithmetic term'' is a mathematical expression which uses only the operations of addition $(a+b)$, subtraction $(a-b)$, multiplication $(ab)$, floored division $(\floor{a/b})$, and exponentiation $a^b$. Note that the modulo operation $(a \bmod b)$ is implied, since it can be expressed using subtraction and floored division as
+An ``arithmetic term'' is a mathematical expression which uses only the operations of addition $(a+b)$, subtraction $(a-b)$, multiplication $(ab)$, floored division $(\floor{a/b})$, and exponentiation $a^b$. Note that the modulo operation $(a \bmod b)$ is implied, since it can be expressed using subtraction, multiplication, and floored division as
 \begin{align*}
     a \bmod b = a - b \floor{a/b} .
 \end{align*}
@@ -80,7 +80,7 @@ Let $\textbf{A}$ denote the class of arithmetic terms. Formally, we have
 \textbf{A} = [ \{ 1, a+b, a-b, ab, \floor{a/b}, a^b \} ].
 \end{align*}
 
-In this paper, we present new results on arithmetic term formulas for the GCD and semiprime factorization. Building on work by Mazzanti and Marchenkov \cite{mazzanti2002plainbases, marchenkov1980superposition}, we derive a simplified polynomial form for the GCD that can be expressed in terms of an arbitrary integer base. We also obtain arithmetic term formulas for the prime factors of a non-square semiprime $n=p_1 p_2$, using only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
+In this paper, we present new results on arithmetic term formulas for the GCD and semiprime factorization. Building on work by Mazzanti and Marchenkov \cite{mazzanti2002plainbases, marchenkov1980superposition}, we derive a simplified polynomial form for the GCD that can be expressed in terms of an arbitrary integer base. We also obtain arithmetic term formulas for the prime factors of a non-square semiprime $n=p q$, using only the operations of addition, subtraction, multiplication, floored division, and exponentiation.
 
 \subsection{Background}
 Our new arithmetic term formulas for GCDs and semiprime factors, while entirely impractical, are of theoretical importance. We provide a brief overview and some historical context to demonstrate their significance.
@@ -177,20 +177,88 @@ Since we are reducing the quotient mod $x$, we need only consider the term in th
 \end{proof}
 
 \begin{corollary} \label{proof:gcdintegerbase}
-Let $a,b,n \in \Z^+$ such that $n > \gcd(a,b)$. Then
+Let $a,b,n \in \Z^+$ such that $n > 2$ and $n > \gcd(a,b)$. Then
 \begin{align*}
 \gcd(a,b) = \floor{\frac{n^{a+ab}}{(n^a-1)(n^b-1)}}\bmod n .
 \end{align*}
 \end{corollary}
 \begin{proof}
-Consider the polynomial formula given by \cref{proof:gcdpolynomial}. Substituting with $x = n$ yields the given formula. By Theorem 2 in  \cite{shunia2024polynomial}, the substitution is valid since $n > \gcd(a,b)$.
+Consider the polynomial formula given by \cref{proof:gcdpolynomial}. Substituting with $x = n$ yields the given formula. By Theorem 2 in  \cite{shunia2024polynomial}, the substitution is valid since $n$ is greater than the evaluation, which is $\gcd(a,b)$.
+
+However, we also have to consider the form of the fraction. Suppose $n = 2$, then
+\begin{align*}
+\floor{\frac{2^{a+ab}}{(2^a-1)(2^b-1)}}
+= \floor{\frac{2^{a+ab}}{2^{ab+a} - 2^a - 2^b + 1}} = 2k ,
+\end{align*}
+for some $k \in \Z^+$. That is, the fraction always yields an even number of the form $2k$. This would imply
+\begin{align*}
+\gcd(a,b) = \floor{\frac{2^{a+ab}}{(2^a-1)(2^b-1)}} = 2k \equiv 0 \pmod 2 \quad \textup{(contradiction)} ,
+\end{align*}
+which is a contradiction, since $\gcd(a,b)$ is nonzero by definition.
+\end{proof}
+
+\begin{theorem} \label{proof:gcdmodmodpoly}
+\begin{align*}
+\forall a,b \in \Z^+, \quad
+\gcd(a,b) \equiv - \left( x^{a+ab} \bmod(x^{a+b}-x^a-x^b+1) \right) \pmod{x}.
+\end{align*}
+\end{theorem}
+\begin{proof}
+Consider the formula given by \cref{proof:gcdpolynomial}, which is
+\begin{align*}
+    \gcd(a,b) = \floor{\frac{x^{a+ab}}{(x^a-1)(x^b-1)}}\bmod x .
+\end{align*}
+Recall the following well-known identity for the floor function
+\begin{align*}
+    \floor{\frac{a}{b}} = \frac{a - (a \bmod b)}{b} .
+\end{align*}
+Applying this to the formula from \cref{proof:gcdpolynomial}, we get
+\begin{align*}
+    \gcd(a,b) \equiv \frac{x^{a+ab} - \left( x^{a+ab} \bmod(x^{a+b}-x^a-x^b+1) \right)}
+    {x^{a+b}-x^a-x^b+1}
+    \pmod x .
+\end{align*}
+Taking the numerator and denominator mod $x$, we find
+\begin{align*}
+    \gcd(a,b) &= \frac{(x^{a+ab} \bmod x) - \left(\left( x^{a+ab} \bmod(x^{a+b}-x^a-x^b+1) \right) \bmod x \right)}
+    {(x^{a+b}-x^a-x^b+1) \bmod x} \\
+    &=
+    \frac{0 - \left(\left( x^{a+ab} \bmod(x^{a+b}-x^a-x^b+1) \right) \bmod x \right)}
+    {1} \\
+    &=
+    - \left( x^{a+ab} \bmod(x^{a+b}-x^a-x^b+1) \right) \bmod x.
+\end{align*}
+Hence, we can say
+\begin{align*}
+\gcd(a,b) \equiv - \left( x^{a+ab} \bmod(x^{a+b}-x^a-x^b+1) \right) \pmod{x} .
+\end{align*}
+\end{proof}
+
+\begin{corollary} \label{proof:gcdmodmodintegerbase}
+Let $a,b,n \in \Z^+$ such that $n > 2$ and $n > \gcd(a,b)$. Then
+\begin{align*}
+\gcd(a,b) \equiv -\left( n^{a+ab} \bmod(n^{a+b}-n^a-n^b+1) \right) \pmod n.
+\end{align*}
+\end{corollary}
+\begin{proof}
+Consider the polynomial formula given by \cref{proof:gcdpolynomial}. Substituting with $x = n$ yields the given formula. By Theorem 2 in  \cite{shunia2024polynomial}, the substitution is valid since $n$ is greater than the evaluation, which is $\gcd(a,b)$.
+
+However, we also have to consider the form of the remainder. Suppose $n = 2$, then the expression
+\begin{align*}
+2^{a+ab} \bmod(2^{a+b}-2^a-2^b+1)
+\end{align*}
+can yield either an even or odd remainder, depending on the choice of $(a,b)$. Now, suppose the remainder is even and of the form $2k$ for some $k \in \mathbb{Z}^+$. This would imply 
+\begin{align*}
+\gcd(a,b) = 2k \equiv 0 \pmod 2 \quad \textup{(contradiction)} ,
+\end{align*}
+which is a contradiction, since $\gcd(a,b)$ is nonzero by definition.
 \end{proof}
 
 \section{Semiprime Factors} \label{section:semiprimes}
-Using our results on the greatest common divisor function (\cref{section:gcd}), as well as results from our earlier works \cite{shunia2023simple,shunia2024polynomial} and those of Mazzanti \cite{mazzanti2002plainbases}, Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we discover arithmetic term formulas for the prime factors of a non-square semiprime $n=p_1 p_2$.
+Using our results on the greatest common divisor function (\cref{section:gcd}), as well as results from our earlier works \cite{shunia2023simple,shunia2024polynomial} and those of Mazzanti \cite{mazzanti2002plainbases}, Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we discover arithmetic term formulas for the prime factors of a non-square semiprime $n=p q$.
 
 \begin{theorem} \label{proof:semiprimefactorp1}
-Let $n \in \mathbb{Z}^+$ such that $n = p_1 p_2$ is a non-square semiprime and $p_1 < p_2$ are the prime factors of $n$.
+Let $n \in \mathbb{Z}^+$ such that $n = p q$ is a non-square semiprime and $p < q$ are the prime factors of $n$.
 
 Define
 \begin{align*}
@@ -201,20 +269,29 @@ Then, set
 \begin{align*}
 \gamma = \floor
 {
-    \frac{2^{\omega (\omega+1)(\omega+2)}}
+    \frac
+    {
+        (\omega+1)^{\omega\cdot(\omega+2)}
+    }
     {
         \floor
         {
-        (2^{2^{(\omega+1)(\omega+2)} - n} + 2^{-\omega})^{ 2^{(\omega+1)(\omega+2)} }
+            \frac
+            {
+            \left( (\omega+1)^{\omega\cdot(\omega+2)} + 1 \right)^{(\omega+1)^{\omega+2}}
+            }
+            {
+            (\omega+1)^{\omega^2\cdot(\omega+2)}
+            }
         }
-        \bmod 2^{\omega 2^{(\omega+1)(\omega+2)} }
+        \bmod (\omega+1)^{\omega\cdot(\omega+2)}
     }
 } .
 \end{align*}
 
 Finally, we have
 \begin{align*}
-p_1 = \floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n .
+p = \floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n .
 \end{align*}
 \end{theorem}
 \begin{proof}
@@ -227,36 +304,75 @@ which matches our definition of $\omega$. Hence, $\omega = \floor{\sqrt{n}}$.
 
 From Prunescu and Sauras-Altuzarra (2024) \cite{prunescu2024factorial}, we also have the factorial formula
 \begin{align*}
-n! &= \floor{2^{n(n+1)(n+2)} / \binom{2^{(n+1)(n+2)}}{n}} \\
+n! &= \floor{2^{n\cdot(n+1)\cdot(n+2)} / \binom{2^{(n+1)\cdot(n+2)}}{n}} \\
 &= \floor
 {
     \frac
     {
-        2^{n(n+1)(n+2)}
+        2^{n\cdot(n+1)\cdot(n+2)}
     }
     {
         \floor
         {
             \left(
-                2^{2^{(n+1)(n+2)}-n} + 2^{-n}
-            \right)^{2^{(n+1)(n+2)}}
+                2^{2^{(n+1)\cdot(n+2)}-n} + 2^{-n}
+            \right)^{2^{(n+1)\cdot(n+2)}}
         }
         \bmod
-        2^{2^{(n+1)(n+2)}} .
+        2^{2^{(n+1)\cdot(n+2)}}
     }
-}
+} .
 \end{align*}
-Considering $\omega!$, this becomes
+The factorial formula of Prunescu and Sauras-Altuzarra is derived from an identity of Matiyasevich (1993) \cite{matiyasevich1993hilbert}, which is
 \begin{align*}
-\omega! = \floor
+    \forall r \in \Z : r \geq (n+1)^{n+2},
+    \quad
+    n! = \floor{r^n / \binom{r^n}{n}} .
+\end{align*}
+Hence, the formula is also valid for $r=(n+1)^{n+2}$, which grows more slowly than $2^{(n+1)\cdot(n+2)}$ as $n\rightarrow\infty$. Making the substitutions and simplifying, we find
+\begin{align*}
+n! &= \floor
 {
-    \frac{2^{\omega (\omega+1)(\omega+2)}}
+    \frac
+    {
+        (n+1)^{n\cdot(n+2)}
+    }
     {
         \floor
         {
-        (2^{2^{(\omega+1)(\omega+2)} - n} + 2^{-\omega})^{ 2^{(\omega+1)(\omega+2)} }
+            \frac
+            {
+            \left( (n+1)^{n\cdot(n+2)} + 1 \right)^{(n+1)^{n+2}}
+            }
+            {
+            (n+1)^{n^2\cdot(n+2)}
+            }
         }
-        \bmod 2^{\omega 2^{(\omega+1)(\omega+2)} }
+        \bmod (n+1)^{n\cdot(n+2)}
+    }
+}
+\end{align*}
+
+Considering $\omega!$, this becomes
+\begin{align*}
+\omega! &= \floor
+{
+    \frac
+    {
+        (\omega+1)^{\omega\cdot(\omega+2)}
+    }
+    {
+        \floor
+        {
+            \frac
+            {
+            \left( (\omega+1)^{\omega\cdot(\omega+2)} + 1 \right)^{(\omega+1)^{\omega+2}}
+            }
+            {
+            (\omega+1)^{\omega^2\cdot(\omega+2)}
+            }
+        }
+        \bmod (\omega+1)^{\omega\cdot(\omega+2)}
     }
 } ,
 \end{align*}
@@ -266,15 +382,26 @@ Applying \cref{proof:gcdintegerbase}, we have
 \begin{align*}
     \gcd(n, \floor{\sqrt{n}}!) = \gcd(n,\gamma) = \floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n .
 \end{align*}
-Since $n$ is a non-square semiprime and $p_1 < p_2$, we must have $p_1 < \floor{\sqrt{n}}$ and $p_2 > \floor{\sqrt{n}}$. Hence, $p_1 = \gcd(n,\floor{\sqrt{n}}!)$, which we showed is equivalent to the formula in the theorem.
+Since $n$ is a non-square semiprime and $p < q$, we must have $p \leq \floor{\sqrt{n}}$ and $q > \floor{\sqrt{n}}$. Hence, $p = \gcd(n,\floor{\sqrt{n}}!)$, which we showed is equivalent to the formula in the theorem.
 \end{proof}
+
 \begin{corollary} \label{proof:semiprimefactorp2}
+Let $n=pq$ be a non-square semiprime. Then
 \begin{align*}
-p_2 = \frac{n}{\floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n}.
+q = \frac{n}{\floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n}.
 \end{align*}
 \end{corollary}
 \begin{proof}
-The proof follows immediately from \cref{proof:semiprimefactorp1}, since $\frac{n}{p_1} = p_2$ in this case.
+The proof follows immediately from \cref{proof:semiprimefactorp1}, since $\frac{n}{p} = q$ in this case.
+\end{proof}
+\begin{corollary} \label{proof:semiprimetotient}
+Let $\varphi(n)$ represent Euler's totient function for $n=pq$, a non-square semiprime. Then
+\begin{align*}
+\varphi(n) = \left(\left( \floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n \right) - 1 \right) \left( \left( \frac{n}{\floor{\frac{n^{n+n\gamma}}{(n^n-1)(n^{\gamma}-1)}}\bmod n} \right) - 1 \right).
+\end{align*}
+\end{corollary}
+\begin{proof}
+The proof follows immediately from \cref{proof:semiprimefactorp1}, since $\varphi(n) = (p - 1)(q - 1)$ in this case.
 \end{proof}
 
 \begingroup
