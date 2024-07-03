@@ -1,0 +1,340 @@
+\pdfoutput=1
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage{url}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+\usepackage{cleveref}
+\usepackage{tabularx}
+\theoremstyle{plain}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}{Remark}
+\crefname{conjecture}{Conjecture}{Conjectures}
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{corollary}{Corollary}{Corollaries}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{remark}{Remark}{Remarks}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\newtheorem{example}{Example}
+\crefname{definition}{Definition}{Definitions}
+\crefname{notation}{Notation}{Notations}
+\crefname{example}{Example}{Examples}
+\crefname{section}{\S}{Sections}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\wt}[1]{\#(#1)}
+\newcommand{\eval}[2]{\left . #1 \right|_{#2}}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{A Simple Formula for Univariate Multinomial Coefficients}
+\author{Joseph M. Shunia}
+\date{September 2023 \\ \small (Revised: July 2024, Version 4) \normalsize}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We examine an underexplored property of polynomials, which states that under certain conditions, a polynomial can be completely determined by only two evaluations. We prove this property and then apply it to derive new elementary formulas for univariate multinomial coefficients and the partial sums of binomial coefficients. Additionally, we discuss how our multinomial coefficient formula pertains to an open question posed by Graham and others regarding the existence of a simple closed form for the central trinomial coefficients.
+\end{abstract}
+
+\section{Introduction}
+In this paper, we begin by proving a theorem stating that under certain conditions, a polynomial can be completely determined by only two evaluations (\cref{theorem:encoding}). This property allows us to recover the coefficients of a polynomial using a formula involving floor and modulo operations.
+
+Subsequently, we revisit an unconventional formula for binomial coefficients, initially given by Julia Robinson (1952) \cite{robinson1952arithmetic} and later by Adi Shamir (1978) \cite{shamir1978factoring}:
+\begin{align*}
+\binom{n}{k} = \left\lfloor\frac{(2^n+1)^n}{2^{n k}}\right\rfloor \bmod{2^{n}} .
+\end{align*}
+In \cref{section:partialsums}, we present an elementary formula for the partial sums of binomial coefficients, for which previously, no explicit formula was known to exist \cite{boardman2004eggdropnumbers}. Our formula is
+\begin{align*}
+\sum_{k=0}^{j} \binom{n}{k}
+= \floor{\frac{(2^n+1)^n}{2^{n(n-j)}}} \bmod (2^n-1) .
+\end{align*}
+We proceed in \cref{section:multinomialformula} by generalizing Robinson's binomial coefficient formula, to calculate the coefficients in the expansion of univariate unit polynomials of the form
+\begin{align*}
+ [x^k](1 + x + \cdots + x^{r-1})^n .
+\end{align*}
+These coefficients are the univariate multinomial coefficients denoted as $\binom{n}{k}_{r-1}$, which are a generalization of the binomial coefficients. Conventional techniques for computing univariate multinomial coefficients involve factorials and summations over specific criteria. In contrast, our formula uses only elementary arithmetic operations and is given by
+\begin{align*}
+    \binom{n}{k}_{r-1} = \left\lfloor\left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n\right\rfloor \bmod r^n ,
+\end{align*}
+where $n > 0$ and $0 \leq k \leq n (r-1)$ (\cref{proof:multinomialformula}).
+
+In \cref{section:regardinganopenproblem} we show how our univariate multinomial coefficient formula relates to an open question posed by Graham and others regarding the existence of a simple closed form expression for the central trinomial coefficients \cite{graham1994concrete}, which are the coefficients $[x^n](1+x+x^2)^n$.
+
+\section{Polynomial Interpolation with Two Evaluations}
+We begin by presenting a theorem which shows how to recover a polynomial in $\mathbb{Z}[x]$ completely using only two carefully chosen evaluation points.
+
+\begin{theorem} \label{theorem:encoding}
+Let $b, r \in \mathbb{Z}$ such that $b > 0$, $r \geq 0$. Consider a polynomial $f(x) \in \mathbb{Z}[x]$ of degree $r$, which has the form
+\begin{align*}
+    f(x) = a_d x^r + a_{r-1} x^{r-1} + \cdots + a_1 x + a_0 .
+\end{align*}
+Suppose $f(b) \not= 0$ and that all coefficients of $f(x)$ are non-negative. Then, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$. Furthermore, $\forall k \in \mathbb{Z} : 0 \leq k \leq r$, the coefficient $a_k$ can be recovered explicitly from the formula:
+\begin{align*}
+a_k = \floor{\frac{f(f(b))}{f(b)^{k}}} \bmod{f(b)} .
+\end{align*}
+\end{theorem}
+\begin{proof}
+By assumption, $\forall k \in \mathbb{Z} : 0 \leq k \leq r$, the coefficient $a_k$ of $f(x)$ can be recovered from the given formula. To prove the validity of the formula, we proceed by examining its arithmetic operations step-by-step.
+
+Suppose we choose some $k$ in the range $0 \leq k \leq r$. Now, let's consider the expansion of $f(f(b))$, which can be written as
+\begin{align*}
+f(f(b)) &= a_d f(b)^r + a_{r-1} f(b)^{r-1} + \cdots + a_{k} f(b)^{k} + a_{k-1} f(b)^{k-1} + \cdots + a_1 f(b) + a_0 .
+\end{align*}
+The first step in the formula is to divide $f(f(b))$ by $f(b)^{k}$. This results in the quotient
+\begin{align*}
+\frac{f(f(b))}{f(b)^k} &= f(b)^{-k} (a_d f(b)^r  + \cdots + a_{k} f(b)^{k} + a_{k-1} f(b)^{k-1} + \cdots + a_0) \\
+&= a_d f(b)^r f(b)^{-k} + \cdots + a_{k} f(b)^{k} f(b)^{-k} + a_{k-1} f(b)^{k-1} f(b)^{-k} + \cdots + a_0 f(b)^{-k} \\
+&= a_d f(b)^{r-k} + \cdots + a_{k} f(b)^{k-k} + a_{k-1} f(b)^{k-k-1} + \cdots + a_0 f(b)^{-k}  \\
+&= a_d f(b)^{r-k} + \cdots + a_{k} f(b)^{0} + a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}  \\
+&= a_d f(b)^{r-k} + \cdots + a_{k} + a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k} .
+\end{align*}
+The next step is to take the floor of the quotient $\frac{f(f(b))}{f(b)^k}$. In doing so, we effectively isolate the terms ranging from $a_k x^k$ up to and including $a_d x^r$. The result is
+\begin{align*}
+\floor{\frac{f(f(b))}{f(b)^k}} &= a_d f(b)^{r-k} + \cdots + a_{k} .
+\end{align*}
+The final step is to take the floored result $\floor{\frac{f(f(b))}{f(b)^k}}$ modulo $f(b)$. Given $r \geq k \geq 0$, we have two possibilities: The first is that $k = r$, in which case we have a monomial and it is not necessary to carry out the mod operation, since $a_d f(b)^{r-r} = a_d f(b)^{0} = a_d$. Thus, we are done. On the other hand, if $k < r$, we must perform the mod $f(b)$ operation. Carrying it out, noting that the mod operation is distributive over addition, we see
+\begin{align*}
+\floor{\frac{f(f(b))}{f(b)^{k}}} \bmod{f(b)} &= (a_d f(b)^{r-k} \bmod{f(b)}) + \cdots + (a_{k} \bmod{f(b)}) \\
+&= (0) + \cdots + (a_{k} \bmod{f(b)}) \\
+&= 0 + (a_{k} \bmod{f(b)}) \\
+&= a_{k} \bmod{f(b)} .
+\end{align*}
+By assumption, all coefficients of $f(x)$ are positive. Hence, it follows that $\forall k \in \mathbb{Z} : 0 \leq k \leq r$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
+\begin{align*}
+a_k &= \floor{\frac{f(f(b))}{f(b)^{k}}} \bmod{f(b)} .
+\end{align*}
+Which is the formula we wanted to prove. In proving the formula, we have shown that it is possible to recover all the coefficients $a_0, a_1, \ldots, a_d$ using only the values $f(b)$ and $f(f(b))$ under the given conditions. Since we can recover the coefficient $a_k$ given its degree $k$, we can determine the degree of the term corresponding to the coefficient recovered. Hence, we can reconstruct the polynomial $f(x)$, with the correct degrees and coefficients, using only the evaluations $f(b)$ and $f(f(b))$. Thus, we can reconstruct the polynomial one-to-one.
+
+In conclusion, under the given conditions, $f(x)$ can be completely determined by the evaluations $f(b)$ and $f(f(b))$ using the provided formula.
+\end{proof}
+
+\begin{remark}
+The polynomial property described in \cref{theorem:encoding} appears to be underexplored in the literature. However, it has been the subject of some online discussions \cite{mathoverflow2012application, reddit2023determine} and at least one blog post \cite{jcook2012polynomial}. Despite these mentions, the property has been treated mostly as a novelty or curiosity, and its applications have not been thoroughly examined.
+\end{remark}
+
+To provide an intuitive example of how \cref{theorem:encoding} can be used, we prove an unconventional binomial coefficient formula as a corollary. This formula was initially described by Robinson (1952) \cite{robinson1952arithmetic} and later by Shamir (1978) \cite{shamir1978factoring}.
+
+\begin{corollary} \label{corollary:binomialcoefficients}
+Let $n,k \in \mathbb{Z} : 0 \leq k \leq n$. Then
+\begin{align*}
+\binom{n}{k} = \floor{\frac{(2^n+1)^n}{2^{n k}}} \bmod{2^n} .
+\end{align*}
+\end{corollary}
+\begin{proof}
+Consider the polynomial $f(x) := (x+1)^n \in \mathbb{Z}[x]$. The binomial theorem gives the polynomial expansion
+\begin{align*}
+    f(x) = (x+1)^n = \sum_{j=0}^n \binom{n}{j} x^j 1^{n-j} = \sum_{j=0}^n \binom{n}{j} x^j .
+\end{align*}
+By expanding out the inner terms of sum, we can see
+\begin{align*}
+    f(x) = \binom{n}{0} x^0 + \binom{n}{1} x^1 + \cdots + \binom{n}{n-1} x^{n-1} + \binom{n}{n} x^{n} .
+\end{align*}
+Hence, $f(x)$ is a polynomial with terms whose coefficients are the binomial coefficients for row $n$ of Pascal's triangle. 
+
+If we evaluate at $x=1$, we get the coefficient sum. Applying this to $f(x)$, the evaluation $f(1)$ is equal to the sum of the coefficients of the $n$-th row of Pascal's triangle. This sum is well-known to be equal to $2^n$ \cite{A000079}. Carrying out the evaluation, we get
+\begin{align*}
+f(1) &= \binom{n}{0} 1^0 + \binom{n}{1} 1^1 + \cdots + \binom{n}{n-1} 1^{n-1} + \binom{n}{n} 1^{n} \\
+&= \binom{n}{0} + \binom{n}{1} + \cdots + \binom{n}{n-1} + \binom{n}{n} \\
+&= 2^n .
+\end{align*}
+Let $b = 1$, so that $f(b) = f(1) = 2^n$. By \cref{theorem:encoding}, for all $0 \leq k \leq n$, we can recover the coefficient $\binom{n}{k}$ using only the evaluations $f(b)$ and $f(f(b))$ by way of the formula
+\begin{align*}
+    a_k &= \floor{\frac{f(f(b))}{f(b)^k}} \bmod{f(b)} .
+\end{align*}
+In this case, $a_k = \binom{n}{k}$. Substituting $f(b) = 2^n$ and $a_k = \binom{n}{k}$ into the formula, we get
+\begin{align*}
+    \binom{n}{k} = \floor{\frac{f(2^n)}{(2^n)^k}} \bmod{2^n} .
+\end{align*}
+Finally, by expanding $f(2^n) = (2^n+1)^n$ and simplifying, we arrive at
+\begin{align*}
+    \binom{n}{k} = \floor{\frac{(2^n+1)^n}{2^{nk}}} \bmod{2^n} .
+\end{align*}
+Proving the formula.
+\end{proof}
+
+\section{Partial Sums of Binomial Coefficients} \label{section:partialsums}
+According to Boardman (2004), no ``closed form (explicit formula)'' for the partial sums of binomial coefficients is known \cite{boardman2004eggdropnumbers}. If this is still true, then we present the first.
+
+\begin{theorem} \label{proof:binomialcoeffpartialsums}
+Let $n,j \in \Z_{>-1}$ such that $j \leq n$. Then
+\begin{align*}
+\sum_{k=0}^{j} \binom{n}{k}
+= \floor{\frac{(2^n-1)^n}{2^{n(n-j)}}} \bmod (2^n-1)
+\end{align*}
+and
+\begin{align*}
+\sum_{k=0}^{j} \binom{n}{k}
+= \left( (2^n+1)^n \bmod 2^{nj+1} \right) \bmod (2^n-1) .
+\end{align*}
+\end{theorem}
+\begin{proof}
+First, we note that $(2^n-1)^n = \sum_{k=0}^n \binom{n}{k} 2^{nk}$.
+Next, we divide the sum by $2^{nj}$ to get
+\begin{align*}
+    \floor{\frac{(2^n+1)^n}{2^{n(n-j)}}}
+    = \sum_{k=0}^{j} \binom{n}{k} 2^{nk} .
+\end{align*}
+Taking this sum mod $(2^n-1)$ is the same as replacing all instances of $2^n$ with $1$. Thus
+\begin{align*}
+    \sum_{k=0}^{j} \binom{n}{k} 2^{nk} \bmod (2^n-1)
+    = \sum_{k=0}^{j} \binom{n}{k} (1)^{k}
+    = \sum_{k=0}^{j} \binom{n}{k} .
+\end{align*}
+Due to the symmetry of the binomial coefficients in row $n$, we see that taking $(2^n-1)^n$ mod $2^{nj+1}$, then mod $2^n-1$, yields the same result. Consider
+\begin{align*}
+    \left( (2^n+1)^n \bmod 2^{nj+1} \right)
+    = \sum_{k=0}^{j} \binom{n}{n-k} 2^{n(n-k)}
+    = \sum_{k=0}^{j} \binom{n}{k} 2^{nk}
+\end{align*}
+By taking this sum mod $2^n-1$, we once again obtain $\sum_{k=0}^{j} \binom{n}{k}$.
+\end{proof}
+
+\begin{corollary}
+Let $n,a,b \in \Z_{>-1}$ such that $a < b \leq n$. Then
+\begin{align*}
+\sum_{k=a}^{b} \binom{n}{k}
+=
+\left(
+    \left( (2^n+1)^n \bmod 2^{nb+1} \right)
+    - \left( (2^n+1)^n \bmod 2^{na} \right)
+\right)
+\bmod (2^n-1) 
+\end{align*}
+\end{corollary}
+\begin{proof}
+The proof follows trivially from \cref{proof:binomialcoeffpartialsums}, since
+\begin{align*}
+& \left(\left( (2^n+1)^n \bmod 2^{nb+1} \right) \bmod (2^n-1)\right)
+- \left(\left( (2^n+1)^n \bmod 2^{na} \right) \bmod (2^n-1)\right)
+ \\
+&= \left(
+    \left( (2^n+1)^n \bmod 2^{nb+1} \right)
+    - \left( (2^n+1)^n \bmod 2^{na} \right)
+\right)
+\bmod (2^n-1) \\
+&= \sum_{k=0}^{b} \binom{n}{k} - \sum_{k=0}^{a-1} \binom{n}{k} \\
+&= \sum_{k=a}^{b} \binom{n}{k} .
+\end{align*}
+\end{proof}
+
+\section{Univariate Multinomial Coefficients} \label{section:multinomialformula}
+Applying \cref{theorem:encoding}, we derive a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials. These are polynomials of the form
+\begin{align*}
+    \left(\frac{x^{r}-1}{x-1}\right)^n = (1 + x + \cdots + x^{r-1})^n  .
+\end{align*}
+The conventional approach to determine these coefficients utilizes conditional summations of multivariate multinomial coefficients, which represent the number of ways specific choices can be made to yield the term \(x^k\) \cite{graham1994concrete}. The standard formula for multivariate multinomial coefficients is
+\begin{align*}
+    \binom{n}{k_0, k_1, \cdots, k_{r-1}} = \frac{n!}{k_0! k_1! \cdots k_{r-1}!} .
+\end{align*}
+
+In the context of our univariate polynomial, for each power of \(x\) in the expansion, the coefficient will come from all the combinations of powers that sum up to that specific power. Specifically, the coefficient of \(x^k\) in the expansion of our polynomial is \cite{brualdi2010intro}
+\begin{align*}
+    \binom{n}{k}_{r-1} = [x^k](1 + x + \cdots + x^{r-1})^n = \sum \binom{n}{k_0, k_1, \cdots, k_{r-1}} ,
+\end{align*}
+where the summation criteria are
+\begin{align*}
+    k_0 + k_1 + \cdots + k_{r-1} &= n , \\
+    0 k_0 + 1 k_1 + \cdots + (r-1) k_{r-1} &= k .
+\end{align*}
+
+\begin{theorem}
+\label{proof:multinomialformula}
+Let $n,k,r \in \mathbb{Z}$ such that $n > 0$ and $0 \leq k \leq n (r-1)$. Then
+\begin{align*}
+    \binom{n}{k}_{r-1} = \floor{\left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n} \bmod r^n .
+\end{align*}
+\end{theorem}
+\begin{proof}
+Consider the polynomial function
+\begin{align*}
+    f_r(x)^n = \left(\frac{x^{r}-1}{x-1}\right)^n = (1 + x + \cdots + x^{r-1})^n .
+\end{align*}
+In this case, it is clear that
+\begin{align*}
+    f_r(1)^n = r^n .
+\end{align*}
+Therefore, we have
+\begin{align*}
+    f_r(f_r(1)^n)^n = (1 + r^n + \cdots + r^{n (r - 1)})^n .
+\end{align*}
+Observe that the inner sum is equivalent to the summation of the powers of $r^n$ from $0$ to $(r - 1)$. We note the following identity from the OEIS \cite{A023037}:
+\begin{align*}
+    \sum_{k=0}^{n-1} n^k = \frac{n^{n} - 1}{n - 1} .
+\end{align*}
+By substitution, we have
+\begin{align*}
+    f_r(f_r(1)^n)^n = \left(\sum_{k=0}^{r-1} r^{nk}\right)^n = \left(\frac{r^{rn} - 1}{r^{n} - 1}\right)^n .
+\end{align*}
+In \cref{theorem:encoding}, we showed that
+\begin{align*}
+    [x^k] f(x)^{n} = \left\lfloor\frac{f(f(1)^n)^{n}}{f(1)^{n k}}\right\rfloor \bmod{f(1)^{n}} .
+\end{align*}
+By equivalence, we have
+\begin{align*}
+    \binom{n}{k}_{r-1} = [x^k] f_r(x)^{n} = \left\lfloor\frac{f_r(f_r(1)^n)^{n}}{f_r(1)^{n k}}\right\rfloor \bmod{f_r(1)^{n}} .
+\end{align*}
+Replacing the values of $f_r(1)^n$ and $f_r(f_r(1)^n)^n$ and simplifying, we arrive at our original formula
+\begin{align*}
+    \binom{n}{k}_{r-1} = [x^k] \left(\frac{x^{r}-1}{x-1}\right)^n
+    = \left\lfloor \left(\frac{r^{rn} - 1}{r^{n} - 1}\right)^n r^{-n k}\right\rfloor \bmod r^n
+    = \left\lfloor \left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n\right\rfloor \bmod r^n .
+\end{align*}
+
+To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n (r-1)$, we consider the possible cases in relation to
+\begin{align*}
+    \binom{n}{k}_{r-1} = \left\lfloor \left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n\right\rfloor \bmod r^n
+    = \left\lfloor \left(\frac{r^{rn} - 1}{r^{n} - 1}\right)^n r^{-n k}\right\rfloor \bmod r^n
+\end{align*}
+
+\textbf{Cases:}
+\begin{enumerate}
+    \item[(i)] $n \leq 0$: In this case, the modulus becomes $r^{-n}$ and the original equation does not make sense.
+    \item[(ii)] $k < 0$: In this case, we have $r^{-(-nk)} = r^{nk}$ and thus the original expression is always equal to $0$, since $r^{n} \mid r^{nk}$.
+    \item[(iii)] $k > n (r-1)$: In this case, $r^{nk} > \left(\frac{r^{rn} - 1}{r^{n} - 1}\right)^{n} > r^{n^2}$, so the value of the expression is always equal to $0$.
+\end{enumerate}
+
+In conclusion, we have shown that the formula is valid and that it holds only for $n > 0$ and $0 \leq k \leq n(r-1)$. This completes the proof.
+\end{proof}
+
+\section{Regarding an Open Problem} \label{section:regardinganopenproblem}
+In the book Concrete Mathematics: A Foundation for Computer Science \cite{graham1994concrete}, the authors Graham, Knuth, and Patashnik posed an open problem asking for a proof that no ``simple closed form'' exists for the coefficient of $x^n$ in $(1+x+x^2)^n$ as a function of $n$, within some large class of ``simple closed forms''. In some places, they define a ``simple closed form'' as an expression that uses only the operations of addition, subtraction, multiplication, division, and exponentiation.
+
+The coefficients of $x^n$ in $(1+x+x^2)^n$ are $\binom{n}{n}_2$, known as the central trinomial coefficients, which form the sequence \seqnum{A002426} in the OEIS \cite{A002426}. Applying our formula from \cref{proof:multinomialformula}, we see that
+\begin{align*}
+    \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
+    = \floor{\left(\frac{27^{n} - 1}{9^{n} - 3^n}\right)^n} \bmod 3^n
+\end{align*}
+Our formula uses only the elementary arithmetic operations of addition, subtraction, multiplication, division with remainder, and exponentiation, which is a very restricted set of operations. In light of this, it seems unlikely that a proof of the non-existence of a simple closed form for the central trinomial coefficients within a larger class of simple closed forms will be found. If a formula as restricted as ours exists, it suggests that the class of simple closed forms that the authors had in mind when posing the problem might not be sufficient to exclude all possible expressions for the central trinomial coefficients.
+
+Furthermore, the authors' intention behind the problem statement and the specific class of simple closed forms they were referring to remain unclear. Without further clarification or additional constraints on the class of simple closed forms, it appears that the open problem, as stated, may not be resolvable.
+
+\begingroup
+\raggedright
+\bibliographystyle{unsrtnat}
+\bibliography{main}
+\endgroup
+
+\end{document}
