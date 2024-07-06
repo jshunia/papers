@@ -56,7 +56,7 @@ citecolor=webgreen]{hyperref}
 \maketitle
 
 \begin{abstract}
-We examine an underexplored property of polynomials, which states that under certain conditions, a polynomial can be completely determined by only two evaluations. We prove this property and then apply it to derive new elementary formulas for univariate multinomial coefficients and the partial sums of binomial coefficients. Additionally, we discuss how our multinomial coefficient formula pertains to an open question posed by Graham and others regarding the existence of a simple closed form for the central trinomial coefficients.
+We examine an underexplored property of polynomials, which states that under certain conditions, a polynomial can be completely determined by only two evaluations. Using this result, we derive new elementary formulas for univariate multinomial coefficients and the partial sums of binomial coefficients. Notably, we present what is potentially the first closed-form expression for partial sums of binomial coefficients.
 \end{abstract}
 
 \section{Introduction}
@@ -66,7 +66,7 @@ Subsequently, we revisit an unconventional formula for binomial coefficients, in
 \begin{align*}
 \binom{n}{k} = \left\lfloor\frac{(2^n+1)^n}{2^{n k}}\right\rfloor \bmod{2^{n}} .
 \end{align*}
-In \cref{section:partialsums}, we present an elementary formula for the partial sums of binomial coefficients, for which previously, no explicit formula was known to exist \cite{boardman2004eggdropnumbers}. Our formula is
+In \cref{section:partialsums}, we present elementary formulas for the partial sums of binomial coefficients, for which it has been alleged that no explicit formula is known \cite{boardman2004eggdropnumbers, wikipedia2024binomialcoefficient}. A formula of ours is
 \begin{align*}
 \sum_{k=0}^{j} \binom{n}{k}
 = \floor{\frac{(2^n+1)^n}{2^{n(n-j)}}} \bmod (2^n-1) .
@@ -80,8 +80,6 @@ These coefficients are the univariate multinomial coefficients denoted as $\bino
     \binom{n}{k}_{r-1} = \left\lfloor\left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n\right\rfloor \bmod r^n ,
 \end{align*}
 where $n > 0$ and $0 \leq k \leq n (r-1)$ (\cref{proof:multinomialformula}).
-
-In \cref{section:regardinganopenproblem} we show how our univariate multinomial coefficient formula relates to an open question posed by Graham and others regarding the existence of a simple closed form expression for the central trinomial coefficients \cite{graham1994concrete}, which are the coefficients $[x^n](1+x+x^2)^n$.
 
 \section{Polynomial Interpolation with Two Evaluations}
 We begin by presenting a theorem which shows how to recover a polynomial in $\mathbb{Z}[x]$ completely using only two carefully chosen evaluation points.
@@ -122,7 +120,7 @@ The final step is to take the floored result $\floor{\frac{f(f(b))}{f(b)^k}}$ mo
 &= 0 + (a_{k} \bmod{f(b)}) \\
 &= a_{k} \bmod{f(b)} .
 \end{align*}
-By assumption, all coefficients of $f(x)$ are positive. Hence, it follows that $\forall k \in \mathbb{Z} : 0 \leq k \leq r$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
+By assumption, all coefficients of $f(x)$ are positive. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
 \begin{align*}
 a_k &= \floor{\frac{f(f(b))}{f(b)^{k}}} \bmod{f(b)} .
 \end{align*}
@@ -176,7 +174,7 @@ Proving the formula.
 \end{proof}
 
 \section{Partial Sums of Binomial Coefficients} \label{section:partialsums}
-According to Boardman (2004), no ``closed form (explicit formula)'' for the partial sums of binomial coefficients is known \cite{boardman2004eggdropnumbers}. If this is still true, then we present the first.
+Boardman (2004) asserted that ``it is well-known that there is no closed form (that is, direct formula) for the partial sum of binomial coefficients'' \cite{boardman2004eggdropnumbers}. This statement has been cited in the Wikipedia article on binomial coefficients to suggest the impossibility of a closed-form expression for these partial sums \cite{wikipedia2024binomialcoefficient}. However, this interpretation appears to misrepresent Boardman's intended meaning. In his paper, Boardman references a theorem by Petkovšek, Wilf, and Zeilberger from their book \textit{A=B} (1996), which proves the non-existence of a closed-form expression for the partial sums of binomial coefficients specifically as a hypergeometric function \cite{petkovsek1996ab}. It is more likely that Boardman was citing this result to indicate the absence of a known formula, rather than asserting the impossibility of any such formula. If indeed no closed-form expression has been previously established, the formula we present here may constitute the first of its kind.
 
 \begin{theorem} \label{proof:binomialcoeffpartialsums}
 Let $n,j \in \Z_{>-1}$ such that $j \leq n$. Then
@@ -237,6 +235,46 @@ The proof follows trivially from \cref{proof:binomialcoeffpartialsums}, since
 \bmod (2^n-1) \\
 &= \sum_{k=0}^{b} \binom{n}{k} - \sum_{k=0}^{a-1} \binom{n}{k} \\
 &= \sum_{k=a}^{b} \binom{n}{k} .
+\end{align*}
+\end{proof}
+
+We now provide an alternative formula for the partial sums of binomial coefficients, using results from Boardman (2004).
+
+\begin{theorem} \label{proof:binomialcoeffpartialsums2}
+Let $n,j \in \Z_{>-1}$ such that $j \leq n$. Then
+\begin{align*}
+1 + \left( \floor{ \frac{(2^n+1)^n - 1}{2^{nj}(1-2^n)} } \bmod 2^n \right) = \sum_{k=0}^{j} \binom{n}{k}
+\end{align*}
+\end{theorem}
+\begin{proof}
+From Boardman (2004) \cite{boardman2004eggdropnumbers}, we have
+\begin{align*}
+\frac{(x+1)^n - 1}{1-x} = 
+\binom{n}{1} x
++ \left( \binom{n}{1} + \binom{n}{2} \right) x^2
++ \cdots
++ \left( \binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{n} \right) x^n .
+\end{align*}
+
+By substituting $x=2^n$, we get
+\begin{align*}
+\frac{(2^n+1)^n - 1}{1-2^n} = 
+\binom{n}{1} (2^n)^1
++ \left( \binom{n}{1} + \binom{n}{2} \right) (2^n)^2
++ \cdots
++ \left( \binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{n} \right) (2^n)^n .
+\end{align*}
+This substitution is valid, since the coefficients are at most $(2^n-1)$.
+
+Now, to recover the partial sum of binomial coefficients from $\binom{n}{1}$ up to $\binom{n}{j}$, we must isolate the $j$-th term in the sum. To do this, we can divide by $2^{nj}$ and then mod by $2^n$ (\cref{theorem:encoding}). This yields
+\begin{align*}
+\floor{ \frac{(2^n+1)^n - 1}{2^{nj}(1-2^n)} } \bmod 2^n = 
+\binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{n} .
+\end{align*}
+Finally, we add $\binom{n}{0} = 1$ to get the desired sum, which is
+\begin{align*}
+1 + \left( \floor{ \frac{(2^n+1)^n - 1}{2^{nj}(1-2^n)} } \bmod 2^n \right) = 
+\binom{n}{0} + \binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{n} = \sum_{k=0}^j \binom{n}{j} .
 \end{align*}
 \end{proof}
 
@@ -318,18 +356,6 @@ To prove why the equation holds only for $n > 0$ and $0 \leq k \leq n (r-1)$, we
 
 In conclusion, we have shown that the formula is valid and that it holds only for $n > 0$ and $0 \leq k \leq n(r-1)$. This completes the proof.
 \end{proof}
-
-\section{Regarding an Open Problem} \label{section:regardinganopenproblem}
-In the book Concrete Mathematics: A Foundation for Computer Science \cite{graham1994concrete}, the authors Graham, Knuth, and Patashnik posed an open problem asking for a proof that no ``simple closed form'' exists for the coefficient of $x^n$ in $(1+x+x^2)^n$ as a function of $n$, within some large class of ``simple closed forms''. In some places, they define a ``simple closed form'' as an expression that uses only the operations of addition, subtraction, multiplication, division, and exponentiation.
-
-The coefficients of $x^n$ in $(1+x+x^2)^n$ are $\binom{n}{n}_2$, known as the central trinomial coefficients, which form the sequence \seqnum{A002426} in the OEIS \cite{A002426}. Applying our formula from \cref{proof:multinomialformula}, we see that
-\begin{align*}
-    \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
-    = \floor{\left(\frac{27^{n} - 1}{9^{n} - 3^n}\right)^n} \bmod 3^n
-\end{align*}
-Our formula uses only the elementary arithmetic operations of addition, subtraction, multiplication, division with remainder, and exponentiation, which is a very restricted set of operations. In light of this, it seems unlikely that a proof of the non-existence of a simple closed form for the central trinomial coefficients within a larger class of simple closed forms will be found. If a formula as restricted as ours exists, it suggests that the class of simple closed forms that the authors had in mind when posing the problem might not be sufficient to exclude all possible expressions for the central trinomial coefficients.
-
-Furthermore, the authors' intention behind the problem statement and the specific class of simple closed forms they were referring to remain unclear. Without further clarification or additional constraints on the class of simple closed forms, it appears that the open problem, as stated, may not be resolvable.
 
 \begingroup
 \raggedright
