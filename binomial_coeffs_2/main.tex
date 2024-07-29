@@ -110,6 +110,8 @@ The coefficients in the multinomial expansion of univariate unit polynomials are
 \end{align*}
 where $n > 0$ and $0 \leq k \leq n (r-1)$ (\cref{proof:multinomialformula}).
 
+In \cref{section:centraltrinomialcoefficients}, we apply our multinomial coefficient formula to address an open problem posed by Graham et al. in their 1994 book \textit{Concrete Mathematics: A Foundation for Computer Science} \cite{graham1994concrete}. The problem concerns the existence of a restricted class of ``simple closed forms'' that excludes the sequence of central trinomial coefficients (\seqnum{A002426} in the OEIS). We present an argument suggesting a negative resolution to this question.
+
 \section{Polynomial Interpolation with Two Evaluations} \label{section:interpolation}
 We begin by presenting a theorem which shows how to recover a polynomial in $\mathbb{Z}[x]$ completely using only two carefully chosen evaluation points.
 
@@ -398,7 +400,7 @@ Finally, reducing this sum mod $(r^n-1)$ is the same as replacing all instances 
 \end{align*}
 \end{proof}
 
-\section{Central Trinomial Coefficients}
+\section{Central Trinomial Coefficients} \label{section:centraltrinomialcoefficients}
 To illustrate how our univariate multinomial coefficient formula (\cref{proof:multinomialformula}) can be applied, we consider the central trinomial coefficients.
 
 The coefficients of the term $x^n$ in the polynomial expansion of $(x^2+x+1)^n$, denoted as $\binom{n}{n}_2$, are known as the central trinomial coefficients. These form the sequence \seqnum{A002426} in the OEIS \cite{A002426}. Applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
