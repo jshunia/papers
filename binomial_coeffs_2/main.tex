@@ -450,14 +450,14 @@ Given a rational number $ q $ and two coprime integers $ b > 0 $ and $ a $ such 
 The following two results are due to Mihai Prunescu and Lorenzo Sauras-Altuzarra (pers. comm.):
 
 \begin{lemma} \label{proof:hypergeokalmar}
-If \( s(n) \) is a hypergeometric term on \( \mathbb{Q} \) and \( s(k) \neq 0 \) for every integer \( k \geq 0 \), then \( \CT ( s(n) ) \) is upper-bounded by some expression of the form \( 2^{2^{\ldots^{2^{||n||}}}} \).
+If $s(n)$ is a hypergeometric term on $\mathbb{Q}$ and $s(k) \neq 0$ for every integer $k \geq 0$, then $\CT ( s(n) )$ is upper-bounded by some expression of the form $2^{2^{\ldots^{2^{||n||}}}}$.
 \end{lemma}
 \begin{proof}
-Let \( f(n) = \frac{s(n+1)}{s(n)} \). Since \( s(n) \) is hypergeometric, \( f(n) \in \mathbb{Q}(n) \). Thus, there exists a positive integer \( r \) such that \( \num(f(n)) \) and \( \den(f(n)) \) are upper-bounded by \( n^r \).
+Let $f(n) = \frac{s(n+1)}{s(n)}$. Since $s(n)$ is hypergeometric, $f(n) \in \mathbb{Q}(n)$. Thus, there exists a positive integer $r$ such that $\num(f(n))$ and $\den(f(n))$ are upper-bounded by $n^r$.
 
-For every non-negative integer \( k \) such that \( ||k|| \leq ||n|| \), there exist functions \( g(||n||) \) and \( h(||n||) \) such that \( ||\num(f(k))|| \) and \( ||\den(f(k))|| \) are upper-bounded by \( g(||n||) \), and \( \CT(\num(f(k))) \) and \( \CT(\den(f(k))) \) are upper-bounded by \( h(||n||) \).
+For every non-negative integer $k$ such that $||k|| \leq ||n||$, there exist functions $g(||n||)$ and $h(||n||)$ such that $||\num(f(k))||$ and $||\den(f(k))||$ are upper-bounded by $g(||n||)$, and $\CT(\num(f(k)))$ and $\CT(\den(f(k)))$ are upper-bounded by $h(||n||)$.
 
-For large \( n \), we have
+For large $n$, we have
 $$
 \CT \left( \frac{s(n)}{s(0)} \right) = \CT \left( \prod_{k=0}^{n-1} f(k) \right)
 \leq \CT \left( \frac{\prod_{k=0}^{n-1} \num(f(k))}{\prod_{k=0}^{n-1} \den(f(k))} \right) \leq 
@@ -472,21 +472,21 @@ $$
 
 $$ 2 n h ( || n || ) + 2 ( 1 g ( || n || ) )^2 + 2 ( 2 g ( || n || ) )^2 + \cdots + 2 ( n g ( || n || ) )^2 + ( n g ( || n || ) )^2 \log ( n g ( || n || ) ) = $$ $$ 2 n h ( || n || ) + 2 ( 1^2 + 2^2 + \cdots + n^2 ) g ( || n || )^2 + n^2 g ( || n || )^2 \log ( n g ( || n || ) ) = $$ $$ 2 n h ( || n || ) + n ( n + 1 )( 2 n + 1 ) g ( || n || )^2 / 3 + n^2 g ( || n || )^2 \log ( n g ( || n || ) ) . $$
 
-The last expression is upper-bounded by some arithmetic term, thus \( \CT(s(n)) \) is upper-bounded by \( 2^{2^{\ldots^{2^{||n||}}}} \).
+The last expression is upper-bounded by some arithmetic term, thus $\CT(s(n))$ is upper-bounded by $2^{2^{\ldots^{2^{||n||}}}}$.
 \end{proof}
 
 \begin{theorem} \label{proof:hypergeometricbound}
-If \( r \) is a non-negative integer and \( s_0(n), \ldots, s_r(n) \) are hypergeometric terms on \( \mathbb{Q} \) such that \( s_i(j) \neq 0 \) for every two non-negative integers \( i \leq r \) and \( j \), then \( \CT ( s_0(n) + \ldots + s_r(n) ) \) is upper-bounded by some expression of the form \( 2^{2^{\ldots^{2^{||n||}}}} \).
+If $r$ is a non-negative integer and $s_0(n), \ldots, s_r(n)$ are hypergeometric terms on $\mathbb{Q}$ such that $s_i(j) \neq 0$ for every two non-negative integers $i \leq r$ and $j$, then $\CT ( s_0(n) + \cdots + s_r(n) )$ is upper-bounded by some expression of the form $2^{2^{\ldots^{2^{||n||}}}}$.
 \end{theorem}
 \begin{proof}
-Lemma \ref{proof:hypergeokalmar} implies the existence of an expression \( M(n) \), of the form \( 2^{2^{\ldots^{2^{||n||}}}} \), such that, for every \( i \in \{0, \ldots, r\} \), \( s_i(n) \) and \( \CT(s_i(n)) \) are upper-bounded by \( M(n) \).
+Lemma \ref{proof:hypergeokalmar} implies the existence of an expression $M(n)$, of the form $2^{2^{\ldots^{2^{||n||}}}}$, such that, for every $i \in \{0, \ldots, r\}$, $s_i(n)$ and $\CT(s_i(n))$ are upper-bounded by $M(n)$.
 
-Therefore, for large enough values of \( n \), we have that
+Therefore, for large enough values of $n$, we have that
 $$ \CT \left( \sum_{k=0}^r s_k ( n ) \right) \leq \sum_{j=0}^r \CT \left( \sum_{k=0}^j s_k ( n ) \right) \leq \sum_{k=0}^r \CT(s_k(n)) + $$ $$ \max ( || s_0 ( n ) || , || s_1 ( n ) || ) + $$ $$ \max ( || s_0 ( n ) + s_1 ( n ) || , || s_2 ( n ) || ) + \cdots + $$ $$ \max ( || s_0 ( n ) + s_1 ( n ) + s_2 ( n ) + \cdots + s_{r - 1} ( n ) || , || s_r ( n ) || ) $$
 $$ \leq r M ( n ) + M ( n ) + 2 M ( n ) + \cdots + r M ( n ) $$
 $$ = r M ( n ) + r ( r + 1 ) M ( n ) / 2 . $$
 
-And the expression is clearly upper-bounded by some expression of the form \( 2^{2^{\ldots^{2^{||n||}}}} \).
+And the expression is clearly upper-bounded by some expression of the form $2^{2^{\ldots^{2^{||n||}}}}$.
 \end{proof}
 
 This theorem allows us to establish the following corollaries:
@@ -501,7 +501,7 @@ s(n) = \floor{\left(\frac{27^n \dot{-} 1}{9^n \dot{-} 3^n}\right)^n} \bmod 3^n .
 \end{align*}
 All functions in $C$ are integer-valued, so $C$ does not contain any functions that directly return irrational or transcendental numbers. However, since $C$ is Kalmar, any real number can be approximated to arbitrary precision by a sequence of the form $\lim_{n \to \infty} \frac{f(n+1)}{f(n)}$, where $f(n) \in C$. This is true because irrational and transcendental numbers can be approximated by rational numbers, and rational approximations can be derived from generalized continued fractions, which are defined by recurrence relations involving only integer arithmetic operations. These operations fall within the scope of Kalmar functions, thereby allowing the sequence in $C$ to approximate any real number to arbitrary precision.
 
-Since $C$ contains the $\floor{a/b}$ operation, which can be interpreted as rational division followed by rounding down to the nearest integer, we see that the quotient in the limit can be calculated to arbitrary precision and converted an integer. Since $C$ is Kalmar, this limit can be approximated as some function of $n$ that is bounded by $2^{2^{...^{2^n}}}$. Therefore, $s(n)$ is contained within $C$.
+Since $C$ contains the $\floor{a/b}$ operation, which can be interpreted as rational division followed by rounding down to the nearest integer, we see that the quotient in the limit can be calculated to arbitrary precision and converted an integer. Since $C$ is Kalmar, this limit can be approximated as some function of $n$ that is bounded by $2^{2^{\ldots^{2^n}}}$. Therefore, $s(n)$ is contained within $C$.
 \end{proof}
 
 \begin{corollary}
