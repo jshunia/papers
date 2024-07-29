@@ -414,7 +414,7 @@ Starting from $n=1$, our formula yields the correct sequence terms, which are:
 \end{align*}
 
 \subsection{Solution to an Open Problem}
-A \textbf{hypergeometric closed form} is a linear combination, with respect to a field $K$, of expressions $f(n)$ such that $f(n+1)/f(n)$ is a rational function on $K$ \cite{petkovsek1996ab, sauras2018thesis}.
+A \textbf{hypergeometric closed form} is a linear combination, with respect to a field $K$, of expressions $f(n)$ such that $\frac{f(n+1)}{f(n)}$ is a rational function on $K$ \cite{petkovsek1996ab, sauras2018thesis}.
 
 As is the case with the partial sums of binomial coefficients (See \cref{section:partialsums}), it was proved by Petkovšek et al. that there is no hypergeometric closed form for the central trinomial coefficients \cite{petkovsek1996ab}. Based on this result, Graham et al. posed a related research problem \cite{graham1994concrete}:
 \begin{problem} \label{problem:grahametal}
@@ -435,7 +435,7 @@ By definition of a hypergeometric term, we have that $\frac{f_k(n+1)}{f_k(n)}$ b
 Given that $s(n)$ is a finite linear combination of such terms, $s(n)$ is also bounded by a function that grows at most exponentially. This growth is much slower than a tower of exponentials of the form $2^{2^{...^{2^n}}}$. Therefore, $s(n)$ is upper-bounded by a Kalmar function. Thus, $S_n$ is a Kalmar function.
 \end{proof}
 
-This lemma allows us to establish the following corollaries:
+This theorem allows us to establish the following corollaries:
 
 \begin{corollary} \label{proof:trinomialnoclass}
 Let $C$ be a class of integer-valued functions that is Kalmar and contains functions $f(n)$ such that the ratio of consecutive terms $\frac{f(n+1)}{f(n)}$ is irrational in $C$. Then, $C$ contains the central trinomial coefficients.
