@@ -27,6 +27,7 @@ citecolor=webgreen]{hyperref}
 \newtheorem{example}{Example}[section]
 \newtheorem{counterexample}{Counter Example}[section]
 \newtheorem{observation}{Observation}[section]
+\newtheorem{problem}{Problem}[section]
 \crefname{conjecture}{Conjecture}{Conjectures}
 \crefname{theorem}{Theorem}{Theorems}
 \crefname{corollary}{Corollary}{Corollaries}
@@ -36,6 +37,7 @@ citecolor=webgreen]{hyperref}
 \crefname{definition}{Definition}{Definitions}
 \crefname{notation}{Notation}{Notations}
 \crefname{example}{Example}{Examples}
+\crefname{problem}{Problem}{Problems}
 \crefname{section}{\S}{Sections}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\Z}{\mathbb{Z}}
@@ -49,7 +51,7 @@ citecolor=webgreen]{hyperref}
 
 \title{Simple Formulas for Univariate Multinomial Coefficients}
 \author{Joseph M. Shunia}
-\date{September 2023 \\ \small (Revised: July 2024, Version 6) \normalsize}
+\date{September 2023 \\ \small (Revised: July 2024, Version 7) \normalsize}
 
 \begin{document}
 
@@ -57,16 +59,14 @@ citecolor=webgreen]{hyperref}
 
  \begin{abstract}
  \noindent
-We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed-form expressions for partial sums of binomial coefficients. These results stem from an underutilized property of polynomials, which allows for their complete determination using only two evaluations under specific conditions. Our findings contribute several new fundamental arithmetic terms, the study of which is an emerging and promising area of research in discrete mathematics.
+We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. These results stem from an underutilized property of polynomials, which allows for their complete determination using only two evaluations under specific conditions. Applying our techniques to central trinomial coefficients, we resolve an open problem posed by Graham et al., demonstrating that no restricted class of ``simple closed forms'' can exclude these coefficients.
  \\[2mm]
  {\bf Keywords:} elementary formula; arithmetic term; modular arithmetic; multinomial coefficient; binomial coefficient; partial sum; polynomial interpolation; Kronecker substitution.\\[2mm]
  {\bf 2020 Mathematics Subject Classification:} 11B65, 11Y55, 11A25.
  \end{abstract}
 
-\baselineskip=0.20in
-
 \section{Introduction}
-This paper marks the beginning of our exploration into the study of explicit arithmetic terms for integer sequences and number theoretic functions. We introduce the first known arithmetic terms for univariate multinomial coefficients and their partial sums. Remarkably, we also present what are possibly the only closed-form expressions of any kind for the partial sums of binomial coefficients, as detailed in \cref{section:partialsums}. These foundational results help set the stage for further research into the study of arithmetic terms.
+This paper marks the beginning of our exploration into the study of explicit arithmetic terms for integer sequences and number theoretic functions. We introduce the first known arithmetic terms for univariate multinomial coefficients and their partial sums. Remarkably, we also present what are possibly the only closed form expressions of any kind for the partial sums of binomial coefficients, as detailed in \cref{section:partialsums}. These foundational results help set the stage for further research into the study of arithmetic terms.
 
 To fully appreciate the implications of these contributions, it is essential to understand what constitutes an arithmetic term. An arithmetic term is an integer-valued function that uses only the elementary arithmetic operations:
 \begin{align*}
@@ -88,10 +88,10 @@ This asymmetry is an inversion of our expectations: One reasonably expects that 
 
 Indeed, deriving arithmetic terms for many Kalmar functions has proven to be exceedingly challenging. Matiyasevich's work \cite{matiyasevich1980diophantine}, for instance, confirms the existence of arithmetic terms for many prominent number theoretic functions that remain elusive, such as: The $n$-th prime number, the prime counting function, and Euler's totient function. Our hope is that the discovery and study of such formulas can yield new insights in number theory and other branches of mathematics.
 
-\section{Structure of the Paper}
+\subsection{Structure of the Paper}
 We begin in \cref{section:interpolation} by proving a theorem stating that under certain conditions, a polynomial can be completely determined by only two evaluations (\cref{theorem:encoding}). This property allows us to recover the coefficients of a polynomial using an arithmetic term. Subsequently, we revisit an unconventional formula for binomial coefficients, initially given by Julia Robinson \cite{robinson1952arithmetic}, and prove it as a corollary.
 
-In \cref{section:partialsums}, we present arithmetic terms for the partial sums of binomial coefficients, for which it has been alleged that no explicit closed-form expression is known \cite{boardman2004eggdropnumbers, wikipedia2024binomialcoefficient}. A formula we prove is
+In \cref{section:partialsums}, we present arithmetic terms for the partial sums of binomial coefficients, for which it has been alleged that no explicit closed form expression is known \cite{boardman2004eggdropnumbers, wikipedia2024binomialcoefficient}. A formula we prove is
 \begin{align*}
 \sum_{k=0}^{j} \binom{n}{k}
 = \floor{\frac{(2^n+1)^n}{2^{n(n-j)}}} \bmod (2^n-1) .
@@ -146,7 +146,7 @@ The final step is to take the floored result $\floor{\frac{f(f(b))}{f(b)^k}}$ mo
 &= 0 + \cdots + 0 + (a_k \bmod{f(b)}) \\
 &= a_k \bmod{f(b)} .
 \end{align*}
-By assumption, all coefficients of $f(x)$ are positive. Furthermore, since $f(b) \geq f(1)$ and $\deg(f(x)) = r \geq 1$, we know that $f(b) > a_k$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
+By assumption, all coefficients of $f(x)$ are non-negative. Furthermore, since $f(b) \geq f(1)$ and $\deg(f(x)) = r \geq 1$, we know that $f(b) > a_k$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
 \begin{align*}
 a_k &= \floor{\frac{f(f(b))}{f(b)^k}} \bmod{f(b)} ,
 \end{align*}
@@ -206,7 +206,7 @@ The polynomial interpolation procedure described by \cref{theorem:encoding} is c
 Given a polynomial $f(x) \in \mathbb{Z}[x]$ and a suitable integer $b \in \mathbb{Z}$, Kronecker substitution evaluates $f(x)$ at $x = b$. By choosing an appropriate base $b$, the resulting integer $f(b)$ encodes the coefficients of $f$ in its digits. An integer base $b$ is said to be ``suitable'' for a polynomial $f$ if $b$ is greater than the sum of the absolute values of the coefficients of the polynomial, ensuring that the coefficients can be uniquely determined from the digits of $f(b)$. This technique is commonly used for fast polynomial multiplication \cite{harvey2009kronecker, harvey2019faster, albrecht2018implementing, bos2020postquantum, greuet2022modular}. However, its potential applications in number theory remain largely unexplored. The aim of this paper, along with our ongoing research, is to investigate and broaden the traditional applications of Kronecker substitution and related methods.
 
 \section{Partial Sums of Binomial Coefficients} \label{section:partialsums}
-Boardman (2004) asserted that ``it is well-known that there is no closed form (that is, direct formula) for the partial sum of binomial coefficients'' \cite{boardman2004eggdropnumbers}. This statement has been cited in the Wikipedia article on binomial coefficients to suggest the impossibility of a closed-form expression for these partial sums \cite{wikipedia2024binomialcoefficient}. However, this interpretation appears to misconstrue Boardman's intended meaning. In his paper, Boardman references a theorem by Petkovšek et al. which proves the non-existence of a closed-form expression for the partial sums of binomial coefficients specifically as a hypergeometric closed form \cite{petkovsek1996ab}. In our opinion, it is more likely that Boardman was citing this result to indicate the absence of a known formula, rather than asserting the impossibility of any such formula. If indeed no closed-form expression has been previously established, then the formulas we present here may constitute the first of their kind.
+Boardman (2004) asserted that ``it is well-known that there is no closed form (that is, direct formula) for the partial sum of binomial coefficients'' \cite{boardman2004eggdropnumbers}. This statement has been cited in the Wikipedia article on binomial coefficients to suggest the impossibility of a closed form expression for these partial sums \cite{wikipedia2024binomialcoefficient}. However, this interpretation appears to misconstrue Boardman's intended meaning. In his paper, Boardman references a theorem by Petkovšek et al. which proves the non-existence of a closed form expression for the partial sums of binomial coefficients specifically as a hypergeometric closed form \cite{petkovsek1996ab}. In our opinion, it is more likely that Boardman was citing this result to indicate the absence of a known formula, rather than asserting the impossibility of any such formula. If indeed no closed form expression has been previously established, then the formulas we present here may constitute the first of their kind.
 
 \begin{theorem} \label{proof:binomialcoeffpartialsums}
 Let $n,j \in \Z_{>-1}$ such that $j \leq n$. Then the following formulas are valid:
@@ -375,22 +375,8 @@ Replacing the values of $f_r(1)^n$ and $f_r(f_r(1)^n)^n$ and simplifying, we arr
 completing the proof.
 \end{proof}
 
-\subsection{Central Trinomial Coefficients}
-To illustrate how our univariate multinomial coefficient formula (\cref{proof:multinomialformula}) can be applied, we consider the central trinomial coefficients.
-
-The coefficients of the term $x^n$ in the polynomial expansion of $(1+x+x^2)^n$, denoted as $\binom{n}{n}_2$, are known as the central trinomial coefficients. These form the sequence \seqnum{A002426} in the OEIS \cite{A002426}. Applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
-\begin{align*}
-    \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
-    = \floor{\left(\frac{27^n - 1}{9^n - 3^n}\right)^n} \bmod 3^n .
-\end{align*}
-Starting from $n=1$, our formula yields the correct sequence terms, which are:
-\begin{align*}
-1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,5196627, \ldots .
-\end{align*}
-It is intriguing to note that, as is the case with the partial sums of binomial coefficients (See \cref{section:partialsums}), it was proved by Petkovšek et al. that there is no hypergeometric closed form for the central trinomial coefficients \cite{petkovsek1996ab}. Graham et al. have posed a related research problem asking for a proof that no closed form exists in some other large class of simple closed forms \cite{graham1994concrete}.
-
-\section{Partial Sums of Univariate Multinomial Coefficients}
-We conclude with a formula for the partial sums of univariate multinomial coefficients, taking a similar approach as in \cref{section:partialsums}.
+\subsection{Partial Sums of Univariate Multinomial Coefficients}
+As a corollary, we will now prove a formula for the partial sums of univariate multinomial coefficients, taking a similar approach as in \cref{section:partialsums}.
 
 \begin{corollary} \label{proof:multinomialcoeffpartialsums}
 Let $n,j,r \in \mathbb{Z}^+$ such that $n > 0$ and $0 \leq j \leq n (r-1)$. Then
@@ -412,8 +398,65 @@ Finally, reducing this sum mod $(r^n-1)$ is the same as replacing all instances 
 \end{align*}
 \end{proof}
 
+\section{Central Trinomial Coefficients}
+To illustrate how our univariate multinomial coefficient formula (\cref{proof:multinomialformula}) can be applied, we consider the central trinomial coefficients.
+
+The coefficients of the term $x^n$ in the polynomial expansion of $(x^2+x+1)^n$, denoted as $\binom{n}{n}_2$, are known as the central trinomial coefficients. These form the sequence \seqnum{A002426} in the OEIS \cite{A002426}. Applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
+\begin{align*}
+    \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
+    = \floor{\left(\frac{27^n - 1}{9^n - 3^n}\right)^n} \bmod 3^n .
+\end{align*}
+Starting from $n=1$, our formula yields the correct sequence terms, which are:
+\begin{align*}
+1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,5196627, \ldots .
+\end{align*}
+
+\subsection{Solution to an Open Problem}
+A \textbf{hypergeometric closed form} is a linear combination, with respect to a field $K$, of expressions $f(n)$ such that $f(n+1)/f(n)$ is a rational function on $K$ \cite{petkovsek1996ab, sauras2018thesis}.
+
+As is the case with the partial sums of binomial coefficients (See \cref{section:partialsums}), it was proved by Petkovšek et al. that there is no hypergeometric closed form for the central trinomial coefficients \cite{petkovsek1996ab}. Based on this result, Graham et al. posed a related research problem \cite{graham1994concrete}:
+\begin{problem} \label{problem:grahametal}
+Prove that there is no ``simple closed form'' for the coefficient of $x^n$ in $(x^2+x+1)^n$, as a function of $n$, in some large class of simple closed forms.
+\end{problem}
+Here, a ``simple closed form'' is defined as an expression using only addition, subtraction, multiplication, division, and exponentiation \cite{graham1994concrete}. This is essentially the definition of a Kalmar function. We will demonstrate that no such class exists, thereby providing a negative solution to the problem posed by Graham et al. We begin with a key theorem.
+
+\begin{theorem} \label{proof:hypergeokalmar}
+If an integer sequence $s(n)$ of non-negative terms has a hypergeometric closed form, then $s(n)$ is a Kalmar function.
+\end{theorem}
+\begin{proof}
+Let $s(n)$ be an integer sequence of non-negative terms that has a hypergeometric closed form. Then there exists a positive integer $r$, $r$ complex numbers $a_1, \ldots, a_r$, and $r$ hypergeometric terms $f_1(n), \ldots, f_r(n)$ such that
+\begin{align*}
+s(n) = a_1 f_1(n) + \ldots + a_r f_r(n) .
+\end{align*}
+By definition of a hypergeometric term, we have that $\frac{f_k(n+1)}{f_k(n)}$ belongs to $\mathbb{C}(n)$ for every $k \in \{1, \ldots, r\}$, where $\mathbb{C}(n)$ denotes the rational complex functions in variable $n$. This implies that each $f_k(n)$ is bounded by either a polynomial or an exponential function.
+
+Given that $s(n)$ is a finite linear combination of such terms, $s(n)$ is also bounded by a function that grows at most exponentially. This growth is much slower than a tower of exponentials of the form $2^{2^{...^{2^n}}}$. Therefore, $s(n)$ is upper-bounded by a Kalmar function. Thus, $S_n$ is a Kalmar function.
+\end{proof}
+
+This lemma allows us to establish the following corollaries:
+
+\begin{corollary} \label{proof:trinomialnoclass}
+Let $C$ be a class of integer-valued functions that is Kalmar and contains functions $f(n)$ such that the ratio of consecutive terms $\frac{f(n+1)}{f(n)}$ is irrational in $C$. Then, $C$ contains the central trinomial coefficients.
+\end{corollary}
+\begin{proof}
+Let $s(n)$ be the sequence of central trinomial coefficients, which are the coefficients of $x^n$ in the expansion of $(x^2+x+1)^n$. From \cref{proof:multinomialformula}, these coefficients can be expressed using the Kalmar formula
+\begin{align*}
+s(n) = \floor{\left(\frac{27^n \dot{-} 1}{9^n \dot{-} 3^n}\right)^n} \bmod 3^n .
+\end{align*}
+All functions in $C$ are integer-valued, so $C$ does not contain any functions that directly return irrational or transcendental numbers. However, since $C$ is Kalmar, any real number can be approximated to arbitrary precision by a sequence of the form $\lim_{n \to \infty} \frac{f(n+1)}{f(n)}$, where $f(n) \in C$. This is true because irrational and transcendental numbers can be approximated by rational numbers, and rational approximations can be derived from generalized continued fractions, which are defined by recurrence relations involving only integer arithmetic operations. These operations fall within the scope of Kalmar functions, thereby allowing the sequence in $C$ to approximate any real number to arbitrary precision.
+
+Since $C$ contains the $\floor{a/b}$ operation, which can be interpreted as rational division followed by rounding down to the nearest integer, we see that the quotient in the limit can be calculated to arbitrary precision and converted an integer. Since $C$ is Kalmar, this limit can be approximated as some function of $n$ that is bounded by $2^{2^{...^{2^n}}}$. Therefore, $s(n)$ is contained within $C$.
+\end{proof}
+
+\begin{corollary}
+\cref{problem:grahametal} has no solutions.
+\end{corollary}
+\begin{proof}
+From \cref{proof:trinomialnoclass}, we see that any solution to the problem posed by Graham et al. (\cref{problem:grahametal}), which is a class of Kalmar functions $C$, must either contain the hypergeometric restriction or weakened variant of it. Therefore, we conclude that \cref{problem:grahametal} has no solutions.
+\end{proof}
+
 \section{Acknowledgements}
-The author gratefully acknowledges Lorenzo Sauras-Altuzarra (Institut f\"ur Diskrete Mathematik und Geometric, TU Wien) for his comprehensive review and valuable feedback. His insights markedly improved the manuscript's presentation and strengthened key proofs, most notably \cref{theorem:encoding}, \cref{proof:binomialcoeffpartialsums}, and \cref{proof:binomialcoeffpartialsums2}.
+The author gratefully acknowledges Lorenzo Sauras-Altuzarra for his comprehensive review and valuable feedback.
 
 \footnotesize
 \setlength{\parskip}{0.0em}
