@@ -17,6 +17,10 @@ citecolor=webgreen]{hyperref}
 \usepackage{cleveref}
 \usepackage{tabularx}
 \theoremstyle{plain}
+\DeclareMathOperator\CT{CT}
+\DeclareMathOperator\num{\mathcal{N}}
+\DeclareMathOperator\den{\mathcal{D}}
+
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{conjecture}{Conjecture}[section]
 \newtheorem{corollary}{Corollary}[section]
@@ -45,6 +49,23 @@ citecolor=webgreen]{hyperref}
 \newcommand{\wt}[1]{\#(#1)}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
 \newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\Q}{{\mathbb{Q}}}
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\M}{{\mathbb{M}}}
+\newcommand{\F}{{\mathbb{F}}}
+\newcommand{\V}{{\mathbb{V}}}
+\newcommand{\LL}{{\mathbb{L}}}
+\newcommand{\A}{{\mathbb{A}}}
+\newcommand{\HH}{{\mathbb{H}}}
+
+\newcommand{\g}[1]{{\mathfrak {#1}}}
+\newcommand{\cc}[1]{{\cal {#1}}}
+\newcommand{\ul}{\underline }
+\newcommand{\ol}{\overline }
+
+\newcommand{\Qed}{\hspace*{\fill}$\Box \Box$}
 
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
@@ -400,45 +421,78 @@ Finally, reducing this sum mod $(r^n-1)$ is the same as replacing all instances 
 \end{align*}
 \end{proof}
 
-\section{Central Trinomial Coefficients} \label{section:centraltrinomialcoefficients}
-To illustrate how our univariate multinomial coefficient formula (\cref{proof:multinomialformula}) can be applied, we consider the central trinomial coefficients.
-
-The coefficients of the term $x^n$ in the polynomial expansion of $(x^2+x+1)^n$, denoted as $\binom{n}{n}_2$, are known as the central trinomial coefficients. These form the sequence \seqnum{A002426} in the OEIS \cite{A002426}. Applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
+\section{Solution to an Open Problem} \label{section:centraltrinomialcoefficients}
+The coefficients of the term $x^n$ in the polynomial expansion of $(x^2+x+1)^n$, denoted as $\binom{n}{n}_2$, are known as the \textbf{central trinomial coefficients} (sequence \seqnum{A002426} in the OEIS). Applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
 \begin{align*}
     \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
     = \floor{\left(\frac{27^n - 1}{9^n - 3^n}\right)^n} \bmod 3^n .
 \end{align*}
-Starting from $n=1$, our formula yields the correct sequence terms, which are:
+Starting from $n=1$, the sequence begins as
 \begin{align*}
 1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,5196627, \ldots .
 \end{align*}
 
-\subsection{Solution to an Open Problem}
 A \textbf{hypergeometric closed form} is a linear combination, with respect to a field $K$, of expressions $f(n)$ such that $\frac{f(n+1)}{f(n)}$ is a rational function on $K$ \cite{petkovsek1996ab, sauras2018thesis}.
 
 As is the case with the partial sums of binomial coefficients (See \cref{section:partialsums}), it was proved by Petkovšek et al. that there is no hypergeometric closed form for the central trinomial coefficients \cite{petkovsek1996ab}. Based on this result, Graham et al. posed a related research problem \cite{graham1994concrete}:
 \begin{problem} \label{problem:grahametal}
 Prove that there is no ``simple closed form'' for the coefficient of $x^n$ in $(x^2+x+1)^n$, as a function of $n$, in some large class of simple closed forms.
 \end{problem}
-Here, a ``simple closed form'' is defined as an expression using only addition, subtraction, multiplication, division, and exponentiation \cite{graham1994concrete}. This is essentially the definition of a Kalmar function. We will demonstrate that no such class exists, thereby providing a negative solution to the problem posed by Graham et al. We begin with a key theorem.
+Here, a ``simple closed form'' is defined as an expression using only addition, subtraction, multiplication, division, and exponentiation \cite{graham1994concrete}. This is essentially the definition of a Kalmar function. We will demonstrate that no such class exists, thereby providing a negative solution to the problem posed by Graham et al.
 
-\begin{theorem} \label{proof:hypergeokalmar}
-If an integer sequence $s(n)$ of non-negative terms has a hypergeometric closed form, then $s(n)$ is a Kalmar function.
+\subsection{Proofs}
+Given an integer $ c $, let $ || c || $ denote one plus the length of the bit-string encoding $ c $ (we add one unit in order to make the bounds of the following proofs clearer).
+
+Let $ \CT $ be the function which maps any univariate expression into its computation time. It is well-known that, if $ m $, $ u $ and $ v $ are integers such that $ v \neq 0 $ and $ m = \max ( || u || , || v || ) $, then $ \CT ( u + v ) $, $ \CT ( u v ) $ and $ \CT ( u / v ) $ are upper-bounded by $ m $, $ m^2 $ and $ m^2 \log ( m ) $, respectively.
+
+Given a rational number $ q $ and two coprime integers $ b > 0 $ and $ a $ such that $ q = a / b $, let $ \num ( q ) $ and $ \den ( q ) $ denote the numbers $ a $ and $ b $, respectively.
+\newpage
+The following two results are due to Mihai Prunescu and Lorenzo Sauras-Altuzarra (pers. comm.):
+
+\begin{lemma} \label{proof:hypergeokalmar}
+If \( s(n) \) is a hypergeometric term on \( \mathbb{Q} \) and \( s(k) \neq 0 \) for every integer \( k \geq 0 \), then \( \CT ( s(n) ) \) is upper-bounded by some expression of the form \( 2^{2^{\ldots^{2^{||n||}}}} \).
+\end{lemma}
+\begin{proof}
+Let \( f(n) = \frac{s(n+1)}{s(n)} \). Since \( s(n) \) is hypergeometric, \( f(n) \in \mathbb{Q}(n) \). Thus, there exists a positive integer \( r \) such that \( \num(f(n)) \) and \( \den(f(n)) \) are upper-bounded by \( n^r \).
+
+For every non-negative integer \( k \) such that \( ||k|| \leq ||n|| \), there exist functions \( g(||n||) \) and \( h(||n||) \) such that \( ||\num(f(k))|| \) and \( ||\den(f(k))|| \) are upper-bounded by \( g(||n||) \), and \( \CT(\num(f(k))) \) and \( \CT(\den(f(k))) \) are upper-bounded by \( h(||n||) \).
+
+For large \( n \), we have
+$$
+\CT \left( \frac{s(n)}{s(0)} \right) = \CT \left( \prod_{k=0}^{n-1} f(k) \right)
+\leq \CT \left( \frac{\prod_{k=0}^{n-1} \num(f(k))}{\prod_{k=0}^{n-1} \den(f(k))} \right) \leq 
+$$
+
+$$ \sum_{k=0}^{n-1} \CT(\num(f(k))) + \sum_{j=2}^{n} \CT\left(\prod_{k=0}^{j-1} \num(f(k))\right) + \sum_{k=0}^{n-1} \CT(\den(f(k))) + \sum_{j=2}^{n} \CT\left(\prod_{k=0}^{j-1} \den(f(k))\right) + \CT\left(\frac{\prod_{k=0}^{n-1} \num(f(k))}{\prod_{k=0}^{n-1} \den(f(k))}\right) \leq 
+$$
+
+$$ n h ( || n || ) + 
+$$ $$ \max( || \num ( f ( 0 ) ) || , || \num ( f ( 1 ) ) || )^2 + $$ $$ \max( || \num ( f ( 0 ) ) \num ( f ( 1 ) ) || , || \num ( f ( 2 ) ) || )^2 + \cdots + $$ $$ \max( || \num ( f ( 0 ) ) \num ( f ( 1 ) ) \cdots \num ( f ( n - 2 ) ) || , || \num ( f ( n - 1 ) ) || )^2 + $$ $$ n h ( || n || ) + $$ $$ \max( || \den ( f ( 0 ) ) || , || \den ( f ( 1 ) ) || )^2 + $$ $$ \max( || \den ( f ( 0 ) ) \den ( f ( 1 ) ) || , || \den ( f ( 2 ) ) || )^2 + \cdots + $$ $$ \max( || \den ( f ( 0 ) ) \den ( f ( 1 ) ) \cdots \den ( f ( n - 2 ) ) || , || \den ( f ( n - 1 ) ) || )^2 + $$ $$ \max ( || \num ( f ( 0 ) ) \cdots \num ( f ( n - 1 ) ) || , || \den ( f ( 0 ) ) \cdots \den ( f ( n - 1 ) ) || )^2 \cdot $$ $$ \log ( \max ( || \num ( f ( 0 ) ) \cdots \num ( f ( n - 1 ) ) || , || \den ( f ( 0 ) ) \cdots \den ( f ( n - 1 ) ) || ) ) \leq 
+$$
+
+$$ 2 n h ( || n || ) + 2 ( 1 g ( || n || ) )^2 + 2 ( 2 g ( || n || ) )^2 + \cdots + 2 ( n g ( || n || ) )^2 + ( n g ( || n || ) )^2 \log ( n g ( || n || ) ) = $$ $$ 2 n h ( || n || ) + 2 ( 1^2 + 2^2 + \cdots + n^2 ) g ( || n || )^2 + n^2 g ( || n || )^2 \log ( n g ( || n || ) ) = $$ $$ 2 n h ( || n || ) + n ( n + 1 )( 2 n + 1 ) g ( || n || )^2 / 3 + n^2 g ( || n || )^2 \log ( n g ( || n || ) ) . $$
+
+The last expression is upper-bounded by some arithmetic term, thus \( \CT(s(n)) \) is upper-bounded by \( 2^{2^{\ldots^{2^{||n||}}}} \).
+\end{proof}
+
+\begin{theorem} \label{proof:hypergeometricbound}
+If \( r \) is a non-negative integer and \( s_0(n), \ldots, s_r(n) \) are hypergeometric terms on \( \mathbb{Q} \) such that \( s_i(j) \neq 0 \) for every two non-negative integers \( i \leq r \) and \( j \), then \( \CT ( s_0(n) + \ldots + s_r(n) ) \) is upper-bounded by some expression of the form \( 2^{2^{\ldots^{2^{||n||}}}} \).
 \end{theorem}
 \begin{proof}
-Let $s(n)$ be an integer sequence of non-negative terms that has a hypergeometric closed form. Then there exists a positive integer $r$, $r$ complex numbers $a_1, \ldots, a_r$, and $r$ hypergeometric terms $f_1(n), \ldots, f_r(n)$ such that
-\begin{align*}
-s(n) = a_1 f_1(n) + \ldots + a_r f_r(n) .
-\end{align*}
-By definition of a hypergeometric term, we have that $\frac{f_k(n+1)}{f_k(n)}$ belongs to $\mathbb{C}(n)$ for every $k \in \{1, \ldots, r\}$, where $\mathbb{C}(n)$ denotes the rational complex functions in variable $n$. This implies that each $f_k(n)$ is bounded by either a polynomial or an exponential function.
+Lemma \ref{proof:hypergeokalmar} implies the existence of an expression \( M(n) \), of the form \( 2^{2^{\ldots^{2^{||n||}}}} \), such that, for every \( i \in \{0, \ldots, r\} \), \( s_i(n) \) and \( \CT(s_i(n)) \) are upper-bounded by \( M(n) \).
 
-Given that $s(n)$ is a finite linear combination of such terms, $s(n)$ is also bounded by a function that grows at most exponentially. This growth is much slower than a tower of exponentials of the form $2^{2^{...^{2^n}}}$. Therefore, $s(n)$ is upper-bounded by a Kalmar function. Thus, $S_n$ is a Kalmar function.
+Therefore, for large enough values of \( n \), we have that
+$$ \CT \left( \sum_{k=0}^r s_k ( n ) \right) \leq \sum_{j=0}^r \CT \left( \sum_{k=0}^j s_k ( n ) \right) \leq \sum_{k=0}^r \CT(s_k(n)) + $$ $$ \max ( || s_0 ( n ) || , || s_1 ( n ) || ) + $$ $$ \max ( || s_0 ( n ) + s_1 ( n ) || , || s_2 ( n ) || ) + \cdots + $$ $$ \max ( || s_0 ( n ) + s_1 ( n ) + s_2 ( n ) + \cdots + s_{r - 1} ( n ) || , || s_r ( n ) || ) $$
+$$ \leq r M ( n ) + M ( n ) + 2 M ( n ) + \cdots + r M ( n ) $$
+$$ = r M ( n ) + r ( r + 1 ) M ( n ) / 2 . $$
+
+And the expression is clearly upper-bounded by some expression of the form \( 2^{2^{\ldots^{2^{||n||}}}} \).
 \end{proof}
 
 This theorem allows us to establish the following corollaries:
 
 \begin{corollary} \label{proof:trinomialnoclass}
-Let $C$ be a class of integer-valued functions that is Kalmar and contains functions $f(n)$ such that the ratio of consecutive terms $\frac{f(n+1)}{f(n)}$ is irrational in $C$. Then, $C$ contains the central trinomial coefficients.
+Let $C$ be a class of integer-valued functions that is Kalmar and contains functions $f(n)$ such that the ratio of consecutive terms $\frac{f(n+1)}{f(n)}$ is irrational on $C$. Then, $C$ contains the central trinomial coefficients.
 \end{corollary}
 \begin{proof}
 Let $s(n)$ be the sequence of central trinomial coefficients, which are the coefficients of $x^n$ in the expansion of $(x^2+x+1)^n$. From \cref{proof:multinomialformula}, these coefficients can be expressed using the Kalmar formula
@@ -454,11 +508,11 @@ Since $C$ contains the $\floor{a/b}$ operation, which can be interpreted as rati
 \cref{problem:grahametal} has no solutions.
 \end{corollary}
 \begin{proof}
-From \cref{proof:trinomialnoclass}, we see that any solution to the problem posed by Graham et al. (\cref{problem:grahametal}), which is a class of Kalmar functions $C$, must either contain the hypergeometric restriction or weakened variant of it. Therefore, we conclude that \cref{problem:grahametal} has no solutions.
+From \cref{proof:trinomialnoclass}, we see that any solution to the problem posed by Graham et al. (\cref{problem:grahametal}), which is a class of Kalmar functions $C$ (\cref{proof:hypergeometricbound}), must either contain the hypergeometric restriction or weakened variant of it. Therefore, we conclude that \cref{problem:grahametal} has no solutions.
 \end{proof}
 
 \section{Acknowledgements}
-The author gratefully acknowledges Lorenzo Sauras-Altuzarra for his comprehensive review and valuable suggestions, among which include \cref{proof:hypergeokalmar}.
+The author acknowledges Lorenzo Sauras-Altuzarra and Mihai Prunescu for their contributions to the paper, specifically \cref{proof:hypergeokalmar} and \cref{proof:hypergeometricbound}. Additionally, Sauras-Altuzarra's detailed review and comments were especially beneficial and are greatly appreciated.
 
 \footnotesize
 \setlength{\parskip}{0.0em}
