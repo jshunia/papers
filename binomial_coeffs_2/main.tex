@@ -80,7 +80,7 @@ citecolor=webgreen]{hyperref}
 
  \begin{abstract}
  \noindent
-We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. These results stem from an underutilized property of polynomials, which allows for their complete determination using only two evaluations under specific conditions. Applying our techniques to central trinomial coefficients, we resolve an open problem posed by Graham et al., demonstrating that no restricted class of ``simple closed forms'' can exclude these coefficients.
+We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. We extend our findings to discover new arithmetic terms for multisections of binomial coefficient sums. Applying our techniques to central trinomial coefficients, we successfully resolve an open problem posed by Graham et al., by demonstrating the existence of a ``simple closed form'' for these coefficients.
  \\[2mm]
  {\bf Keywords:} elementary formula; arithmetic term; modular arithmetic; multinomial coefficient; binomial coefficient; partial sum; polynomial interpolation; Kronecker substitution.\\[2mm]
  {\bf 2020 Mathematics Subject Classification:} 11B65, 11Y55, 11A25.
@@ -89,7 +89,7 @@ We present novel arithmetic terms for univariate multinomial coefficients and th
 \section{Introduction}
 This paper marks the beginning of our exploration into the study of explicit arithmetic terms for integer sequences and number theoretic functions. We introduce the first known arithmetic terms for univariate multinomial coefficients and their partial sums. Remarkably, we also present what are possibly the only closed form expressions of any kind for the partial sums of binomial coefficients, as detailed in \cref{section:partialsums}. These foundational results help set the stage for further research into the study of arithmetic terms.
 
-To fully appreciate the implications of these contributions, it is essential to understand what constitutes an arithmetic term. An arithmetic term is an integer-valued function that uses only the elementary arithmetic operations:
+To fully appreciate the implications of these contributions, it is essential to understand what constitutes an arithmetic term. An \textbf{arithmetic term} is an integer-valued function that uses only the elementary arithmetic operations:
 \begin{align*}
     \{ a + b, a \dot{-} b, ab, \floor{a/b}, a \bmod b, a^b \} ,
 \end{align*}
@@ -101,22 +101,31 @@ Mazzanti's 2002 discovery that arithmetic terms generate the class of Kalmar fun
 
 Despite these theoretical milestones, little attention has been given to the explicit construction and study of arithmetic terms until recently. Our research began in early 2022 with the dissemination of an early version of this paper. At around the same time, researchers Prunescu and Sauras-Altuzarra began their own independent investigations \cite{prunescu2024factorial,prunescu2024representation}.
 
-Interestingly, functions that seem computationally simple, like the logarithm function $\log(n)$ or Hamming weight $\#(n)$ (the number of ones in the binary expansion of $n$), often lack straightforward arithmetic terms. Conversely, more complicated functions can sometimes be represented simply. Consider Robinson's elegant formula for the binomial coefficient $\binom{n}{k} = \frac{n!}{k!(n-k)!}$ \cite{robinson1952arithmetic}:
-\begin{align*}
-\binom{n}{k} = \left\lfloor\frac{(2^n+1)^n}{2^{n k}}\right\rfloor \bmod{2^{n}} .
-\end{align*}
+Interestingly, functions that seem computationally simple, like the logarithm function $\log(n)$ or Hamming weight $\#(n)$ (the number of ones in the binary expansion of $n$), often lack straightforward arithmetic terms. Conversely, more complicated functions can sometimes be represented simply.
+
 This asymmetry is an inversion of our expectations: One reasonably expects that sequences which are hard to compute should necessitate formulas that are sophisticated and hard to find, whereas sequences which are easy to compute should have formulas that are simple and easy to find.
 
-Indeed, deriving arithmetic terms for many Kalmar functions has proven to be exceedingly challenging. Matiyasevich's work \cite{matiyasevich1980diophantine}, for instance, confirms the existence of arithmetic terms for many prominent number theoretic functions that remain elusive, such as: The $n$-th prime number, the prime counting function, and Euler's totient function. Our hope is that the discovery and study of such formulas can yield new insights in number theory and other branches of mathematics.
+Indeed, deriving arithmetic terms for many Kalmar functions has proven to be exceedingly challenging. Matiyasevich's work \cite{matiyasevich1980diophantine}, for instance, confirms the existence of arithmetic terms for many prominent number theoretic functions that remain elusive, such as: The $n$-th prime number and the prime counting function. Our hope is that the discovery and study of such formulas can yield new insights in number theory and other branches of mathematics.
 
 \subsection{Structure of the Paper}
 We begin in \cref{section:interpolation} by proving a theorem stating that under certain conditions, a polynomial can be completely determined by only two evaluations (\cref{theorem:encoding}). This property allows us to recover the coefficients of a polynomial using an arithmetic term. Subsequently, we revisit an unconventional formula for binomial coefficients, initially given by Julia Robinson \cite{robinson1952arithmetic}, and prove it as a corollary.
 
 In \cref{section:partialsums}, we present arithmetic terms for the partial sums of binomial coefficients, for which it has been alleged that no explicit closed form expression is known \cite{boardman2004eggdropnumbers, wikipedia2024binomialcoefficient}. A formula we prove is
 \begin{align*}
-\sum_{k=0}^{j} \binom{n}{k}
-= \floor{\frac{(2^n+1)^n}{2^{n(n-j)}}} \bmod (2^n-1) .
+\floor{\frac{(2^n+1)^n}{2^{n(n-j)}}} \bmod (2^n-1)
+= \binom{n}{0} + \binom{n}{1} + \cdots + \binom{n}{j}
+= \sum_{k=0}^{j} \binom{n}{k} ,
 \end{align*}
+where $n,j \in \Z^+$ such that $j \leq n$.
+
+We follow up in \cref{section:multisectionsums} with a new formula for the multisections of binomial coefficient sums. Our formula is
+\begin{align*}
+\floor{\frac{(2^n+1)^n \bmod(2^{ns}-1)}{2^{nj}}} \bmod 2^n
+= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
+= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} ,
+\end{align*}
+where $n,s,j \in \Z^+$ such that $s < n$ and $j < s$.
+
 We proceed in \cref{section:multinomialformula} by generalizing Robinson's binomial coefficient formula to calculate the coefficients in the multinomial expansion of univariate unit polynomials. A univariate unit polynomial is a polynomial of the form
 \begin{align*}
     \left(\frac{x^{r}-1}{x-1}\right)^n = (x^{r-1} + \cdots + x + 1)^n  ,
@@ -129,9 +138,9 @@ The coefficients in the multinomial expansion of univariate unit polynomials are
 \begin{align*}
     \binom{n}{k}_{r-1} = \left\lfloor\left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n\right\rfloor \bmod r^n ,
 \end{align*}
-where $n > 0$ and $0 \leq k \leq n (r-1)$ (\cref{proof:multinomialformula}).
+where $n > 0$ and $0 \leq k \leq n (r-1)$ (\cref{proof:multinomialformula}). As a corollary, we give a formula for the partial sums of these coefficients (\cref{proof:multinomialcoeffpartialsums}).
 
-In \cref{section:centraltrinomialcoefficients}, we apply our multinomial coefficient formula to address an open problem posed by Graham et al. in their 1994 book \textit{Concrete Mathematics: A Foundation for Computer Science} \cite{graham1994concrete}. The problem concerns the existence of a restricted class of ``simple closed forms'' that excludes the sequence of central trinomial coefficients (\seqnum{A002426} in the OEIS). We present an argument suggesting a negative resolution to this question.
+In \cref{section:centraltrinomialcoefficients}, we apply our multinomial coefficient formula to address an open problem posed by Graham et al. in their 1994 book \textit{Concrete Mathematics: A Foundation for Computer Science} \cite{graham1994concrete}. The problem concerns the existence of a restricted class of ``simple closed forms'' that excludes the sequence of central trinomial coefficients (\seqnum{A002426} in the OEIS). Our multinomial formula from  \cref{proof:multinomialformula} gives an explicit negative answer to the problem.
 
 \section{Polynomial Interpolation with Two Evaluations} \label{section:interpolation}
 We begin by presenting a theorem which shows how to recover a polynomial in $\mathbb{Z}[x]$ completely using only two carefully chosen evaluation points.
@@ -336,6 +345,70 @@ Finally, we add $\binom{n}{0} = 1$ to get the desired sum, which is
 \end{align*}
 \end{proof}
 
+\section{Multisections of Binomial Coefficient Sums} \label{section:multisectionsums}
+A multisection of a sum is a new sum composed of equally spaced terms extracted unaltered from the original sum \cite{wikipedia2024seriesmultisection}. The multisections of binomial coefficient sums are sums of the form
+\begin{align*}
+\binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
+= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} ,
+\end{align*}
+where $n,s,j \in \Z^+$ such that $s < n$ and $j < s$.
+
+We present a new formula for the multisections of binomial coefficient sums.
+
+\begin{theorem}
+Let $n,s,j \in \Z^+$ such that $s < n$ and $j < s$. Then
+\begin{align*}
+\floor{\frac{\left( (2^n+1)^n \bmod (2^{ns}-1) \right)}{2^{nj}}} \bmod 2^n
+= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} = \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
+\end{align*}
+\end{theorem}
+\begin{proof}
+Fix a ring $R = \Z[x]/(x^s-1)$. Consider the polynomial
+\begin{align*}
+f(x) := (x+1)^n \in R .
+\end{align*}
+In the ring $R$, all instances of $x^s$ are implicitly replaced by $1$. This is the same as reducing $f(x)$ modulo $(x^s-1)$. Expanding $f(x)$ in $R$ yields
+\begin{align*}
+f(x) = \sum_{k=0}^n \binom{n}{k} x^k \bmod(x^s-1) .
+\end{align*}
+The reduction $f(x) \bmod (x^s-1)$ results in a polynomial remainder with degree $s-1$ of the form
+\begin{align*}
+f(x) \bmod (x^s-1) = & \left(\binom{n}{s} + \binom{n}{2s} + \cdots + \binom{n}{\floor{n/s}s} \right) x^0 \\
++ & \left(\binom{n}{s+1} + \binom{n}{2s+1} + \cdots + \binom{n}{\floor{n/s}s+1} \right) x^1 + \cdots \\
++ & \left(\binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \right) x^j
++ \cdots \\
++ & \left(\binom{n}{s+(s-1)} + \binom{n}{2s+(s-1)} + \cdots + \binom{n}{\floor{n/s}s+(s-1)} \right) x^{s-1} .
+\end{align*}
+Dividing this remainder by $x^j$, we obtain
+\begin{align*}
+\frac{f(x) \bmod(x^s-1)}{x^j} = \left(\binom{n}{s} + \cdots \right) x^{0-j}
++ \cdots
++ \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
++ \cdots
++ \left(\binom{n}{s+(s-1)} + \cdots \right) x^{s-1-j} .
+\end{align*}
+Taking the floor of the above result, the terms with degree less than $j$ will vanish. We see that
+\begin{align*}
+\floor{\frac{f(x) \bmod(x^s-1)}{x^j}}
+= \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
++ \cdots
++ \left(\binom{n}{s+(s-1)} + \cdots \right) x^{s-1-j} .
+\end{align*}
+The final step is reduce the floored result modulo $x$ to remove all remaining terms with degree greater than $0$. This reduction gives
+\begin{align*}
+\floor{\frac{f(x) \bmod(x^s-1)}{x^j}} \bmod x
+= \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
+= \binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
+.
+\end{align*}
+Since $\sum_{k=0}^{n} \binom{n}{k} = 2^n$, it is obvious that $2^n \geq f(1)$. Thus, by \cref{theorem:encoding}, we can replace $x=2^n$ and the formula remains valid. The substitution $x=2^n$ produces the formula in the theorem, which is
+\begin{align*}
+\floor{\frac{(2^n+1)^n \bmod(2^{ns}-1)}{2^{nj}}} \bmod 2^n
+= \binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
+= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
+\end{align*}
+\end{proof}
+
 \section{Univariate Multinomial Coefficients} \label{section:multinomialformula}
 Applying \cref{theorem:encoding}, we derive a generalized formula for calculating coefficients within the multinomial expansion of arbitrary degree univariate unit polynomials. These are polynomials of the form
 \begin{align*}
@@ -343,7 +416,7 @@ Applying \cref{theorem:encoding}, we derive a generalized formula for calculatin
 \end{align*}
 The conventional approach to determine these coefficients utilizes conditional summations of multivariate multinomial coefficients, which represent the number of ways specific choices can be made to yield the term \(x^k\) \cite{graham1994concrete}. The standard formula for multivariate multinomial coefficients is
 \begin{align*}
-    \binom{n}{k_0, k_1, \cdots, k_{r-1}} = \frac{n!}{k_0! k_1! \cdots k_{r-1}!} .
+    \binom{n}{k_0, k_1, \ldots, k_{r-1}} = \frac{n!}{k_0! k_1! \cdots k_{r-1}!} .
 \end{align*}
 
 In the context of our univariate polynomial, for each power of \(x\) in the expansion, the coefficient will come from all the combinations of powers that sum up to that specific power. Specifically, the coefficient of \(x^k\) in the expansion of our polynomial is \cite{brualdi2010intro}
@@ -369,11 +442,7 @@ Consider the polynomial function
 \begin{align*}
     f_r(x)^n := \left(\frac{x^{r}-1}{x-1}\right)^n = (x^{r-1} + \cdots + x + 1)^n \in \Z[x].
 \end{align*}
-In this case, it is clear that
-\begin{align*}
-    f_r(1)^n = r^n .
-\end{align*}
-Therefore, we have
+In this case, it is clear that $f_r(1)^n = r^n$. Therefore, we have
 \begin{align*}
     f_r(f_r(1)^n)^n = (r^{n(r-1)} + \cdots + r^n + 1)^n .
 \end{align*}
@@ -422,15 +491,7 @@ Finally, reducing this sum mod $(r^n-1)$ is the same as replacing all instances 
 \end{proof}
 
 \section{Solution to an Open Problem} \label{section:centraltrinomialcoefficients}
-The coefficients of the term $x^n$ in the polynomial expansion of $(x^2+x+1)^n$, denoted as $\binom{n}{n}_2$, are known as the \textbf{central trinomial coefficients} (sequence \seqnum{A002426} in the OEIS). Applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
-\begin{align*}
-    \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
-    = \floor{\left(\frac{27^n - 1}{9^n - 3^n}\right)^n} \bmod 3^n .
-\end{align*}
-Starting from $n=1$, the sequence begins as
-\begin{align*}
-1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,5196627, \ldots .
-\end{align*}
+The coefficients of the term $x^n$ in the polynomial expansion of $(x^2+x+1)^n$, denoted as $\binom{n}{n}_2$, are known as the \textbf{central trinomial coefficients}. These form the sequence \seqnum{A002426} in the OEIS. 
 
 A \textbf{hypergeometric closed form} is a linear combination, with respect to a field $K$, of expressions $f(n)$ such that $\frac{f(n+1)}{f(n)}$ is a rational function on $K$ \cite{petkovsek1996ab, sauras2018thesis}.
 
@@ -438,81 +499,20 @@ As is the case with the partial sums of binomial coefficients (See \cref{section
 \begin{problem} \label{problem:grahametal}
 Prove that there is no ``simple closed form'' for the coefficient of $x^n$ in $(x^2+x+1)^n$, as a function of $n$, in some large class of simple closed forms.
 \end{problem}
-Here, a ``simple closed form'' is defined as an expression using only addition, subtraction, multiplication, division, and exponentiation \cite{graham1994concrete}. This is essentially the definition of a Kalmar function. We will demonstrate that no such class exists, thereby providing a negative solution to the problem posed by Graham et al.
-
-\subsection{Proofs}
-Given an integer $ c $, let $ || c || $ denote one plus the length of the bit-string encoding $ c $ (we add one unit in order to make the bounds of the following proofs clearer).
-
-Let $ \CT $ be the function which maps any univariate expression into its computation time. It is well-known that, if $ m $, $ u $ and $ v $ are integers such that $ v \neq 0 $ and $ m = \max ( || u || , || v || ) $, then $ \CT ( u + v ) $, $ \CT ( u v ) $ and $ \CT ( u / v ) $ are upper-bounded by $ m $, $ m^2 $ and $ m^2 \log ( m ) $, respectively.
-
-Given a rational number $ q $ and two coprime integers $ b > 0 $ and $ a $ such that $ q = a / b $, let $ \num ( q ) $ and $ \den ( q ) $ denote the numbers $ a $ and $ b $, respectively.
-\newpage
-The following two results are due to Mihai Prunescu and Lorenzo Sauras-Altuzarra (pers. comm.):
-
-\begin{lemma} \label{proof:hypergeokalmar}
-If $s(n)$ is a hypergeometric term on $\mathbb{Q}$ and $s(k) \neq 0$ for every integer $k \geq 0$, then $\CT ( s(n) )$ is upper-bounded by some expression of the form $2^{2^{\ldots^{2^{||n||}}}}$.
-\end{lemma}
-\begin{proof}
-Let $f(n) = \frac{s(n+1)}{s(n)}$. Since $s(n)$ is hypergeometric, $f(n) \in \mathbb{Q}(n)$. Thus, there exists a positive integer $r$ such that $\num(f(n))$ and $\den(f(n))$ are upper-bounded by $n^r$.
-
-For every non-negative integer $k$ such that $||k|| \leq ||n||$, there exist functions $g(||n||)$ and $h(||n||)$ such that $||\num(f(k))||$ and $||\den(f(k))||$ are upper-bounded by $g(||n||)$, and $\CT(\num(f(k)))$ and $\CT(\den(f(k)))$ are upper-bounded by $h(||n||)$.
-
-For large $n$, we have
-$$
-\CT \left( \frac{s(n)}{s(0)} \right) = \CT \left( \prod_{k=0}^{n-1} f(k) \right)
-\leq \CT \left( \frac{\prod_{k=0}^{n-1} \num(f(k))}{\prod_{k=0}^{n-1} \den(f(k))} \right) \leq 
-$$
-
-$$ \sum_{k=0}^{n-1} \CT(\num(f(k))) + \sum_{j=2}^{n} \CT\left(\prod_{k=0}^{j-1} \num(f(k))\right) + \sum_{k=0}^{n-1} \CT(\den(f(k))) + \sum_{j=2}^{n} \CT\left(\prod_{k=0}^{j-1} \den(f(k))\right) + \CT\left(\frac{\prod_{k=0}^{n-1} \num(f(k))}{\prod_{k=0}^{n-1} \den(f(k))}\right) \leq 
-$$
-
-$$ n h ( || n || ) + 
-$$ $$ \max( || \num ( f ( 0 ) ) || , || \num ( f ( 1 ) ) || )^2 + $$ $$ \max( || \num ( f ( 0 ) ) \num ( f ( 1 ) ) || , || \num ( f ( 2 ) ) || )^2 + \cdots + $$ $$ \max( || \num ( f ( 0 ) ) \num ( f ( 1 ) ) \cdots \num ( f ( n - 2 ) ) || , || \num ( f ( n - 1 ) ) || )^2 + $$ $$ n h ( || n || ) + $$ $$ \max( || \den ( f ( 0 ) ) || , || \den ( f ( 1 ) ) || )^2 + $$ $$ \max( || \den ( f ( 0 ) ) \den ( f ( 1 ) ) || , || \den ( f ( 2 ) ) || )^2 + \cdots + $$ $$ \max( || \den ( f ( 0 ) ) \den ( f ( 1 ) ) \cdots \den ( f ( n - 2 ) ) || , || \den ( f ( n - 1 ) ) || )^2 + $$ $$ \max ( || \num ( f ( 0 ) ) \cdots \num ( f ( n - 1 ) ) || , || \den ( f ( 0 ) ) \cdots \den ( f ( n - 1 ) ) || )^2 \cdot $$ $$ \log ( \max ( || \num ( f ( 0 ) ) \cdots \num ( f ( n - 1 ) ) || , || \den ( f ( 0 ) ) \cdots \den ( f ( n - 1 ) ) || ) ) \leq 
-$$
-
-$$ 2 n h ( || n || ) + 2 ( 1 g ( || n || ) )^2 + 2 ( 2 g ( || n || ) )^2 + \cdots + 2 ( n g ( || n || ) )^2 + ( n g ( || n || ) )^2 \log ( n g ( || n || ) ) = $$ $$ 2 n h ( || n || ) + 2 ( 1^2 + 2^2 + \cdots + n^2 ) g ( || n || )^2 + n^2 g ( || n || )^2 \log ( n g ( || n || ) ) = $$ $$ 2 n h ( || n || ) + n ( n + 1 )( 2 n + 1 ) g ( || n || )^2 / 3 + n^2 g ( || n || )^2 \log ( n g ( || n || ) ) . $$
-
-The last expression is upper-bounded by some arithmetic term, thus $\CT(s(n))$ is upper-bounded by $2^{2^{\ldots^{2^{||n||}}}}$.
-\end{proof}
-
-\begin{theorem} \label{proof:hypergeometricbound}
-If $r$ is a non-negative integer and $s_0(n), \ldots, s_r(n)$ are hypergeometric terms on $\mathbb{Q}$ such that $s_i(j) \neq 0$ for every two non-negative integers $i \leq r$ and $j$, then $\CT ( s_0(n) + \cdots + s_r(n) )$ is upper-bounded by some expression of the form $2^{2^{\ldots^{2^{||n||}}}}$.
-\end{theorem}
-\begin{proof}
-Lemma \ref{proof:hypergeokalmar} implies the existence of an expression $M(n)$, of the form $2^{2^{\ldots^{2^{||n||}}}}$, such that, for every $i \in \{0, \ldots, r\}$, $s_i(n)$ and $\CT(s_i(n))$ are upper-bounded by $M(n)$.
-
-Therefore, for large enough values of $n$, we have that
-$$ \CT \left( \sum_{k=0}^r s_k ( n ) \right) \leq \sum_{j=0}^r \CT \left( \sum_{k=0}^j s_k ( n ) \right) \leq \sum_{k=0}^r \CT(s_k(n)) + $$ $$ \max ( || s_0 ( n ) || , || s_1 ( n ) || ) + $$ $$ \max ( || s_0 ( n ) + s_1 ( n ) || , || s_2 ( n ) || ) + \cdots + $$ $$ \max ( || s_0 ( n ) + s_1 ( n ) + s_2 ( n ) + \cdots + s_{r - 1} ( n ) || , || s_r ( n ) || ) $$
-$$ \leq r M ( n ) + M ( n ) + 2 M ( n ) + \cdots + r M ( n ) $$
-$$ = r M ( n ) + r ( r + 1 ) M ( n ) / 2 . $$
-
-And the expression is clearly upper-bounded by some expression of the form $2^{2^{\ldots^{2^{||n||}}}}$.
-\end{proof}
-
-This theorem allows us to establish the following corollaries:
-
-\begin{corollary} \label{proof:trinomialnoclass}
-Let $C$ be a class of integer-valued functions that is Kalmar and contains functions $f(n)$ such that the ratio of consecutive terms $\frac{f(n+1)}{f(n)}$ is irrational on $C$. Then, $C$ contains the central trinomial coefficients.
-\end{corollary}
-\begin{proof}
-Let $s(n)$ be the sequence of central trinomial coefficients, which are the coefficients of $x^n$ in the expansion of $(x^2+x+1)^n$. From \cref{proof:multinomialformula}, these coefficients can be expressed using the Kalmar formula
+Here, a ``simple closed form'' is defined as an expression using only addition, subtraction, multiplication, division, and exponentiation \cite{graham1994concrete}. This is essentially the definition of an arithmetic term. And, applying our univariate multinomial coefficient formula from \cref{proof:multinomialformula}, we see that
 \begin{align*}
-s(n) = \floor{\left(\frac{27^n \dot{-} 1}{9^n \dot{-} 3^n}\right)^n} \bmod 3^n .
+    \binom{n}{n}_2 = \floor{\left(\frac{3^{3n} - 1}{3^{2n} - 3^n}\right)^n} \bmod 3^n
+    = \floor{\left(\frac{27^n - 1}{9^n - 3^n}\right)^n} \bmod 3^n ,
 \end{align*}
-All functions in $C$ are integer-valued, so $C$ does not contain any functions that directly return irrational or transcendental numbers. However, since $C$ is Kalmar, any real number can be approximated to arbitrary precision by a sequence of the form $\lim_{n \to \infty} \frac{f(n+1)}{f(n)}$, where $f(n) \in C$. This is true because irrational and transcendental numbers can be approximated by rational numbers, and rational approximations can be derived from generalized continued fractions, which are defined by recurrence relations involving only integer arithmetic operations. These operations fall within the scope of Kalmar functions, thereby allowing the sequence in $C$ to approximate any real number to arbitrary precision.
+which provides a negative answer to \cref{problem:grahametal}.
 
-Since $C$ contains the $\floor{a/b}$ operation, which can be interpreted as rational division followed by rounding down to the nearest integer, we see that the quotient in the limit can be calculated to arbitrary precision and converted an integer. Since $C$ is Kalmar, this limit can be approximated as some function of $n$ that is bounded by $2^{2^{\ldots^{2^n}}}$. Therefore, $s(n)$ is contained within $C$.
-\end{proof}
-
-\begin{corollary}
-\cref{problem:grahametal} has no solutions.
-\end{corollary}
-\begin{proof}
-From \cref{proof:trinomialnoclass}, we see that any solution to the problem posed by Graham et al. (\cref{problem:grahametal}), which is a class of Kalmar functions $C$ (by \cref{proof:multinomialformula} and \cref{proof:hypergeometricbound}), must either contain the hypergeometric restriction or weakened variant of it. Therefore, we conclude that \cref{problem:grahametal} has no solutions.
-\end{proof}
+Starting from $n=1$, our formula yields the correct sequence terms for the central trinomial coefficients, which are:
+\begin{align*}
+\seqnum{A002426}(n) = 1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,5196627, \ldots .
+\end{align*}
 
 \section{Acknowledgements}
-The author acknowledges Lorenzo Sauras-Altuzarra and Mihai Prunescu for their contributions to the paper, specifically \cref{proof:hypergeokalmar} and \cref{proof:hypergeometricbound}. Additionally, Sauras-Altuzarra's detailed review and comments were especially beneficial and are greatly appreciated.
+The author gratefully acknowledges Lorenzo Sauras-Altuzarra for his comprehensive review and valuable feedback.
 
 \footnotesize
 \setlength{\parskip}{0.0em}
