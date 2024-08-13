@@ -1,0 +1,262 @@
+\pdfoutput=1
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage{url}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+\usepackage{cleveref}
+\usepackage{tabularx}
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{question}{Question}[section]
+\newtheorem{counterexample}{Counter Example}[section]
+\newtheorem{observation}{Observation}[section]
+\crefname{conjecture}{Conjecture}{Conjectures}
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{corollary}{Corollary}{Corollaries}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{remark}{Remark}{Remarks}
+\crefname{definition}{Definition}{Definitions}
+\crefname{notation}{Notation}{Notations}
+\crefname{example}{Example}{Examples}
+\crefname{question}{Question}{Questions}
+\crefname{section}{\S}{Sections}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\stirling}[2]{\left[ #1 \atop #2 \right]}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\round}[1]{\left[ #1 \right]}
+\newcommand{\numerator}{\mathrm{numerator}}
+\newcommand{\denominator}{\mathrm{denominator}}
+\newcommand{\sg}{\mathrm{sg}}
+\newcommand{\xor}{\oplus}
+\newcommand{\hw}{\operatorname{HW}}
+\newcommand{\lpf}{\operatorname{LPF}}
+\newcommand{\carry}{\operatorname{\Delta_{+}}}
+\newcommand{\lcm}{\mathrm{lcm}}
+\newcommand{\mask}{\mathrm{mask}}
+\newcommand{\coprime}{\epsilon}
+\newcommand{\rmod}{\operatorname{rmod}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\wt}[1]{\#(#1)}
+\newcommand{\eval}[2]{\left . #1 \right|_{#2}}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\rm #2}}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{[Draft] On Kalmar Numbers and Arithmetic Terms}
+\author{Joseph M. Shunia}
+\date{August 13, 2024}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent From the classes of Kalmar functions and arithmetic terms, we describe the class of Kalmar numbers, which is the subset of computable real numbers that can be represented as a limit of the quotient of two Kalmar functions. We give Kalmar numbers for many important mathematical constants and functions, such as $e$, $\pi$, $\sqrt[r]{n}$, $\log(n)$, $\exp(n)$, $\sin(n)$, $\cos(n)$, $\Gamma_k(q)$, $(q)_{n,k}$, $\psi^{(k)}(q)$.
+\end{abstract}
+
+\textbf{DISCLAIMER:} This paper is a work in progress. Many proofs and results are currently missing.
+
+\section{Kalmar Numbers}
+We define a \textbf{Kalmar number} as a computable real number which can be represented as a limit of the quotient of two Kalmar functions. That is, $r \in \mathbb{R}$ is a Kalmar number if there exists a limit
+\begin{align*}
+r = \lim_{n \to +\infty} \frac{f(n)}{g(n)}
+\quad \text{ or } \quad 
+r = \lim_{n \to -\infty} \frac{f(n)}{g(n)}
+\quad \text{ or } \quad 
+r = \lim_{n \to 0} \frac{f(n)}{g(n)}
+\end{align*}
+where $f(n),g(n)$ are Kalmar functions. This definition is due to Lorenzo Sauras-Altuzarra, who described it in a private correspondence.
+
+\section{Characterizing the Set of Kalmar Numbers}
+An interesting question from Mihai Prunescu is:
+\begin{question}
+What is the subset of computable real numbers that are Kalmar numbers?
+\end{question}
+We offer a partial solution to the question.
+
+\begin{theorem}
+Let $r \in \mathbb{R}$ such that the ratios of consecutive terms for both the numerators and denominators of the $n$-th convergents in its generalized continued fraction representation are bounded by a tower of exponentials $2^{2^{\ldots^{2^n}}}$ with height $n$. Then, there exist Kalmar functions $f(n)$ and $g(n)$ such that
+\begin{align*}
+r = \lim_{n\to\infty} \frac{f(n)}{g(n)} .
+\end{align*}
+\end{theorem}
+\begin{proof}
+The generalized continued fraction representation of $r$ is given by
+\begin{align*}
+r = a_0 + \cfrac{b_1}{a_1 + \cfrac{b_2}{a_2 + \cfrac{b_3}{a_3 + \ddots}}} ,
+\end{align*}
+where $a_i$ and $b_i$ are sequences of integers. The $n$-th convergents of the generalized continued fraction for $r$ can be expressed using the recurrence relations
+\begin{align*}
+P_n &= a_n P_{n-1} + b_n P_{n-2}, \\
+Q_n &= a_n Q_{n-1} + b_n Q_{n-2},
+\end{align*}
+with initial starting conditions $P_{-1} = 1$, $P_0 = a_0$, $Q_{-1} = 0$, and $Q_0 = 1$.
+
+The sequence of convergents $\frac{P_n}{Q_n}$ of the generalized continued fraction for $r$ will approach $r$ as $n\to\infty$. That is,
+\begin{align*}
+\lim_{n\to\infty} \frac{P_n}{Q_n} = r .
+\end{align*}
+
+By the theorem's assumption, we have
+\begin{align*}
+\frac{P_n}{P_{n-1}} \leq 2^{2^{2^{\ldots^n}}} \text{ and } \frac{Q_n}{Q_{n-1}} \leq 2^{2^{2^{\ldots^n}}} .
+\end{align*}
+This implies that for all $n \geq 1$,
+\begin{align*}
+P_n &\leq P_{n-1} 2^{2^{2^{\dots^n}}}
+    \leq P_{n-2} 2^{2^{2^{\dots^{n-1}}}} 2^{2^{2^{\dots^n}}}
+    \leq \ldots \leq \\
+    & P_0 2^{2^{2^1}} 2^{2^{2^2}} \cdots 2^{2^{2^{\dots^n}}}
+    = P_0 2^{2^1 + 2^2 + \cdots + 2^{2^{\dots^n}}}
+    = P_02^{2^{2^{\dots^{n+1}}} - 2} \\
+    &= O(2^{2^{2^{\dots^n}}}),
+\end{align*}
+and similarly for $Q_n$.
+
+The set of rational numbers $\mathbb{Q}$ is dense in $\mathbb{R}$. Thus, for any $r \in \mathbb{R}$ and any $\epsilon > 0$, there exists a rational number $q \in \mathbb{Q}$ such that $|r - q| < \epsilon$.
+
+Define $\epsilon_n = \left| r - \frac{P_n}{Q_n} \right|$. Since $\lim_{n\to\infty} \frac{P_n}{Q_n} = r$, there exists an $N \in \mathbb{N}$ such that for all $n > N$, we have $\epsilon_n < \frac{P_n}{Q_n}$ and $\epsilon_{n+1} < \epsilon_n$. Furthermore, since $P_n$ and $Q_n$ are bounded by $O(2^{2^{\ldots^{2^n}}})$ and their recursions require only elementary arithmetic operations to compute, there exists a pair of Kalmar functions $f(n)$ and $g(n)$ such that $f(n)=P_n$ and $g(n) = Q_n$. Therefore, we conclude
+\begin{align*}
+\lim_{n\to\infty} \left| r - \frac{f(n)}{g(n)} \right| = 0 
+\implies \lim_{n\to\infty} \frac{f(n)}{g(n)} = r .    
+\end{align*}
+\end{proof}
+
+\section{Pochhammer Function}
+We define the integer-valued function
+\begin{align*}
+(n)_{a,b} = \prod_{k=0}^n (a+bk)
+\end{align*}
+
+\begin{theorem} \label{proof:pochhammer1}
+Let $n,a,b \in \Z$ such that $n > 0$.
+Set $\ell = \floor{\log_b((n)_{a,b})}+1$, $m = b^{\ell}+1$, and $c = (ab^{-1}) \bmod m$. Then
+\begin{align*}
+(n)_{a,b} = \left( \binom{n+c}{n+1} b^{n+1} (n+1)! \right) \bmod m .
+\end{align*}
+Further, $(n)_{a,b}$ is an arithmetic term.
+\end{theorem}
+\begin{proof}
+From \cite{matiyasevich1993hilbert}, for $a \equiv bc \pmod{m}$, we have
+\begin{align} \label{formula:matiyasevich1}
+\prod_{k=0}^n (a+bk) \equiv \binom{n+c}{n+1} b^{n+1} (n+1)! \pmod{m} .
+\end{align}
+We are given $m = b^{\ell}+1$, thus $m$ and $b$ are coprime and $b^{-1} \pmod{m}$ exists. Therefore, $c = ab^{-1} \bmod m$ is valid. Hence, we have established a congruence of $(n)_{a,b}$ modulo $m$.
+
+Now, since
+\begin{align*}
+(n+1)_{a,b} > m = b^{\ell} = b^{\floor{\log_b((n)_{a,b})}+1} > (n)_{a,b} ,
+\end{align*}
+it follows that
+\begin{align*}
+(n)_{a,b} = \left( \binom{n+c}{n+1} b^{n+1} (n+1)! \right) \bmod m .
+\end{align*}
+
+Due to Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we have an arithmetic term for the modular inverse $b^{-1} \pmod{m}$. Arithmetic terms for the factorial function, binomial coefficients, and roots are also known \cite{robinson1952arithmetic,shunia2023simple,shunia2024polynomial, prunescu2024factorial}. Therefore, it follows that $(n)_{a,b}$ is an arithmetic term.
+\end{proof}
+
+\section{Gamma Function}
+\begin{theorem}
+The function $\Gamma_k(q)$, where $q \in \mathbb{Q}$, is a Kalmar number.
+\end{theorem}
+\begin{proof}
+From \cite{diaz2005hypergeometric}, we have
+\begin{align*}
+\Gamma_k(q) = \lim_{n\to\infty} \frac{n! k^n (nk)^{q/k-1}}{(q)_{n,k}} .
+\end{align*}
+By \cref{proof:pochhammer1}, $(q)_{n,k}$ is an arithmetic term. Arithmetic terms for the factorial function and roots are also known \cite{prunescu2024factorial,shunia2024polynomial}. Therefore, it follows that $\Gamma_k(q)$ is a Kalmar number.
+\end{proof}
+
+\section{Polygamma Function}
+From our Kalmar number for $\Gamma(q)$, we can calculate $\psi(q)$.
+\begin{align*}
+\psi^{(0)}(q) =\psi(q) = \frac{\Gamma'(q)}{\Gamma(q)} .
+\end{align*}
+
+\section{Useful Kalmar Numbers}
+
+\textbf{Roots}
+\begin{align}
+\sqrt[n]{a} &= \lim_{k\to\infty}
+    \frac{(k^{kn} + 1)^{kn+1} \bmod (k^{kn^2}-a)}
+    {(k^{kn} + 1)^{kn} \bmod (k^{kn^2}-a)} - 1 .
+\end{align}
+
+\textbf{Derivatives}
+\begin{align}
+f'(x) = \lim_{b \to 0} \frac{f(a+b) - f(a)}{b}
+\end{align}
+
+\textbf{Exponential Function}
+\begin{align*}
+    e = \lim_{k\rightarrow\infty} \frac{(k+1)^k}{k^k}
+\end{align*}
+\begin{align*}
+    e^n = \lim_{k\rightarrow\infty} \frac{(k+1)^{nk}}{k^{nk}}
+\end{align*}
+\begin{align*}
+\exp(in) = \lim_{k\to\infty} \left(\left(1+\frac{xn}{k} \right)^k \bmod (x^2+1) \right)
+\end{align*}
+
+\textbf{Natural Logarithm}
+\begin{align*}
+\log(n) = \lim_{k\rightarrow\infty} k (\sqrt[k]{n}-1) .
+\end{align*}
+
+\textbf{Trigonometric Functions}
+\begin{align*}
+\cos(n) &= \lim_{k\to\infty} \left( \left( \left( 1+\frac{xn}{k} \right)^k \bmod (x^2+1) \right) \bmod x \right) , \\
+\sin(n) &= \lim_{k\to\infty} \floor{\frac{\left( 1+\frac{xn}{k} \right)^k \bmod (x^2+1)}{x}} .
+\end{align*}
+
+\textbf{Mod One}
+\begin{align*}
+a \bmod b
+= b \left( \frac{a}{b} \bmod 1 \right)
+= b \left( \frac{a}{b} - \floor{\frac{a}{b}} \right)
+\end{align*}
+
+\textbf{Pi}
+\begin{align*}
+\sqrt{2\pi} = \lim_{n\rightarrow\infty} \frac{n!}{\sqrt{n}n^n e^{-n}}
+\end{align*}
+\begin{align*}
+\sqrt{\pi} = \lim_{n\rightarrow\infty} \frac{4^n n!^2}{\sqrt{n} (2n)!}
+\end{align*}
+\begin{align*}
+\frac{\pi}{2}
+= \lim_{n\rightarrow\infty} \frac{2^{4n} n!^4}{(2n)!^2 (2n+1)}
+\end{align*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\footnotesize
+
+\begingroup
+\raggedright
+\bibliographystyle{plainnat}
+\bibliography{main}
+\endgroup
+
+\end{document}
