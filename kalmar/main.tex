@@ -89,7 +89,7 @@ r = \lim_{n \to 0} \frac{f(n)}{g(n)}
 \end{align*}
 where $f(n),g(n)$ are Kalmar functions. This definition is due to Lorenzo Sauras-Altuzarra, who described it in a private correspondence.
 
-\section{Characterizing the Set of Kalmar Numbers}
+\section{Characterizing the Kalmar Numbers}
 An interesting question from Mihai Prunescu is:
 \begin{question}
 What is the subset of computable real numbers that are Kalmar numbers?
@@ -144,17 +144,67 @@ Define $\epsilon_n = \left| r - \frac{P_n}{Q_n} \right|$. Since $\lim_{n\to\inft
 \end{align*}
 \end{proof}
 
-\section{Pochhammer Function}
-We define the integer-valued function
+\section{Pochhammer Symbol}
+The \textbf{Pochhammer $k$-symbol} is defined as the integer-valued function
 \begin{align*}
-(n)_{a,b} = \prod_{k=0}^n (a+bk)
+(n)_{a,b} = \prod_{k=1}^n (a+(b-1)k) .
 \end{align*}
 
-\begin{theorem} \label{proof:pochhammer1}
-Let $n,a,b \in \Z$ such that $n > 0$.
-Set $\ell = \floor{\log_b((n)_{a,b})}+1$, $m = b^{\ell}+1$, and $c = (ab^{-1}) \bmod m$. Then
+\begin{lemma} \label{proof:pochapprox1}
+Let $a, b \in \Z$. For large $n$, the product 
 \begin{align*}
-(n)_{a,b} = \left( \binom{n+c}{n+1} b^{n+1} (n+1)! \right) \bmod m .
+P_n = \prod_{k=0}^n (a+bk)
+\end{align*}
+is approximated by
+\begin{align*}
+P_n \approx \frac{b^n n! (a/b+n)^n}{(a/b)^n} .
+\end{align*}
+\end{lemma}
+\begin{proof}
+We begin by expressing the product $P_n$ as
+\begin{align*}
+P_n = b^n \prod_{k=0}^n \left(\frac{a}{b} + k\right) .
+\end{align*}
+This can be rewritten using the Gamma function as
+\begin{align*}
+P_n = b^n \frac{\Gamma(a/b + n + 1)}{\Gamma(a/b)}.
+\end{align*}
+Stirling's approximation for the Gamma function gives
+\begin{align*}
+\Gamma(z) \sim \sqrt{2\pi z} \left(\frac{z}{e}\right)^z \quad \text{ as } z \to \infty .
+\end{align*}
+Applying the approximation, we have
+\begin{align*}
+\frac{\Gamma(a/b+n+1)}{\Gamma(a/b)} \sim \frac{\sqrt{2\pi(a/b+n+1)} \left(\frac{a/b+n+1}{e}\right)^{a/b+n+1}}{\sqrt{2\pi a/b} \left(\frac{a/b}{e}\right)^{a/b}} .
+\end{align*}
+Simplifying this expression
+\begin{align*}
+\frac{\Gamma(a/b+n+1)}{\Gamma(a/b)} \sim \sqrt{\frac{a/b+n+1}{a/b}} \left(\frac{a/b+n+1}{a/b}\right)^{a/b} (a/b+n+1)^n e^{-n-1}.
+\end{align*}
+For large $n$ and $a/b$, $\frac{a/b+n+1}{a/b} \approx 1 + \frac{n+1}{a/b}$, so
+\begin{align*}
+\frac{\Gamma(x+n+1)}{\Gamma(x)} \sim n! \left(1 + \frac{n}{a/b}\right)^n \left(\frac{x+n}{x}\right)^n.
+\end{align*}
+Hence, we find
+\begin{align*}
+P_n \approx b^n \frac{n! (a/b+n)^n}{(a/b)^n}.
+\end{align*}
+\end{proof}
+
+\begin{theorem} \label{proof:pochhammer1}
+Let $n,a,b \in \Z$ such that $n > 0$ and $\log(n) > a$.
+
+Define $\sigma(n,a,b) = \frac{b^n n! (a/b+n)^n}{(a/b)^n}$.
+
+Set $\ell = \floor{\log_b(\sigma(n,a,b)}+1$.
+
+Set $m = b^{\ell}+1$.
+
+Set $c = (ab^{-1}) \bmod m$.
+
+Then
+\begin{align*}
+(n)_{a,b} = \floor{\frac{\left( \binom{n+c}{n+1} b^{n+1} (n+1)! \right) \bmod m}{a+nb}}.
 \end{align*}
 Further, $(n)_{a,b}$ is an arithmetic term.
 \end{theorem}
@@ -163,21 +213,60 @@ From \cite{matiyasevich1993hilbert}, for $a \equiv bc \pmod{m}$, we have
 \begin{align} \label{formula:matiyasevich1}
 \prod_{k=0}^n (a+bk) \equiv \binom{n+c}{n+1} b^{n+1} (n+1)! \pmod{m} .
 \end{align}
-We are given $m = b^{\ell}+1$, thus $m$ and $b$ are coprime and $b^{-1} \pmod{m}$ exists. Therefore, $c = ab^{-1} \bmod m$ is valid. Hence, we have established a congruence of $(n)_{a,b}$ modulo $m$.
+We are given $m = b^{\ell}+1$, thus $m$ and $b$ are coprime and $b^{-1} \pmod{m}$ exists. Therefore, $c = ab^{-1} \bmod m$ is valid. Hence, we have established a congruence of $\prod_{k=0}^n (a+bk)$ modulo $m$.
 
 Now, since
 \begin{align*}
-(n+1)_{a,b} > m = b^{\ell} = b^{\floor{\log_b((n)_{a,b})}+1} > (n)_{a,b} ,
+\left( \prod_{k=0}^n (a+bk) \right)^2 > m = b^{\ell} = b^{\floor{\log_b((n)_{a,b})}+1} > \prod_{k=0}^n (a+bk) ,
 \end{align*}
 it follows that
 \begin{align*}
-(n)_{a,b} = \left( \binom{n+c}{n+1} b^{n+1} (n+1)! \right) \bmod m .
+(n)_{a,b} = \floor{\frac{\left( \binom{n+c}{n+1} b^{n+1} (n+1)! \right) \bmod m}{a+nb}}.
 \end{align*}
 
-Due to Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we have an arithmetic term for the modular inverse $b^{-1} \pmod{m}$. Arithmetic terms for the factorial function, binomial coefficients, and roots are also known \cite{robinson1952arithmetic,shunia2023simple,shunia2024polynomial, prunescu2024factorial}. Therefore, it follows that $(n)_{a,b}$ is an arithmetic term.
+Finally, due to Prunescu and Sauras-Altuzarra \cite{prunescu2024factorial}, we have an arithmetic term for the modular inverse $b^{-1} \pmod{m}$. Arithmetic terms for the factorial function, binomial coefficients, and roots are also known \cite{robinson1952arithmetic,shunia2023simple,shunia2024polynomial, prunescu2024factorial}. Therefore, it follows that $(n)_{a,b}$ is an arithmetic term.
 \end{proof}
 
+\section{Generalized Binomial Coefficients}
+We define the \textbf{generalized binomial coefficients} as the coefficients of the form
+\begin{align}
+\binom{\frac{a}{b}}{k} = \frac{\left(\frac{a}{b}\right)\left(\frac{a}{b} - 1\right)\left(\frac{a}{b} - 2\right) \cdots \left(\frac{a}{b} - (k-1)\right)}{k!} .
+\end{align}
+\begin{lemma} \label{proof:genbinomial1}
+\begin{align*}
+\forall a,b,k \in \Z^+, \quad
+\binom{\frac{a}{b}}{k} = \frac{(k)_{a,-b}}{b^k k!} .
+\end{align*}
+\end{lemma}
+\begin{proof}
+We begin with our definition
+\begin{align*}
+\binom{\frac{a}{b}}{k} = \frac{\left(\frac{a}{b}\right)\left(\frac{a}{b} - 1\right)\left(\frac{a}{b} - 2\right) \cdots \left(\frac{a}{b} - (k-1)\right)}{k!} .
+\end{align*}
+Expanding the terms and simplifying, we obtain
+\begin{align*}
+\binom{\frac{a}{b}}{k} &= \frac{\frac{a}{b} \frac{a-b}{b} \frac{a-2b}{b} \cdots \frac{a-(k-1)b}{b}}{k!} \\
+&= \frac{a (a - b) (a - 2b) \cdots (a - (k-1)b)}{b^k k!} \\
+&= \frac{(k)_{a,-b}}{b^k k!} .
+\end{align*}
+\end{proof}
+
+\section{Beta Function}
+The \textbf{beta function} is defined as
+\begin{align}
+\textbf{B}(a,b) = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)} . 
+\end{align}
+For all $a,b \in \Z^+$, we have
+\begin{align}
+\textbf{B}(a,b) = \frac{a+b}{ab} \Bigg/ \binom{a+b}{a} . 
+\end{align}
+
 \section{Gamma Function}
+The \textbf{$k$-Gamma function} \cite{diaz2005hypergeometric} is defined as 
+\begin{align*}
+\Gamma_k(q) = \lim_{n\to\infty} \frac{n! k^n (nk)^{q/k-1}}{(q)_{n,k}} .
+\end{align*}
+
 \begin{theorem}
 The function $\Gamma_k(q)$, where $q \in \mathbb{Q}$, is a Kalmar number.
 \end{theorem}
@@ -228,7 +317,7 @@ f'(x) = \lim_{b \to 0} \frac{f(a+b) - f(a)}{b}
 \textbf{Trigonometric Functions}
 \begin{align*}
 \cos(n) &= \lim_{k\to\infty} \left( \left( \left( 1+\frac{xn}{k} \right)^k \bmod (x^2+1) \right) \bmod x \right) , \\
-\sin(n) &= \lim_{k\to\infty} \floor{\frac{\left( 1+\frac{xn}{k} \right)^k \bmod (x^2+1)}{x}} .
+\sin(n) &= \lim_{k\to\infty} \frac{\left( 1+\frac{xn}{k} \right)^k \bmod (x^2+1)}{x} .
 \end{align*}
 
 \textbf{Mod One}
