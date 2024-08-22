@@ -72,7 +72,7 @@ citecolor=webgreen]{hyperref}
 
 \title{Simple Formulas for Univariate Multinomial Coefficients}
 \author{Joseph M. Shunia}
-\date{September 2023 \\ \small (Revised: July 2024, Version 7) \normalsize}
+\date{September 2023 \\ \small (Revised: August 2024, Version 8) \normalsize}
 
 \begin{document}
 
@@ -80,7 +80,7 @@ citecolor=webgreen]{hyperref}
 
  \begin{abstract}
  \noindent
-We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. We extend our findings to discover new arithmetic terms for multisections of binomial coefficient sums. Applying our techniques to central trinomial coefficients, we successfully resolve an open problem posed by Graham et al., by demonstrating the existence of a ``simple closed form'' for these coefficients.
+We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. We extend our findings to discover new arithmetic terms for multisections of binomial coefficient sums. Applying our techniques to central trinomial coefficients, we successfully resolve an open problem posed by Graham et al. by demonstrating the existence of a ``simple closed form'' for these coefficients.
  \\[2mm]
  {\bf Keywords:} elementary formula; arithmetic term; modular arithmetic; multinomial coefficient; binomial coefficient; partial sum; polynomial interpolation; Kronecker substitution.\\[2mm]
  {\bf 2020 Mathematics Subject Classification:} 11B65, 11Y55, 11A25.
@@ -128,12 +128,10 @@ where $n,s,j \in \Z^+$ such that $s < n$ and $j < s$.
 
 We proceed in \cref{section:multinomialformula} by generalizing Robinson's binomial coefficient formula to calculate the coefficients in the multinomial expansion of univariate unit polynomials. A univariate unit polynomial is a polynomial of the form
 \begin{align*}
-    \left(\frac{x^{r}-1}{x-1}\right)^n = (x^{r-1} + \cdots + x + 1)^n  ,
+\frac{x^{r}-1}{x-1} = x^{r-1} + \cdots + x + 1  ,
 \end{align*}
-and its multinomial expansion is given by
-\begin{align*}
- [x^k](x^{r-1} + \cdots + x + 1)^n .
-\end{align*}
+and its multinomial expansion is given by $(x^{r-1} + \cdots + x + 1)^n$.
+
 The coefficients in the multinomial expansion of univariate unit polynomials are the univariate multinomial coefficients denoted as $\binom{n}{k}_{r-1}$, which are a generalization of the binomial coefficients. Conventional techniques for computing univariate multinomial coefficients involve factorials and summations over specific criteria. In contrast, our formula uses only elementary arithmetic operations and is given by
 \begin{align*}
     \binom{n}{k}_{r-1} = \left\lfloor\left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n\right\rfloor \bmod r^n ,
@@ -168,7 +166,7 @@ The first step in the formula is to divide $f(f(b))$ by $f(b)^k$. This results i
 &= a_r f(b)^{r-k} + \cdots + a_{k} f(b)^{0} + a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}  \\
 &= a_r f(b)^{r-k} + \cdots + a_{k} + a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k} .
 \end{align*}
-Since $b \geq 1$, we have $f(b) \geq f(1)$. Thus, the coefficients of $a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}$ will sum to a value that is less than $1$. The next step is to take the floor of the quotient $\frac{f(f(b))}{f(b)^k}$ to isolate the terms ranging from $a_k x^k$ up to and including $a_r x^r$. The result is
+Since $b \geq 1$, the coefficients of $a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}$ will sum to a value that is less than $1$. The next step is to take the floor of the quotient $\frac{f(f(b))}{f(b)^k}$ to isolate the terms ranging from $a_k x^k$ up to and including $a_r x^r$. The result is
 \begin{align*}
 \floor{\frac{f(f(b))}{f(b)^k}} &= a_r f(b)^{r-k} + \cdots + a_{k} .
 \end{align*}
@@ -178,7 +176,7 @@ The final step is to take the floored result $\floor{\frac{f(f(b))}{f(b)^k}}$ mo
 &= 0 + \cdots + 0 + (a_k \bmod{f(b)}) \\
 &= a_k \bmod{f(b)} .
 \end{align*}
-By assumption, all coefficients of $f(x)$ are non-negative. Furthermore, since $f(b) \geq f(1)$ and $\deg(f(x)) = r \geq 1$, we know that $f(b) > a_k$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
+By assumption, all coefficients of $f(x)$ are non-negative. Furthermore, since $b \geq 1$ and $\deg(f(x)) = r \geq 1$, we know that $f(b) > a_k$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
 \begin{align*}
 a_k &= \floor{\frac{f(f(b))}{f(b)^k}} \bmod{f(b)} ,
 \end{align*}
@@ -259,14 +257,16 @@ Let $n,j \in \Z_{>-1}$ such that $j \leq n$. Then the following formulas are val
 The first step in formula (i) is to perform floored division on the sum $(2^n+1)^n = \sum_{k=0}^n \binom{n}{k} 2^{nk}$ by $2^{n(n-j)}$. Due the symmetry for binomial coefficients in row $n$, $\binom{n}{k} = \binom{n}{n-k}$, this yields
 \begin{align*}
     \floor{\frac{(2^n+1)^n}{2^{n(n-j)}}}
-    = \floor{ \sum_{k=0}^{j} \binom{n}{k} 2^{nk-(n(n-j))} }
-    = \sum_{k=n-j}^{n} \binom{n}{k} 2^{n(n-k)}
-    = \sum_{k=0}^{j} \binom{n}{k} 2^{nk} .
+    = \floor{ \sum_{k=0}^{n} \binom{n}{k} 2^{nk-(n(n-j))} }
+    = \floor{ \sum_{k=n-j}^{n} \binom{n}{k} 2^{nk-(n(n-j))} }
+    = \sum_{k=0}^{j} \binom{n}{k} 2^{n(j-k)} .
 \end{align*}
+Since $k \leq j$ for all remaining $k$, clearly it is always true that $2^{n(j-k)} > 0$.
+
 Next, we reduce the result of the floored division modulo $(2^n-1)$. Viewing this sum as the polynomial $\floor{\frac{(x+1)^n}{x^{n(n-j)}}} = \sum_{k=0}^{j} \binom{n}{k} x^k$, where $x$ has been replaced by $2^n$, we see that reducing mod $(x-1) = (2^n-1)$ is the same as replacing all instances of $2^n$ with $1$ (by Ruffini's rule). Thus
 \begin{align*}
-    \sum_{k=0}^{j} \binom{n}{k} 2^{nk} \bmod (2^n-1)
-    = \sum_{k=0}^{j} \binom{n}{k} (1)^k
+    \sum_{k=0}^{j} \binom{n}{k} 2^{n(j-k)} \bmod (2^n-1)
+    = \sum_{k=0}^{j} \binom{n}{k} (1)^{j-k}
     = \sum_{k=0}^{j} \binom{n}{k} .
 \end{align*}
 This proves formula (i). Next, we will show that formula (ii) yields the same result. Consider
@@ -358,7 +358,7 @@ We present a new formula for the multisections of binomial coefficient sums.
 \begin{theorem}
 Let $n,s,j \in \Z^+$ such that $s < n$ and $j < s$. Then
 \begin{align*}
-\floor{\frac{\left( (2^n+1)^n \bmod (2^{ns}-1) \right)}{2^{nj}}} \bmod 2^n
+\floor{\frac{(2^n+1)^n \bmod (2^{ns}-1)}{2^{nj}}} \bmod 2^n
 = \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} = \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
 \end{align*}
 \end{theorem}
@@ -432,7 +432,7 @@ where the summation criteria are
 
 \begin{theorem}
 \label{proof:multinomialformula}
-Let $n,k,r \in \mathbb{Z}$ such that $n > 0$ and $0 \leq k \leq n (r-1)$. Then
+Let $n,k,r \in \mathbb{Z}$ such that $n > 0$, $r>1$, and $0 \leq k \leq n (r-1)$. Then
 \begin{align*}
     \binom{n}{k}_{r-1} = \floor{\left(\frac{r^{rn} - 1}{r^{n+k} - r^k}\right)^n} \bmod r^n .
 \end{align*}
@@ -442,7 +442,7 @@ Consider the polynomial function
 \begin{align*}
     f_r(x)^n := \left(\frac{x^{r}-1}{x-1}\right)^n = (x^{r-1} + \cdots + x + 1)^n \in \Z[x].
 \end{align*}
-In this case, it is clear that $f_r(1)^n = r^n$. Therefore, we have
+In this case, it is clear that $f_r(1)^n = r^n$ when the evaluation is performed after quotienting. Therefore, we have
 \begin{align*}
     f_r(f_r(1)^n)^n = (r^{n(r-1)} + \cdots + r^n + 1)^n .
 \end{align*}
@@ -487,6 +487,60 @@ Finally, reducing this sum mod $(r^n-1)$ is the same as replacing all instances 
     \sum_{k=0}^{j} \binom{n}{k}_{r-1} r^{nk} \bmod (r^n-1)
     = \sum_{k=0}^{j} \binom{n}{k}_{r-1} (1)^{k}
     = \sum_{k=0}^{j} \binom{n}{k}_{r-1} .
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+Let $n,s,j,r \in \Z^+$ such that $s < n$, $j < s$, and $r $. Then
+\begin{align*}
+\floor{\frac{(2^n+1)^n \bmod (2^{ns}-1)}{2^{nj}}} \bmod 2^n
+= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} = \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
+\end{align*}
+\end{corollary}
+\begin{proof}
+Fix a ring $R = \Z[x]/(x^s-1)$. Consider the polynomial
+\begin{align*}
+f(x) := (x+1)^n \in R .
+\end{align*}
+In the ring $R$, all instances of $x^s$ are implicitly replaced by $1$. This is the same as reducing $f(x)$ modulo $(x^s-1)$. Expanding $f(x)$ in $R$ yields
+\begin{align*}
+f(x) = \sum_{k=0}^n \binom{n}{k} x^k \bmod(x^s-1) .
+\end{align*}
+The reduction $f(x) \bmod (x^s-1)$ results in a polynomial remainder with degree $s-1$ of the form
+\begin{align*}
+f(x) \bmod (x^s-1) = & \left(\binom{n}{s} + \binom{n}{2s} + \cdots + \binom{n}{\floor{n/s}s} \right) x^0 \\
++ & \left(\binom{n}{s+1} + \binom{n}{2s+1} + \cdots + \binom{n}{\floor{n/s}s+1} \right) x^1 + \cdots \\
++ & \left(\binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \right) x^j
++ \cdots \\
++ & \left(\binom{n}{s+(s-1)} + \binom{n}{2s+(s-1)} + \cdots + \binom{n}{\floor{n/s}s+(s-1)} \right) x^{s-1} .
+\end{align*}
+Dividing this remainder by $x^j$, we obtain
+\begin{align*}
+\frac{f(x) \bmod(x^s-1)}{x^j} = \left(\binom{n}{s} + \cdots \right) x^{0-j}
++ \cdots
++ \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
++ \cdots
++ \left(\binom{n}{s+(s-1)} + \cdots \right) x^{s-1-j} .
+\end{align*}
+Taking the floor of the above result, the terms with degree less than $j$ will vanish. We see that
+\begin{align*}
+\floor{\frac{f(x) \bmod(x^s-1)}{x^j}}
+= \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
++ \cdots
++ \left(\binom{n}{s+(s-1)} + \cdots \right) x^{s-1-j} .
+\end{align*}
+The final step is reduce the floored result modulo $x$ to remove all remaining terms with degree greater than $0$. This reduction gives
+\begin{align*}
+\floor{\frac{f(x) \bmod(x^s-1)}{x^j}} \bmod x
+= \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
+= \binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
+.
+\end{align*}
+Since $\sum_{k=0}^{n} \binom{n}{k} = 2^n$, it is obvious that $2^n \geq f(1)$. Thus, by \cref{theorem:encoding}, we can replace $x=2^n$ and the formula remains valid. The substitution $x=2^n$ produces the formula in the theorem, which is
+\begin{align*}
+\floor{\frac{(2^n+1)^n \bmod(2^{ns}-1)}{2^{nj}}} \bmod 2^n
+= \binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
+= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
 \end{align*}
 \end{proof}
 
