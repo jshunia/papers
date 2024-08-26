@@ -65,7 +65,7 @@ For $n=2$, the formula holds since,
     \floor{\log(e^{\varphi(2)+1})} = \floor{\log(e^{1+1})} = \floor{\log(e^2)} = 2 .
 \end{align*}
 
-For $n > 2$, we consider the worst-case scenario, which occurs when $n$ and $n-2$ are a twin prime pair. In such case, the leading terms in $S_n(e)$ are $e^{\phi(n)}$ and $e^{\phi(n-2)}$, so we need to ensure that
+For $n > 2$, we consider the worst-case scenario, which occurs when $n$ and $n-2$ are a twin prime pair. In such case, the leading terms in $S_n(e)$ are $e^{\phi(n)+1}$ and $e^{\phi(n-2)+1}$, so we need to ensure that
 \begin{align*}
 \forall n \in \Z_{>2}, \quad
 e^{\varphi(n)+1} > \sum_{k=2}^{n-1} e^{\varphi(k)+1} .
