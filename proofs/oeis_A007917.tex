@@ -1,0 +1,109 @@
+\pdfoutput=1
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+\usepackage{url}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+\usepackage{cleveref}
+\usepackage{tabularx}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\crefname{theorem}{Theorem}{Theorems}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\round}[1]{\left[ #1 \right]}
+\newcommand{\lcm}{\mathrm{lcm}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\rm #2}}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{A Formula Proof for OEIS Sequence A007917}
+\author{Joseph M. Shunia}
+\date{August 26, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Formula and Proof}
+A short proof of a formula for $\seqnum{A007917}(n)$ is given.
+
+\begin{theorem}
+Define $\seqnum{A007917}(n)$ to be the integer sequence which returns the least prime $p \leq n$. Then 
+\begin{align*}
+\forall n \in \Z_{\geq 2}, \quad 
+\seqnum{A007917}(n) = \floor{ \log\left( \sum_{k=2}^n e^{\varphi(k)+1} \right) }.
+\end{align*}
+\end{theorem}
+\begin{proof}
+Let $n \in \Z_{\geq 2}$. Consider the polynomial
+\begin{align*}
+S_n(x) = \sum_{k=2}^n x^{\varphi(k)+1} \in \Z[x].
+\end{align*}
+Substituting $x = e$ into $S_n(x)$ gives the expression $S_n(e) = \sum_{k=2}^n e^{\varphi(k)+1}$. Notice that the degree of $S_n(x)$ is determined by the largest $\varphi(k) + 1$, which occurs when $k$ is the largest prime $\leq n$. Thus, $\deg(S_n(x)) = \seqnum{A007917}(n)$.
+
+To complete the proof, we will show that 
+\begin{align*}
+\seqnum{A007917}(n) = \deg(S_n(x)) = \floor{\log(S_n(e))} = \floor{ \log\left( \sum_{k=2}^n e^{\varphi(k)+1} \right) } .
+\end{align*}
+
+For $n=2$, the formula holds since,
+\begin{align*}
+    \floor{\log(e^{\varphi(2)+1})} = \floor{\log(e^{1+1})} = \floor{\log(e^2)} = 2 .
+\end{align*}
+
+For $n > 2$, we consider the worst-case scenario, which occurs when $n$ and $n-2$ are a twin prime pair. In such case, the leading terms in $S_n(e)$ are $e^{\phi(n)}$ and $e^{\phi(n-2)}$, so we need to ensure that
+\begin{align*}
+\forall n \in \Z_{>2}, \quad
+e^{\varphi(n)+1} > \sum_{k=2}^{n-1} e^{\varphi(k)+1} .
+\end{align*}
+Rewriting this inequality, and noting that $\varphi(n) = n-1$ iff $n$ is prime, we have
+\begin{align*}
+e^{\varphi(n)+1} > e^{\varphi(n-1)+1} + e^{\varphi(n-2)+1} + \sum_{k=2}^{n-3} e^{\varphi(k)+1} , \\
+e^n > e^{n-2} + e^{\varphi(n-1)+1} + \sum_{k=2}^{n-3} e^{\varphi(k)+1} ,
+\end{align*}
+which simplifies to
+\begin{align*}
+e^n - e^{n-2} > e^{\varphi(n-1)+1} + \sum_{k=2}^{n-3} e^{\varphi(k)+1} , \\
+e^{n-2} (e^2-1) > e^{\varphi(n-1)+1} + \sum_{k=2}^{n-3} e^{\varphi(k)+1}.
+\end{align*}
+
+We claim that, for $n > 2$, we have
+\begin{align*}
+e^{n-2} (e^2-1) > \sum_{k=2}^{n-3} e^k \geq \sum_{k=2}^{n-3} e^{\varphi(k)+1}.
+\end{align*}
+Observe that the sum $\sum_{k=2}^{n-3} e^k$ is a geometric series with the closed form
+\begin{align*}
+\sum_{k=2}^{n-3} e^k = \frac{e^n-e^4}{e^2(e-1)} .
+\end{align*}
+Substituting this into the previous inequality, we obtain
+\begin{align*}
+e^{n-2} (e^2-1) > \frac{e^n-e^4}{e^2(e-1)} \geq \sum_{k=2}^{n-3} e^{\varphi(k)+1} ,
+\end{align*}
+which is certainly true, since
+\begin{align*}
+    e^{n-2} (e^2-1) - \left(e^{n-1} + \frac{e^n-e^4}{e^2(e-1)}\right) = \frac{e^n (e-2) + e^2}{e-1} > 0 .
+\end{align*}
+
+The twin prime case is the worst possible case because, in such scenario, the second-largest term $e^{n-2}$ is as close as possible to the largest term $e^n$, maximizing the contribution of lower-order terms to the sum $S_n(e)$. In other cases where $n$ and $n-2$ are not both primes, the second-largest term is smaller, and thus the sum $S_n(e)$ is more heavily dominated by $e^n$. This means $\log(S_n(e))$ is closer to $n$ and more easily approximated by $n$ in non-twin prime cases.
+
+Therefore, in all cases, the sum $S_n(e)$ remains dominated by the leading term $e^n$, and hence
+\begin{align*}
+\floor{ \log\left( \sum_{k=2}^n e^{\varphi(k)+1} \right) } = \deg(S_n(x)) = \seqnum{A007917}(n) .
+\end{align*}
+\end{proof}
+
+\end{document}
