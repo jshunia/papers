@@ -45,8 +45,9 @@ A short proof of a formula for $\seqnum{A007917}(n)$ is given.
 Define $\seqnum{A007917}(n)$ to be the integer sequence which returns the largest prime $p \leq n$. Then 
 \begin{align*}
 \forall n \in \Z_{\geq 2}, \quad 
-\seqnum{A007917}(n) = \floor{ \log\left( \sum_{k=2}^n e^{\varphi(k)+1} \right) }.
+\seqnum{A007917}(n) = \floor{ \log\left( \sum_{k=2}^n e^{\varphi(k)+1} \right) } ,
 \end{align*}
+where $\varphi(\cdot)$ represents Euler's totient function.
 \end{theorem}
 \begin{proof}
 Let $n \in \Z_{\geq 2}$. Consider the polynomial
@@ -91,11 +92,23 @@ Observe that the sum $\sum_{k=2}^{n-3} e^k$ is a geometric series with the close
 \end{align*}
 Substituting this into the previous inequality, we obtain
 \begin{align*}
-e^{n-2} (e^2-1) > e^{n-1} + \frac{e^n-e^4}{e^2(e-1)} \geq \sum_{k=2}^{n-3} e^{\varphi(k)+1} ,
+e^{n-2} (e^2-1) > e^{n-1} + \frac{e^n-e^4}{e^2(e-1)} \geq e^{\varphi(n-1)+1} + \sum_{k=2}^{n-3} e^{\varphi(k)+1} ,
 \end{align*}
 which is certainly true, since
 \begin{align*}
-    e^{n-2} (e^2-1) - \left(e^{n-1} + \frac{e^n-e^4}{e^2(e-1)}\right) = \frac{e^n (e-2) + e^2}{e-1} > 0 .
+    e^{n-2} (e^2-1) - \left(e^{n-1} + \frac{e^n-e^4}{e^2(e-1)}\right) = \frac{e^n (e-2) + e^2}{e-1} > 0 ,
+\end{align*}
+and using the upper bound
+\begin{align*}
+    \varphi(k) < \frac{k}{e^{\gamma} \log\log k}
+    < \frac{k}{e^{0.578} \log\log k}
+    < \frac{k}{1.783 \log\log k} ,
+\end{align*}
+where $\gamma = 0.577215664901\ldots$ (the Euler-Mascheroni constant), we have 
+\begin{align*}
+    e^{n-1} + \frac{e^n-e^4}{e^2(e-1)} = e^{n-1} + \sum_{k=2}^{n-3} e^k
+    > e^{\frac{n-1}{1.783 \log\log(n-1)}+1} + \sum_{k=2}^{n-3} e^{\frac{k}{1.783 \log\log k}+1}
+    > e^{\varphi(n-1)+1} + \sum_{k=2}^{n-3} e^{\varphi(k)+1} .
 \end{align*}
 
 The twin prime case is the worst possible case because, in such scenario, the second-largest term $e^{n-2}$ is as close as possible to the largest term $e^n$, maximizing the contribution of lower-order terms to the sum $S_n(e)$. In other cases where $n$ and $n-2$ are not both primes, the second-largest term is smaller, and thus the sum $S_n(e)$ is more heavily dominated by $e^n$. This means $\log(S_n(e))$ is closer to $n$ and more easily approximated by $n$ in non-twin prime cases.
