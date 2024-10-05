@@ -1,6 +1,6 @@
 \pdfoutput=1
-\documentclass[10pt,a4paper]{article}
-\usepackage[margin=1.5cm]{geometry}
+\documentclass[10pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -46,7 +46,8 @@ citecolor=webgreen]{hyperref}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\K}{\mathcal{K}}
-\newcommand{\wt}[1]{\#(#1)}
+\newcommand{\HW}{\operatorname{HW}}
+\newcommand{\wt}[1]{\HW(#1)}
 \newcommand{\eval}[2]{\left . #1 \right|_{#2}}
 \newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
 \newcommand{\N}{{\mathbb{N}}}
@@ -72,7 +73,7 @@ citecolor=webgreen]{hyperref}
 
 \title{Simple Formulas for Univariate Multinomial Coefficients}
 \author{Joseph M. Shunia}
-\date{September 2023 \\ \small (Revised: August 2024, Version 8) \normalsize}
+\date{September 2023 \\ \small (Revised: October 2024, Version 9) \normalsize}
 
 \begin{document}
 
@@ -80,7 +81,7 @@ citecolor=webgreen]{hyperref}
 
  \begin{abstract}
  \noindent
-We present novel arithmetic terms for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. We extend our findings to discover new arithmetic terms for multisections of binomial coefficient sums. Applying our techniques to central trinomial coefficients, we successfully resolve an open problem posed by Graham et al. by demonstrating the existence of a ``simple closed form'' for these coefficients.
+We present fixed-length elementary closed form expressions for univariate multinomial coefficients and their partial sums. Notably, we introduce what appear to be the first closed form expressions for partial sums of binomial coefficients. We extend our findings to discover new formulas for multisections of binomial coefficient sums. Applying our results to central trinomial coefficients, we resolve an open problem posed by Graham et al. by demonstrating the existence of a simple closed form for these coefficients.
  \\[2mm]
  {\bf Keywords:} elementary formula; arithmetic term; modular arithmetic; multinomial coefficient; binomial coefficient; partial sum; polynomial interpolation; Kronecker substitution.\\[2mm]
  {\bf 2020 Mathematics Subject Classification:} 11B65, 11Y55, 11A25.
@@ -93,19 +94,17 @@ To fully appreciate the implications of these contributions, it is essential to 
 \begin{align*}
     \{ a + b, a \dot{-} b, ab, \floor{a/b}, a \bmod b, a^b \} ,
 \end{align*}
-where the notation $\dot{-}$ represents ``truncated'' or ``bounded'' subtraction, defined as $a \dot{-} b = \max(a-b,0)$ \cite{mazzanti2002plainbases, prunescu2024representation}. In this paper, we may use $-$ in place of $\dot{-}$ when it is clear that $(a-b) \geq 0$. We further note that the modulo operation is implicitly included in the set, as it can be defined by the others as: $a \bmod b = a \dot{-} b \floor{a/b}$. 
+where the notation $\dot{-}$ represents \textbf{bounded subtraction}, defined as $a \dot{-} b = \max(a-b,0)$ \cite{mazzanti2002plainbases, prunescu2024representation}. In this paper, we may use $-$ in place of $\dot{-}$ when it is clear that $(a-b) \geq 0$. We further note that the modulo operation is implicitly included in the set, as it can be defined by the others as: $a \bmod b = a \dot{-} b \floor{a/b}$. 
 
 The study of arithmetic terms has its origins in the earliest days of computer science and discrete mathematics, tracing back to the 1950s and the work of Julia Robinson \cite{robinson1952arithmetic}. During that era, research primarily focused on broad theoretical questions about the capabilities of arithmetic terms in computability and their classification within mathematical logic \cite{herman1969elementary, grzegorczyk1953someclasses, robinson1952arithmetic}. In particular, a significant question was: What is the class of functions that can be represented using only these elementary arithmetic operations?
 
-Mazzanti's 2002 discovery that arithmetic terms generate the class of Kalmar functions, denoted $\textbf{K}$, clarified their position in the Grzegorczyk hierarchy, a framework categorizing primitive recursive functions by complexity \cite{mazzanti2002plainbases, grzegorczyk1953someclasses}. In particular, Mazzanti's result placed arithmetic terms in the class $\mathcal{E}^3$ within the Grzegorczyk hierarchy, which is well-known to be equal to $\textbf{K}$. Further refinement by Marchenkov in 2006 demonstrated that even a more restricted set of functions could generate $\textbf{K}$ \cite{marchenkov2007superposition}. Collectively, the works of Mazzanti-Marchenkov provide a strong theoretical underpinning for the study of arithmetic terms.
+Mazzanti's 2002 discovery that arithmetic terms generate the class of Kalmar functions, denoted $\textbf{K}$, clarified their position in the Grzegorczyk hierarchy, a framework categorizing primitive recursive functions by complexity \cite{mazzanti2002plainbases, grzegorczyk1953someclasses}. In particular, Mazzanti's result placed arithmetic terms in the class $\mathcal{E}^3$ within the Grzegorczyk hierarchy, which is well-known to be equal to $\textbf{K}$. Further refinement by Marchenkov in 2006 demonstrated that even a more restricted set of functions could generate $\textbf{K}$ \cite{marchenkov2007superposition}. Collectively, the works of Mazzanti and Marchenkov provide a strong theoretical underpinning for the study of arithmetic terms.
 
 Despite these theoretical milestones, little attention has been given to the explicit construction and study of arithmetic terms until recently. Our research began in early 2022 with the dissemination of an early version of this paper. At around the same time, researchers Prunescu and Sauras-Altuzarra began their own independent investigations \cite{prunescu2024factorial,prunescu2024representation}.
 
-Interestingly, functions that seem computationally simple, like the logarithm function $\log(n)$ or Hamming weight $\#(n)$ (the number of ones in the binary expansion of $n$), often lack straightforward arithmetic terms. Conversely, more complicated functions can sometimes be represented simply.
+Interestingly, functions that seem computationally simple, like the logarithm function $\log(n)$, often lack straightforward arithmetic terms. Conversely, more complicated functions can sometimes be represented simply.
 
-This asymmetry is an inversion of our expectations: One reasonably expects that sequences which are hard to compute should necessitate formulas that are sophisticated and hard to find, whereas sequences which are easy to compute should have formulas that are simple and easy to find.
-
-Indeed, deriving arithmetic terms for many Kalmar functions has proven to be exceedingly challenging. Matiyasevich's work \cite{matiyasevich1980diophantine}, for instance, confirms the existence of arithmetic terms for many prominent number theoretic functions that remain elusive, such as: The $n$-th prime number and the prime counting function. Our hope is that the discovery and study of such formulas can yield new insights in number theory and other branches of mathematics.
+Indeed, deriving arithmetic terms for many Kalmar functions has proven to be exceedingly challenging. Mazzanti's result on Kalmar functions \cite{mazzanti2002plainbases} implied the existence of arithmetic terms for many prominent number theoretic functions that remain elusive, such as: The $n$-th prime number and the prime counting function \cite{prunescu2024factorial}. Our hope is that the discovery and study of such formulas can yield new insights in number theory and other branches of mathematics.
 
 \subsection{Structure of the Paper}
 We begin in \cref{section:interpolation} by proving a theorem stating that under certain conditions, a polynomial can be completely determined by only two evaluations (\cref{theorem:encoding}). This property allows us to recover the coefficients of a polynomial using an arithmetic term. Subsequently, we revisit an unconventional formula for binomial coefficients, initially given by Julia Robinson \cite{robinson1952arithmetic}, and prove it as a corollary.
@@ -120,9 +119,9 @@ where $n,j \in \Z^+$ such that $j \leq n$.
 
 We follow up in \cref{section:multisectionsums} with a new formula for the multisections of binomial coefficient sums. Our formula is
 \begin{align*}
-\floor{\frac{(2^n+1)^n \bmod(2^{ns}-1)}{2^{nj}}} \bmod 2^n
-= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j}
-= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} ,
+& \floor{\frac{(2^n+1)^n \bmod(2^{ns}-1)}{2^{nj}}} \bmod 2^n \\
+&= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \\
+&= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} ,
 \end{align*}
 where $n,s,j \in \Z^+$ such that $s < n$ and $j < s$.
 
@@ -142,6 +141,24 @@ In \cref{section:centraltrinomialcoefficients}, we apply our multinomial coeffic
 
 \section{Polynomial Interpolation with Two Evaluations} \label{section:interpolation}
 We begin by presenting a theorem which shows how to recover a polynomial in $\mathbb{Z}[x]$ completely using only two carefully chosen evaluation points.
+
+\begin{lemma} \label{proof:encodinglemma}
+Given two integers $x > 1$ and $k > 1$, and $k$ non-negative integers $a_1,a_2,\ldots,a_k$, each of them strictly smaller than $x$, we have that
+\begin{align*}
+a_1 x + a_2 x^2 + \cdots + a_k x^k < x^{k+1} .
+\end{align*}
+\end{lemma}
+\begin{proof}
+The numbers $a_1,a_2,\ldots,a_k$ are integers, so we have that $a_i \leq (x-1)$ for every $i \in \{ 1, \ldots, k \}$.
+Thus,
+\begin{align*}
+& a_1 x + a_2 x^2 + \cdots + a_k x^k
+\leq  (x-1) (x + x^2 + \cdots + x^k)
+= x (x-1) \frac{x^k-1}{x-1} 
+= x^{k+1} - x
+< x^{k+1} .
+\end{align*}
+\end{proof}
 
 \begin{theorem} \label{theorem:encoding}
 Given three non-negative integers $b > 0$, $k$, $r \geq k$, and a non-constant polynomial $f(x)$ of non-negative integer coefficients, degree $r$, such that $f(b) \not= 0$, we have that
@@ -166,7 +183,16 @@ The first step in the formula is to divide $f(f(b))$ by $f(b)^k$. This results i
 &= a_r f(b)^{r-k} + \cdots + a_{k} f(b)^{0} + a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}  \\
 &= a_r f(b)^{r-k} + \cdots + a_{k} + a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k} .
 \end{align*}
-Since $b \geq 1$, the coefficients of $a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}$ will sum to a value that is less than $1$. The next step is to take the floor of the quotient $\frac{f(f(b))}{f(b)^k}$ to isolate the terms ranging from $a_k x^k$ up to and including $a_r x^r$. The result is
+Since $b \geq 1$, the coefficients of $a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k}$ will sum to a value that is less than $1$. This is due to \cref{proof:encodinglemma}, since
+\begin{align*}
+a_{k-1} f(b)^{-1} + \cdots + a_0 f(b)^{-k} < 1 
+\end{align*}
+can be re-written as
+\begin{align*}
+a_0 f(b) + \cdots + a_{k-1} f(b)^k < f(b)^{k+1} .    
+\end{align*}
+
+The next step is to take the floor of the quotient $\frac{f(f(b))}{f(b)^k}$ to isolate the terms ranging from $a_k x^k$ up to and including $a_r x^r$. The result is
 \begin{align*}
 \floor{\frac{f(f(b))}{f(b)^k}} &= a_r f(b)^{r-k} + \cdots + a_{k} .
 \end{align*}
@@ -176,7 +202,7 @@ The final step is to take the floored result $\floor{\frac{f(f(b))}{f(b)^k}}$ mo
 &= 0 + \cdots + 0 + (a_k \bmod{f(b)}) \\
 &= a_k \bmod{f(b)} .
 \end{align*}
-By assumption, all coefficients of $f(x)$ are non-negative. Furthermore, since $b \geq 1$ and $\deg(f(x)) = r \geq 1$, we know that $f(b) > a_k$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
+By assumption, all coefficients of $f(x)$ are non-negative. Furthermore, since $b \geq 1$ and $\deg(f(x)) = r \geq 1$, we have that $f(b) > a_k$. Therefore, the modular reduction by $f(b)$ leaves the coefficient $a_k$ unchanged. Thus, we arrive at
 \begin{align*}
 a_k &= \floor{\frac{f(f(b))}{f(b)^k}} \bmod{f(b)} ,
 \end{align*}
@@ -212,8 +238,7 @@ Hence, $f(x)$ is a polynomial with integer coefficients that are the binomial co
 If we evaluate at $x=1$, we get the coefficient sum. Applying this to $f(x)$, the evaluation $f(1)$ is equal to the sum of the coefficients of the $n$-th row of Pascal's triangle. This sum is well-known to be equal to $2^n$ \cite{A000079}. Carrying out the evaluation, we get
 \begin{align*}
 f(1) &= \binom{n}{0} 1^0 + \binom{n}{1} 1^1 + \cdots + \binom{n}{n-1} 1^{n-1} + \binom{n}{n} 1^n \\
-&= \binom{n}{0} + \binom{n}{1} + \cdots + \binom{n}{n-1} + \binom{n}{n} \\
-&= 2^n .
+&= \binom{n}{0} + \binom{n}{1} + \cdots + \binom{n}{n-1} + \binom{n}{n} = 2^n .
 \end{align*}
 Let $b = 1$, so that $f(b) = f(1) = 2^n$. By \cref{theorem:encoding}, for all $0 \leq k \leq n$, we can recover the coefficient $\binom{n}{k}$ using only the evaluations $f(b)$ and $f(f(b))$ by way of the formula
 \begin{align*}
@@ -263,7 +288,7 @@ The first step in formula (i) is to perform floored division on the sum $(2^n+1)
 \end{align*}
 Since $k \leq j$ for all remaining $k$, clearly it is always true that $2^{n(j-k)} > 0$.
 
-Next, we reduce the result of the floored division modulo $(2^n-1)$. Viewing this sum as the polynomial $\floor{\frac{(x+1)^n}{x^{n(n-j)}}} = \sum_{k=0}^{j} \binom{n}{k} x^k$, where $x$ has been replaced by $2^n$, we see that reducing mod $(x-1) = (2^n-1)$ is the same as replacing all instances of $2^n$ with $1$ (by Ruffini's rule). Thus
+Next, we reduce the result of the floored division modulo $(2^n-1)$. Viewing this sum as the polynomial $\floor{\frac{(x+1)^n}{x^{n(n-j)}}} = \sum_{k=0}^{j} \binom{n}{k} x^k$, where $x$ has been replaced by $2^n$, we see that reducing mod $(x-1) = (2^n-1)$ is the same as replacing all instances of $2^n$ with $1$ (by the remainder theorem). Thus
 \begin{align*}
     \sum_{k=0}^{j} \binom{n}{k} 2^{n(j-k)} \bmod (2^n-1)
     = \sum_{k=0}^{j} \binom{n}{k} (1)^{j-k}
@@ -312,12 +337,8 @@ Let $n,j \in \Z_{>-1}$ such that $n>0$ and $j \leq n$. Then
 \begin{proof}
 From Boardman (2004) \cite{boardman2004eggdropnumbers}, we have the following polynomial identity:
 \begin{align*}
-\frac{(x+1)^n - 1}{x-1} = 
-a_1 x
-+ a_2 x^2
-+ \cdots
-+ a_n x^n =
-\binom{n}{1} x
+& \frac{(x+1)^n - 1}{x-1} = a_1 x + a_2 x^2 + \cdots + a_n x^n \\
+&= \binom{n}{1} x
 + \left( \binom{n}{1} + \binom{n}{2} \right) x^2
 + \cdots
 + \left( \binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{n} \right) x^n .
@@ -358,8 +379,9 @@ We present a new formula for the multisections of binomial coefficient sums.
 \begin{theorem}
 Let $n,s,j \in \Z^+$ such that $s < n$ and $j < s$. Then
 \begin{align*}
-\floor{\frac{(2^n+1)^n \bmod (2^{ns}-1)}{2^{nj}}} \bmod 2^n
-= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} = \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
+& \floor{\frac{(2^n+1)^n \bmod (2^{ns}-1)}{2^{nj}}} \bmod 2^n \\
+&= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \\
+&= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
 \end{align*}
 \end{theorem}
 \begin{proof}
@@ -373,15 +395,16 @@ f(x) = \sum_{k=0}^n \binom{n}{k} x^k \bmod(x^s-1) .
 \end{align*}
 The reduction $f(x) \bmod (x^s-1)$ results in a polynomial remainder with degree $s-1$ of the form
 \begin{align*}
-f(x) \bmod (x^s-1) = & \left(\binom{n}{s} + \binom{n}{2s} + \cdots + \binom{n}{\floor{n/s}s} \right) x^0 \\
-+ & \left(\binom{n}{s+1} + \binom{n}{2s+1} + \cdots + \binom{n}{\floor{n/s}s+1} \right) x^1 + \cdots \\
+f(x) \bmod (x^s-1) = & \left(\binom{n}{s} + \binom{n}{2s} + \cdots + \binom{n}{\floor{n/s}s} \right) x^0 + \\
++ & \left(\binom{n}{s+1} + \binom{n}{2s+1} + \cdots + \binom{n}{\floor{n/s}s+1} \right) x^1 + \cdots + \\
 + & \left(\binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \right) x^j
-+ \cdots \\
++ \cdots + \\
 + & \left(\binom{n}{s+(s-1)} + \binom{n}{2s+(s-1)} + \cdots + \binom{n}{\floor{n/s}s+(s-1)} \right) x^{s-1} .
 \end{align*}
 Dividing this remainder by $x^j$, we obtain
 \begin{align*}
-\frac{f(x) \bmod(x^s-1)}{x^j} = \left(\binom{n}{s} + \cdots \right) x^{0-j}
+& \frac{f(x) \bmod(x^s-1)}{x^j} \\
+&= \left(\binom{n}{s} + \cdots \right) x^{0-j}
 + \cdots
 + \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
 + \cdots
@@ -493,8 +516,9 @@ Finally, reducing this sum mod $(r^n-1)$ is the same as replacing all instances 
 \begin{corollary}
 Let $n,s,j,r \in \Z^+$ such that $s < n$, $j < s$, and $r $. Then
 \begin{align*}
-\floor{\frac{(2^n+1)^n \bmod (2^{ns}-1)}{2^{nj}}} \bmod 2^n
-= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} = \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
+& \floor{\frac{(2^n+1)^n \bmod (2^{ns}-1)}{2^{nj}}} \bmod 2^n \\
+&= \binom{n}{s+j} + \binom{n}{2s+j} + \binom{n}{3s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \\
+&= \sum_{k=0}^{\floor{n/s}} \binom{n}{ks+j} .
 \end{align*}
 \end{corollary}
 \begin{proof}
@@ -508,15 +532,16 @@ f(x) = \sum_{k=0}^n \binom{n}{k} x^k \bmod(x^s-1) .
 \end{align*}
 The reduction $f(x) \bmod (x^s-1)$ results in a polynomial remainder with degree $s-1$ of the form
 \begin{align*}
-f(x) \bmod (x^s-1) = & \left(\binom{n}{s} + \binom{n}{2s} + \cdots + \binom{n}{\floor{n/s}s} \right) x^0 \\
-+ & \left(\binom{n}{s+1} + \binom{n}{2s+1} + \cdots + \binom{n}{\floor{n/s}s+1} \right) x^1 + \cdots \\
+f(x) \bmod (x^s-1) = & \left(\binom{n}{s} + \binom{n}{2s} + \cdots + \binom{n}{\floor{n/s}s} \right) x^0 + \\
++ & \left(\binom{n}{s+1} + \binom{n}{2s+1} + \cdots + \binom{n}{\floor{n/s}s+1} \right) x^1 + \cdots + \\
 + & \left(\binom{n}{s+j} + \binom{n}{2s+j} + \cdots + \binom{n}{\floor{n/s}s+j} \right) x^j
-+ \cdots \\
++ \cdots + \\
 + & \left(\binom{n}{s+(s-1)} + \binom{n}{2s+(s-1)} + \cdots + \binom{n}{\floor{n/s}s+(s-1)} \right) x^{s-1} .
 \end{align*}
 Dividing this remainder by $x^j$, we obtain
 \begin{align*}
-\frac{f(x) \bmod(x^s-1)}{x^j} = \left(\binom{n}{s} + \cdots \right) x^{0-j}
+& \frac{f(x) \bmod(x^s-1)}{x^j} \\
+&= \left(\binom{n}{s} + \cdots \right) x^{0-j}
 + \cdots
 + \left(\binom{n}{s+j} + \cdots \right) x^{j-j}
 + \cdots
@@ -562,16 +587,13 @@ which provides a negative answer to \cref{problem:grahametal}.
 
 Starting from $n=1$, our formula yields the correct sequence terms for the central trinomial coefficients, which are:
 \begin{align*}
-\seqnum{A002426}(n) = 1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,5196627, \ldots .
+\seqnum{A002426}(n) = 1,3,7,19,51,141,393,1107,3139,8953,25653,73789,212941,616227,1787607,\ldots .
 \end{align*}
 
 \section{Acknowledgements}
-The author gratefully acknowledges Lorenzo Sauras-Altuzarra for his comprehensive review and valuable feedback.
+The proof of \cref{proof:encodinglemma} is due to Jinyuan Wang (pers. comm.). The author gratefully acknowledges Lorenzo Sauras-Altuzarra for his comprehensive review and valuable feedback.
 
 \footnotesize
-\setlength{\parskip}{0.0em}
-\baselineskip=0.0in
-\setlength{\parindent}{0pt}
 \begingroup
 \raggedright
 \bibliographystyle{plainnat}
